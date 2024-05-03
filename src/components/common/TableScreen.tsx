@@ -30,7 +30,7 @@ const TableScreen = () => {
         renderItem={({ item }) => (
           <TouchableHighlight
             onPress={() => console.log("pushed")}
-            underlayColor={"red"}
+            underlayColor={"#808080"}
           >
             <View style={styles.listItem}>
               <Text style={styles.listTitle}>{item.name}</Text>
@@ -49,10 +49,10 @@ const styles = StyleSheet.create({
       height:'55%'
     },
     listItem:{
-      padding:10,
+      padding:8,
       borderBottomWidth:1,
       borderBottomColor:'#ddd',
-      backgroundColor:'#fff',
+      backgroundColor:'#fff'
     },
     listTitle:{
       fontSize:18,

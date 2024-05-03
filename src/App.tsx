@@ -6,12 +6,13 @@ import {
   FlatList,
   SafeAreaView,
   TextInput,
-  Button,
   Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
 import Title from "@/components/common/Title";
 import TableScreen from "./components/common/TableScreen";
+import { Button } from "react-native-elements";
+import SearchBar from "./components/common/SearchBar";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -26,26 +27,38 @@ export default function App() {
     <View style={styles.container}>
       <Title />
       <View style={styles.listBackground}></View>
-      <TextInput placeholder="write down something" style={styles.input} />
-      <TableScreen/>
+      <View style={styles.listBackground2}></View>
+      {/* <TextInput placeholder="write down something" style={styles.input} /> */}
+      <SearchBar />
+      <TableScreen />
       <View style={styles.buttonStyle}>
-        <Button
-          title="EC"
-          color="#E7514C"
-          onPress={() => Alert.alert('EC button pressed')}
-        />
-        <Button
-          title="Transportation"
-          color="#F2C865"
-          onPress={() => Alert.alert('Transportation button pressed')}
-        />
-        <Button
-          title="Others"
-          color="#5D8E8D"
-          onPress={() => Alert.alert('Others button pressed')}
-        />
+        <TypeButton title="EC" color="#E7514C" />
+        <TypeButton title="交通" color="#F2C865" />
+        <TypeButton title="その他" color="#5D8E8D" />
       </View>
-      </View>
+    </View>
+  );
+}
+
+const TypeButton = (props) => {
+  return(
+    <Button
+          title={props.title}
+          loading={false}
+          loadingProps={{ size: "small", color: "white" }}
+          buttonStyle={{
+            backgroundColor: props.color,
+            borderRadius: 5,
+            height: 140,
+            width: 106,
+          }}
+          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+          containerStyle={{
+            marginHorizontal: 8,
+            marginVertical: 16,
+          }}
+          onPress={() => console.log("aye")}
+        />
   );
 }
 
@@ -67,6 +80,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 130,
   },
+  listBackground2: {
+    position: "absolute",
+    backgroundColor: "#ffffff",
+    width: 332,
+    height: 484,
+    borderWidth: 2,
+    borderColor: "#dcdcdc",
+    borderRadius: 10,
+    marginTop: 138,
+  },
   contents: {
     backgroundColor: "#dcdcdc",
     padding: 20,
@@ -81,16 +104,16 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderColor: "#ccceee",
     backgroundColor: "#fff",
-    width: 300,
+    width: "80%",
     padding: 10,
-    marginTop: 17,
+    marginTop: 21,
     marginBottom: 10,
     borderRadius: 6,
   },
   buttonStyle: {
     flexDirection: "row",
     position: "absolute",
-    marginTop: 700,
+    marginTop: 630,
     justifyContent: "space-between",
   },
 });
