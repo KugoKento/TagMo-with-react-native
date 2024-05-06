@@ -9,10 +9,13 @@ import {
   Alert,
 } from "react-native";
 import { useFonts } from "expo-font";
-import Title from "@/components/common/Title";
-import TableScreen from "./components/common/TableScreen";
+
+import TableScreen from "@/common/TableScreen";
 import { Button } from "react-native-elements";
-import SearchBar from "./components/common/SearchBar";
+
+import Title from "@/common/Title";
+import SearchBar from "@/common/SearchBar";
+import SettingButton from "@/common/SettingBotton";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -28,7 +31,6 @@ export default function App() {
       <Title />
       <View style={styles.listBackground}></View>
       <View style={styles.listBackground2}></View>
-      {/* <TextInput placeholder="write down something" style={styles.input} /> */}
       <SearchBar />
       <TableScreen />
       <View style={styles.buttonStyle}>
@@ -41,26 +43,26 @@ export default function App() {
 }
 
 const TypeButton = (props) => {
-  return(
+  return (
     <Button
-          title={props.title}
-          loading={false}
-          loadingProps={{ size: "small", color: "white" }}
-          buttonStyle={{
-            backgroundColor: props.color,
-            borderRadius: 5,
-            height: 140,
-            width: 106,
-          }}
-          titleStyle={{ fontWeight: "bold", fontSize: 23 }}
-          containerStyle={{
-            marginHorizontal: 8,
-            marginVertical: 16,
-          }}
-          onPress={() => console.log("aye")}
-        />
+      title={props.title}
+      loading={false}
+      loadingProps={{ size: "small", color: "white" }}
+      buttonStyle={{
+        backgroundColor: props.color,
+        borderRadius: 5,
+        height: 140,
+        width: 106,
+      }}
+      titleStyle={{ fontWeight: "bold", fontSize: 23 }}
+      containerStyle={{
+        marginHorizontal: 8,
+        marginVertical: 16,
+      }}
+      onPress={() => console.log("aye")}
+    />
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -115,5 +117,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     marginTop: 630,
     justifyContent: "space-between",
+  },
+  titleStyle: {
+    flexDirection: "row",
   },
 });

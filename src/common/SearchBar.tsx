@@ -1,15 +1,16 @@
 import * as React from "react";
 import { SearchBar } from "@rneui/base";
+import { Ionicons } from "@expo/vector-icons";
 
 export default () => {
   const [value, setValue] = React.useState("");
 
   return (
     <SearchBar
-      platform="default"
+      platform="ios"
       containerStyle={{
         width: "80%",
-        height: "6%",
+        height: "4%",
         borderRadius: 10,
         marginTop: 24,
         backgroundColor: "#d3d3d3",
@@ -26,13 +27,11 @@ export default () => {
       rightIconContainerStyle={{}}
       loadingProps={{}}
       onChangeText={(newVal) => setValue(newVal)}
-      //   onClearText={{}}
       placeholder="Search"
       placeholderTextColor="#888"
-      //   cancelButtonTitle="Cancel"
-      //   cancelButtonProps={{}}
-      //   onCancel={{}}
       value={value}
+      searchIcon={<Ionicons name="search-outline" size={17} color="black" />}
+      clearIcon={null}
     />
   );
 };
