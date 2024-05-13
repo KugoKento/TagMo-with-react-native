@@ -8,11 +8,13 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from './ThemedText';
+import { useFonts } from "expo-font";
 
 const HEADER_HEIGHT = 100;
 
+
 type Props = PropsWithChildren<{
-  headerImage: ReactElement;
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
@@ -21,8 +23,14 @@ export default function TitleView({
   headerBackgroundColor,
 }: Props) {
   const colorScheme = useColorScheme() ?? 'light';
-  // const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  // const scrollOffset = useScrollViewOffset(scrollRef);
+
+  const [loaded] = useFonts({
+    "russo-one": require("../assets/fonts/Russo_One.ttf"),
+  });
+
+  if (!loaded) {
+    return null; // フォントがロードされるまで何も表示しない
+  }
 
   return (
     <ThemedView style={styles.container}>
@@ -32,7 +40,9 @@ export default function TitleView({
             styles.header,
             { backgroundColor: headerBackgroundColor[colorScheme] },
           ]}>
+            <ThemedText style={styles.title} type="title">TagMo</ThemedText>
         </ThemedView>
+        
         <ThemedView style={styles.content}>{children}</ThemedView>
     </ThemedView>
   );
@@ -52,4 +62,8 @@ const styles = StyleSheet.create({
     gap: 16,
     overflow: 'hidden',
   },
+  title: {
+    color: '#000000',
+    fontFamily: "russo-one",
+  }
 });
