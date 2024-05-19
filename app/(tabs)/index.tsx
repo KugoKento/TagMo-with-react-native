@@ -3,6 +3,8 @@ import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpa
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
 // import Voice from 'react-native-voice';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 type ListItemProps = {
   title: string;
@@ -28,19 +30,9 @@ const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
   </View>
 );
 
-const App: React.FC = () => {
+const Home: React.FC = ({navigation}:any) => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
-
-  // useEffect(() => {
-  //   Voice.onSpeechStart = onSpeechStart;
-  //   Voice.onSpeechEnd = onSpeechEnd;
-  //   Voice.onSpeechResults = onSpeechResults;
-
-  //   return () => {
-  //     Voice.destroy().then(Voice.removeAllListeners);
-  //   };
-  // }, []);
 
   const [loaded] = useFonts({
     "russo-one": require("@/assets/fonts/Russo_One.ttf"),
@@ -61,14 +53,6 @@ const App: React.FC = () => {
   const onSpeechResults = (event: any) => {
     setSearchText(event.value[0]);
   };
-
-  // const startListening = async () => {
-  //   try {
-  //     await Voice.start('en-US');
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
 
   const onSettingsPress = () => {
     Alert.alert('Settings', 'Settings button pressed');
@@ -101,7 +85,7 @@ const App: React.FC = () => {
         style={styles.list}
       />
       <View style={styles.footer}>
-        <TouchableOpacity style={[styles.footerRedButton, styles.button]}>
+        <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
           <MaterialIcons name="shopping-cart" size={50} color="red" />
           <Text style={styles.footerRedButtonText}>EC</Text>
         </TouchableOpacity>
@@ -115,6 +99,90 @@ const App: React.FC = () => {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
+  );
+};
+
+const Amount = ({navigation}:any) => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>TagMo</Text>
+        {/* <TouchableOpacity onPress={onSettingsPress} style={styles.settingsIconContainer}>
+          <FontAwesome name="gear" size={28} color="black" />
+        </TouchableOpacity> */}
+      </View>
+      <View style={styles.amountInput}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#888"
+        />
+        <TouchableOpacity /*onPress={startListening}*/>
+          {/* <FontAwesome name="microphone" size={20} color={isListening ? "red" : "#888"} style={styles.microphoneIcon} /> */}
+        </TouchableOpacity>
+      </View>
+      {/* <FlatList
+        data={DATA}
+        renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
+        keyExtractor={(item, index) => index.toString()}
+        style={styles.list}
+      /> */}
+      <View style={styles.footer}>
+        <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
+          <MaterialIcons name="shopping-cart" size={50} color="red" />
+          <Text style={styles.footerRedButtonText}>EC</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerOrangeButton, styles.button]}>
+          <MaterialIcons name="commute" size={50} color="orange" />
+          <Text style={styles.footerOrangeButtonText}>交通</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerGreenButton, styles.button]}>
+          <MaterialIcons name="help-outline" size={50} color="green" />
+          <Text style={styles.footerGreenButtonText}>その他</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
+          <MaterialIcons name="shopping-cart" size={50} color="red" />
+          <Text style={styles.footerRedButtonText}>EC</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerOrangeButton, styles.button]}>
+          <MaterialIcons name="commute" size={50} color="orange" />
+          <Text style={styles.footerOrangeButtonText}>交通</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerGreenButton, styles.button]}>
+          <MaterialIcons name="help-outline" size={50} color="green" />
+          <Text style={styles.footerGreenButtonText}>その他</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
+          <MaterialIcons name="shopping-cart" size={50} color="red" />
+          <Text style={styles.footerRedButtonText}>EC</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerOrangeButton, styles.button]}>
+          <MaterialIcons name="commute" size={50} color="orange" />
+          <Text style={styles.footerOrangeButtonText}>交通</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.footerGreenButton, styles.button]}>
+          <MaterialIcons name="help-outline" size={50} color="green" />
+          <Text style={styles.footerGreenButtonText}>その他</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  return (
+    <NavigationContainer  independent={true}>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+        <Stack.Screen name="Amount" component={Amount}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
@@ -142,6 +210,15 @@ const styles = StyleSheet.create({
     right: 16,
   },
   searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  amountInput: {
     flexDirection: 'row',
     alignItems: 'center',
     margin: 16,
