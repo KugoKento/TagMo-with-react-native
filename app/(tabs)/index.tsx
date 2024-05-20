@@ -106,12 +106,6 @@ const Amount = ({navigation}:any) => {
   
   const [amount, setAmount] = useState('');
 
-  const handleChange = (text:any) => {
-    // 数字と小数点のみ許可する正規表現
-    const formattedText = text.replace(/[^0-9.]/g, '');
-    setAmount(formattedText);
-  };
-
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
@@ -131,7 +125,7 @@ const Amount = ({navigation}:any) => {
               keyboardType="numeric"
               placeholder="000000"
               value={amount}
-              onChangeText={handleChange}
+              onChangeText={setAmount}
             />
           
         </View>
