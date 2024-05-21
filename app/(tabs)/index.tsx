@@ -30,6 +30,19 @@ const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
   </View>
 );
 
+type SquareButtonProps = {
+  color:string;
+  iconName:keyof typeof MaterialIcons.glyphMap;
+  text:string;
+  onPress: () => void;
+}
+const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, onPress }) => (
+  <TouchableOpacity style={[styles.squareButton, { borderColor: color }]} onPress={onPress}>
+    <MaterialIcons name={iconName} size={50} color={color} />
+    <Text style={[styles.squareButtonText, { color }]}>{text}</Text>
+  </TouchableOpacity>
+);
+
 const Home: React.FC = ({navigation}:any) => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
@@ -58,6 +71,8 @@ const Home: React.FC = ({navigation}:any) => {
     Alert.alert('Settings', 'Settings button pressed');
   };
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -85,18 +100,24 @@ const Home: React.FC = ({navigation}:any) => {
         style={styles.list}
       />
       <View style={styles.footer}>
-        <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-          <MaterialIcons name="shopping-cart" size={50} color="red" />
-          <Text style={styles.footerRedButtonText}>EC</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.footerOrangeButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-          <MaterialIcons name="commute" size={50} color="orange" />
-          <Text style={styles.footerOrangeButtonText}>交通</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.footerGreenButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-          <MaterialIcons name="help-outline" size={50} color="green" />
-          <Text style={styles.footerGreenButtonText}>その他</Text>
-        </TouchableOpacity>
+        <SquareButton
+          color="red"
+          iconName="shopping-cart"
+          text="EC"
+          onPress={() => navigation.navigate('Amount')}
+        />
+        <SquareButton
+          color="orange"
+          iconName="commute"
+          text="交通"
+          onPress={() => navigation.navigate('Amount')}
+        />
+        <SquareButton
+          color="green"
+          iconName="help-outline"
+          text="その他"
+          onPress={() => navigation.navigate('Amount')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -105,6 +126,8 @@ const Home: React.FC = ({navigation}:any) => {
 const Amount = ({navigation}:any) => {
   
   const [amount, setAmount] = useState('');
+
+  const squareButtonColor:string = "#495B6D";
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -136,46 +159,64 @@ const Amount = ({navigation}:any) => {
           style={styles.list}
         /> */}
         <View style={styles.buttonGroup}>
-          <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-            <MaterialIcons name="shopping-cart" size={50} color="red" />
-            <Text style={styles.footerRedButtonText}>EC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerOrangeButton, styles.button]}>
-            <MaterialIcons name="commute" size={50} color="orange" />
-            <Text style={styles.footerOrangeButtonText}>交通</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerGreenButton, styles.button]}>
-            <MaterialIcons name="help-outline" size={50} color="green" />
-            <Text style={styles.footerGreenButtonText}>その他</Text>
-          </TouchableOpacity>
+          <SquareButton
+            color={squareButtonColor}
+            iconName="payments"
+            text="現金"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="credit-card"
+            text="クレジット"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="qr-code-2"
+            text="QRコード"
+            onPress={() => navigation.navigate('Amount')}
+          />
         </View>
         <View style={styles.buttonGroup}>
-          <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-            <MaterialIcons name="shopping-cart" size={50} color="red" />
-            <Text style={styles.footerRedButtonText}>EC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerOrangeButton, styles.button]}>
-            <MaterialIcons name="commute" size={50} color="orange" />
-            <Text style={styles.footerOrangeButtonText}>交通</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerGreenButton, styles.button]}>
-            <MaterialIcons name="help-outline" size={50} color="green" />
-            <Text style={styles.footerGreenButtonText}>その他</Text>
-          </TouchableOpacity>
+          <SquareButton
+            color={squareButtonColor}
+            iconName="commute"
+            text="交通系IC"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="savings"
+            text="口座振込"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="currency-exchange"
+            text="立て替え"
+            onPress={() => navigation.navigate('Amount')}
+          />
         </View>
         <View style={styles.buttonGroup}>
-          <TouchableOpacity style={[styles.footerRedButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-            <MaterialIcons name="shopping-cart" size={50} color="red" />
-            <Text style={styles.footerRedButtonText}>EC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerOrangeButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-            <MaterialIcons name="commute" size={50} color="orange" />
-            <Text style={styles.footerOrangeButtonText}>交通</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.footerGreenButton, styles.button]} onPress={() => navigation.navigate('Amount')}>
-            <MaterialIcons name="help-outline" size={50} color="green" />
-            <Text style={styles.footerGreenButtonText}>その他</Text>
-          </TouchableOpacity>
+          <SquareButton
+            color={squareButtonColor}
+            iconName="thumb-up"
+            text="ポイント"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="card-giftcard"
+            text="商品券"
+            onPress={() => navigation.navigate('Amount')}
+          />
+          <SquareButton
+            color={squareButtonColor}
+            iconName="help-outline"
+            text="その他"
+            onPress={() => navigation.navigate('Amount')}
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -263,6 +304,14 @@ const styles = StyleSheet.create({
     borderTopColor: '#eee',
     backgroundColor: '#fff',
   },
+  squareButton:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 122,
+    height: 120,
+    borderRadius: 10,
+    borderWidth: 8,
+  },
   footerRedButton: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -293,6 +342,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'white',
   },
+  squareButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   footerRedButtonText: {
     color: 'red',
     fontSize: 20,
@@ -320,7 +373,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     padding: 40,
-    backgroundColor: '#4A5A6A',
+    backgroundColor: '#495B6D',
     borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
