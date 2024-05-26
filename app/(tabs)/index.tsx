@@ -3,8 +3,8 @@ import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpa
 import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
 // import Voice from 'react-native-voice';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type ListItemProps = {
   title: string;
@@ -34,14 +34,22 @@ type SquareButtonProps = {
   color:string;
   iconName:keyof typeof MaterialIcons.glyphMap;
   text:string;
-  onPress: () => void;
+  nextScreen:string;
 }
-const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, onPress }) => (
-  <TouchableOpacity style={[styles.squareButton, { borderColor: color }]} onPress={onPress}>
-    <MaterialIcons name={iconName} size={50} color={color} />
-    <Text style={[styles.squareButtonText, { color }]}>{text}</Text>
-  </TouchableOpacity>
-);
+const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, nextScreen }) => {
+
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+
+  return (
+    <TouchableOpacity
+      style={[styles.squareButton, { borderColor: color }]}
+      onPress={() => navigation.navigate(nextScreen)}
+    >
+      <MaterialIcons name={iconName} size={45} color={color} />
+      <Text style={[styles.squareButtonText, { color }]}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
 
 const Home: React.FC = ({navigation}:any) => {
   const [searchText, setSearchText] = useState('');
@@ -104,19 +112,19 @@ const Home: React.FC = ({navigation}:any) => {
           color="red"
           iconName="shopping-cart"
           text="EC"
-          onPress={() => navigation.navigate('Amount')}
+          nextScreen='Amount'
         />
         <SquareButton
           color="orange"
           iconName="commute"
           text="交通"
-          onPress={() => navigation.navigate('Amount')}
+          nextScreen='Amount'
         />
         <SquareButton
           color="green"
           iconName="help-outline"
           text="その他"
-          onPress={() => navigation.navigate('Amount')}
+          nextScreen='Amount'
         />
       </View>
     </SafeAreaView>
@@ -163,19 +171,19 @@ const Amount = ({navigation}:any) => {
             color={squareButtonColor}
             iconName="payments"
             text="現金"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="credit-card"
             text="クレジット"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="qr-code-2"
             text="QRコード"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
         </View>
         <View style={styles.buttonGroup}>
@@ -183,19 +191,19 @@ const Amount = ({navigation}:any) => {
             color={squareButtonColor}
             iconName="commute"
             text="交通系IC"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="savings"
             text="口座振込"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="currency-exchange"
             text="立て替え"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
         </View>
         <View style={styles.buttonGroup}>
@@ -203,19 +211,19 @@ const Amount = ({navigation}:any) => {
             color={squareButtonColor}
             iconName="thumb-up"
             text="ポイント"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="card-giftcard"
             text="商品券"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
           <SquareButton
             color={squareButtonColor}
             iconName="help-outline"
             text="その他"
-            onPress={() => navigation.navigate('Amount')}
+            nextScreen='Amount'
           />
         </View>
       </SafeAreaView>
@@ -279,6 +287,15 @@ const styles = StyleSheet.create({
   microphoneIcon: {
     marginLeft: 10,
   },
+  // listContainer: {
+  //   flex: 2,
+  //   // position: 'absolute',
+  //   marginHorizontal: 5,
+  //   marginVertical: 0,
+  //   borderRadius: 10,
+  //   borderWidth: 8,
+  //   borderColor: '#D8D8D8',
+  // },
   list: {
     flex: 1,
     marginHorizontal: 16,
@@ -310,54 +327,9 @@ const styles = StyleSheet.create({
     width: 122,
     height: 120,
     borderRadius: 10,
-    borderWidth: 8,
-  },
-  footerRedButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 122,
-    height: 120,
-    borderRadius: 10,
-    borderColor: 'red',
-    borderWidth: 8,
-  },
-  footerOrangeButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 122,
-    height: 120,
-    borderRadius: 10,
-    borderColor: 'orange',
-    borderWidth: 8,
-  },
-  footerGreenButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 122,
-    height: 120,
-    borderRadius: 10,
-    borderColor: 'green',
-    borderWidth: 8,
-  },
-  button: {
-    backgroundColor: 'white',
+    borderWidth: 6,
   },
   squareButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  footerRedButtonText: {
-    color: 'red',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  footerOrangeButtonText: {
-    color: 'orange',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  footerGreenButtonText: {
-    color: 'green',
     fontSize: 20,
     fontWeight: 'bold',
   },
