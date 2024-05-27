@@ -1,70 +1,253 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
+import { useFonts } from "expo-font";
+// import Voice from 'react-native-voice';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Dimensions } from 'react-native';
+import { PieChart } from 'react-native-chart-kit';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+type ListItemProps = {
+  title: string;
+  distance: string;
+};
 
-export default function HomeScreen() {
+const DATA: ListItemProps[] = [
+  { title: '名古屋三交ビル', distance: '¥350' },
+  { title: 'セブンイレブン国際センター1号店', distance: '¥350' },
+  { title: 'すき家 名駅一丁目店', distance: '¥350' },
+  { title: '青果 石川', distance: '¥350' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+];
+
+const screenWidth = Dimensions.get('window').width;
+
+const chartData = [
+  {
+    name: 'Google',
+    population: 30,
+    color: 'rgba(131, 167, 234, 1)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
+  {
+    name: 'Apple',
+    population: 30,
+    color: '#F00',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
+  {
+    name: 'Microsoft',
+    population: 15,
+    color: 'red',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
+  {
+    name: 'Samsung',
+    population: 15,
+    color: 'rgb(0, 0, 255)',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
+  {
+    name: 'Other',
+    population: 10,
+    color: 'green',
+    legendFontColor: '#7F7F7F',
+    legendFontSize: 15,
+  },
+];
+
+const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
+  <View style={styles.listItem}>
+    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.distance}>{distance}</Text>
+  </View>
+);
+
+const History: React.FC = () => {
+  const [searchText, setSearchText] = useState('');
+  const [isListening, setIsListening] = useState(false);
+
+  const [loaded] = useFonts({
+    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
+  });
+
+  if (!loaded) {
+    return null; // フォントがロードされるまで何も表示しない
+  }
+
+  const onSpeechStart = () => {
+    setIsListening(true);
+  };
+
+  const onSpeechEnd = () => {
+    setIsListening(false);
+  };
+
+  const onSpeechResults = (event: any) => {
+    setSearchText(event.value[0]);
+  };
+
+  const onSettingsPress = () => {
+    Alert.alert('Settings', 'undo');
+  };
+
+  
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>TagMo</Text>
+      </View>
+      <View>
+      <PieChart
+        data={chartData}
+        width={screenWidth}
+        height={220}
+        chartConfig={{
+          backgroundColor: '#1cc910',
+          backgroundGradientFrom: '#eff3ff',
+          backgroundGradientTo: '#efefef',
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        }}
+        accessor="population"
+        backgroundColor="transparent"
+        paddingLeft="15"
+        absolute
+      />
+    </View>
+      <FlatList
+        data={DATA}
+        renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
+        keyExtractor={(item, index) => index.toString()}
+        style={styles.list}
+      />
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  headerTitle: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    fontFamily: "russo-one",
+  },
+  settingsIconContainer: {
+    position: 'absolute',
+    right: 16,
+  },
+  backIcon: {
+    position: 'absolute',
+    left: 20,
+  },
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    margin: 16,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  searchInput: {
+    flex: 1,
+    height: 40,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  microphoneIcon: {
+    marginLeft: 10,
+  },
+  list: {
+    flex: 1,
+    marginHorizontal: 16,
+  },
+  listItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  title: {
+    fontSize: 16,
+  },
+  distance: {
+    color: '#888',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+    backgroundColor: '#fff',
+  },
+  squareButton:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 122,
+    height: 120,
+    borderRadius: 10,
+    borderWidth: 6,
+  },
+  squareButtonText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
+  // Amountのスタイル
+  buttonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingVertical: 4,
+    backgroundColor: '#fff',
+  },
+  amountContainer: {
+    marginTop: 10,
+    marginBottom: 10,
+    padding: 40,
+    backgroundColor: '#495B6D',
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  currency: {
+    color: '#fff',
+    fontSize: 60,
+    marginRight: 10,
+  },
+  amountInput: {
+    color: '#fff',
+    fontSize: 60,
+    textAlign: 'center',
   },
 });
+
+export default History;

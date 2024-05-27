@@ -21,6 +21,11 @@ const DATA: ListItemProps[] = [
   { title: 'Title', distance: 'Label' },
   { title: 'Title', distance: 'Label' },
   { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
+  { title: 'Title', distance: 'Label' },
 ];
 
 const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
