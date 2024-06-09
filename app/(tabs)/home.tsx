@@ -5,6 +5,8 @@ import { useFonts } from "expo-font";
 // import Voice from 'react-native-voice';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import App from '..';
 
 type ListItemProps = {
   title: string;
@@ -54,6 +56,7 @@ const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, next
 const Home: React.FC = ({navigation}:any) => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const colorScheme = useColorScheme();
 
   const [loaded] = useFonts({
     "russo-one": require("@/assets/fonts/Russo_One.ttf"),
@@ -85,7 +88,10 @@ const Home: React.FC = ({navigation}:any) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>TagMo</Text>
-        <TouchableOpacity onPress={onSettingsPress} style={styles.settingsIconContainer}>
+        <TouchableOpacity 
+          onPress={onSettingsPress}  
+          // onPress={() => navigation.navigate('index')}
+          style={styles.settingsIconContainer}>
           <FontAwesome name="gear" size={28} color="black" />
         </TouchableOpacity>
       </View>
@@ -233,7 +239,7 @@ const Amount = ({navigation}:any) => {
 
 const Stack = createNativeStackNavigator();
 
-const App = () => {
+const HomeAmount = () => {
   return (
     <NavigationContainer  independent={true}>
       <Stack.Navigator initialRouteName="Home">
@@ -364,4 +370,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default HomeAmount;
