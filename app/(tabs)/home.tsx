@@ -90,7 +90,7 @@ const Home: React.FC = ({navigation}:any) => {
         <Text style={styles.headerTitle}>TagMo</Text>
         <TouchableOpacity 
           onPress={onSettingsPress}  
-          // onPress={() => navigation.navigate('index')}
+          // onPress={() => navigation.goBack()}
           style={styles.settingsIconContainer}>
           <FontAwesome name="gear" size={28} color="black" />
         </TouchableOpacity>
