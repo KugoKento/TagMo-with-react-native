@@ -1,43 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
-// import Voice from 'react-native-voice';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 type ListItemProps = {
-  title: string;
-  distance: string;
+  item: string;
+  amount: string;
 };
 
-const DATA: ListItemProps[] = [
-  { title: '名古屋三交ビル', distance: '¥350' },
-  { title: 'セブンイレブン国際センター1号店', distance: '¥350' },
-  { title: 'すき家 名駅一丁目店', distance: '¥350' },
-  { title: '青果 石川', distance: '¥350' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
+const initialData: ListItemProps[] = [
+  { item: '名古屋三交ビル', amount: '¥350' },
+  { item: 'セブンイレブン国際センター1号店', amount: '¥350' },
+  { item: 'すき家 名駅一丁目店', amount: '¥350' },
+  { item: '青果 石川', amount: '¥350' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
+  { item: 'Item', amount: 'Label' },
 ];
 
-const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
+const ListItem: React.FC<ListItemProps> = ({ item, amount }) => (
   <View style={styles.listItem}>
-    <Text style={styles.title}>{title}</Text>
-    <Text style={styles.distance}>{distance}</Text>
+    <Text style={styles.item}>{item}</Text>
+    <Text style={styles.amount}>{amount}</Text>
   </View>
 );
 
 const History: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
+  const [listData, setListData] = useState(initialData);
 
   const [loaded] = useFonts({
     "russo-one": require("@/assets/fonts/Russo_One.ttf"),
@@ -47,23 +46,34 @@ const History: React.FC = () => {
     return null; // フォントがロードされるまで何も表示しない
   }
 
-  const onSpeechStart = () => {
-    setIsListening(true);
-  };
-
-  const onSpeechEnd = () => {
-    setIsListening(false);
-  };
-
-  const onSpeechResults = (event: any) => {
-    setSearchText(event.value[0]);
-  };
-
   const onSettingsPress = () => {
     Alert.alert('Settings', 'undo');
   };
 
-  
+  const deleteRow = (rowMap: { [key: string]: any }, rowKey: string) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+    const newData = [...listData];
+    const prevIndex = listData.findIndex(item => item.item === rowKey);
+    newData.splice(prevIndex, 1);
+    setListData(newData);
+  };
+
+  const renderItem = (data: { item: ListItemProps }) => (
+    <ListItem item={data.item.item} amount={data.item.amount} />
+  );
+
+  const renderHiddenItem = (data: { item: ListItemProps }, rowMap: { [key: string]: any }) => (
+    <View style={styles.rowBack}>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        onPress={() => deleteRow(rowMap, data.item.item)}
+      >
+        <Text style={styles.backTextWhite}>削除</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -81,13 +91,15 @@ const History: React.FC = () => {
           value={searchText}
           onChangeText={setSearchText}
         />
-        <TouchableOpacity /*onPress={startListening}*/>
+        <TouchableOpacity>
           <FontAwesome name="microphone" size={20} color={isListening ? "red" : "#888"} style={styles.microphoneIcon} />
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
+      <SwipeListView
+        data={listData}
+        renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        rightOpenValue={-75}
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
       />
@@ -118,10 +130,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 16,
   },
-  backIcon: {
-    position: 'absolute',
-    left: 20,
-  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,61 +156,38 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    backgroundColor: '#fff',
   },
-  title: {
+  item: {
     fontSize: 16,
   },
-  distance: {
-    color: '#888',
+  amount: {
+    fontSize: 16,
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  squareButton:{
+  rowBack: {
     alignItems: 'center',
-    justifyContent: 'center',
-    width: 122,
-    height: 120,
-    borderRadius: 10,
-    borderWidth: 6,
-  },
-  squareButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-
-  // Amountのスタイル
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 4,
     backgroundColor: '#fff',
-  },
-  amountContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 40,
-    backgroundColor: '#495B6D',
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
     flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingLeft: 15,
+    paddingRight: 15,
   },
-  currency: {
-    color: '#fff',
-    fontSize: 60,
-    marginRight: 10,
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
   },
-  amountInput: {
-    color: '#fff',
-    fontSize: 60,
-    textAlign: 'center',
+  backRightBtnRight: {
+    backgroundColor: 'red',
+    right: 0,
+  },
+  backTextWhite: {
+    color: '#FFF',
+    fontWeight: 'bold',
   },
 });
 

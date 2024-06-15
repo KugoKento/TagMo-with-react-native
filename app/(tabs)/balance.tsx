@@ -14,12 +14,12 @@ type ListItemProps = {
 };
 
 const DATA: ListItemProps[] = [
-  { title: '名古屋三交ビル', distance: '¥350' },
-  { title: 'セブンイレブン国際センター1号店', distance: '¥350' },
-  { title: 'すき家 名駅一丁目店', distance: '¥350' },
-  { title: '青果 石川', distance: '¥350' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
+  { title: '現金', distance: '¥3000' },
+  { title: 'クレジットカード', distance: '¥3500' },
+  { title: 'QRコード決済', distance: '¥3000' },
+  { title: '立て替え', distance: '¥4000' },
+  { title: 'ポイント', distance: '¥4000' },
+  { title: '商品券', distance: '¥7000' },
   { title: 'Title', distance: 'Label' },
   { title: 'Title', distance: 'Label' },
   { title: 'Title', distance: 'Label' },
