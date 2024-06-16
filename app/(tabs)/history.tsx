@@ -5,30 +5,30 @@ import { useFonts } from "expo-font";
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 type ListItemProps = {
-  item: string;
+  id: string;
+  category: string; // 'item' を 'category' に修正
   amount: string;
 };
 
 const initialData: ListItemProps[] = [
-  { item: '名古屋三交ビル', amount: '¥350' },
-  { item: 'セブンイレブン国際センター1号店', amount: '¥350' },
-  { item: 'すき家 名駅一丁目店', amount: '¥350' },
-  { item: '青果 石川', amount: '¥350' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
-  { item: 'Item', amount: 'Label' },
+  { id: '1', category: '名古屋三交ビル', amount: '¥350' },
+  { id: '2', category: 'セブンイレブン国際センター1号店', amount: '¥350' },
+  { id: '3', category: 'すき家 名駅一丁目店', amount: '¥350' },
+  { id: '4', category: '青果 石川', amount: '¥350' },
+  { id: '5', category: 'Item', amount: 'Label' },
+  { id: '6', category: 'Item', amount: 'Label' },
+  { id: '7', category: 'Item', amount: 'Label' },
+  { id: '8', category: 'Item', amount: 'Label' },
+  { id: '9', category: 'Item', amount: 'Label' },
+  { id: '10', category: 'Item', amount: 'Label' },
+  { id: '11', category: 'Item', amount: 'Label' },
+  { id: '12', category: 'Item', amount: 'Label' },
+  { id: '13', category: 'Item', amount: 'Label' },
 ];
 
-const ListItem: React.FC<ListItemProps> = ({ item, amount }) => (
+const ListItem: React.FC<ListItemProps> = ({ category, amount }) => (
   <View style={styles.listItem}>
-    <Text style={styles.item}>{item}</Text>
+    <Text style={styles.category}>{category}</Text>
     <Text style={styles.amount}>{amount}</Text>
   </View>
 );
@@ -37,6 +37,7 @@ const History: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const [listData, setListData] = useState(initialData);
+  const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
 
   const [loaded] = useFonts({
     "russo-one": require("@/assets/fonts/Russo_One.ttf"),
@@ -46,37 +47,75 @@ const History: React.FC = () => {
     return null; // フォントがロードされるまで何も表示しない
   }
 
-  const onSettingsPress = () => {
+  const onCancelPress = () => {
+    if (listHistory.length > 0) {
+      Alert.alert(
+        '取り消し確認',
+        '最後の操作を取り消しますか?',
+        [
+          {
+            text: 'No',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              const previousState = listHistory[listHistory.length - 1];
+              setListData(previousState);
+              setListHistory(listHistory.slice(0, -1));
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      Alert.alert('取り消し', '操作履歴がありません。');
+    }
+  };
+
+  const deleteRow = (rowMap: { [key: string]: any }, rowKey: string) => {
     Alert.alert(
-      '取り消し',
-      '今までの操作を取り消しますか?',
+      'リスト項目削除',
+      'この項目を削除しますか？',
       [
-        { text: 'Cancel', onPress: () => {}, style: 'cancel' },
-        { text: 'OK', onPress: () => setListData(initialData) },
+        {
+          text: 'No',
+          onPress: () => {
+            if (rowMap[rowKey]) {
+              rowMap[rowKey].closeRow(); // スライドして削除ボタンが出ている項目を元に戻す
+            }
+          },
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            if (rowMap[rowKey]) {
+              rowMap[rowKey].closeRow();
+            }
+            const newData = [...listData];
+            const prevIndex = listData.findIndex(item => item.id === rowKey);
+            if (prevIndex >= 0) {
+              setListHistory([...listHistory, listData]); // 現在の状態を操作履歴に追加
+              newData.splice(prevIndex, 1);
+              setListData(newData);
+            }
+          },
+        },
       ],
       { cancelable: false }
     );
   };
 
-  const deleteRow = (rowMap: { [key: string]: any }, rowKey: string) => {
-    if (rowMap[rowKey]) {
-      rowMap[rowKey].closeRow();
-    }
-    const newData = [...listData];
-    const prevIndex = listData.findIndex(item => item.item === rowKey);
-    newData.splice(prevIndex, 1);
-    setListData(newData);
-  };
-
-  const renderItem = useCallback((data: { item: ListItemProps }) => (
-    <ListItem item={data.item.item} amount={data.item.amount} />
+  const renderItem = useCallback(({ item }: { item: ListItemProps }) => (
+    <ListItem category={item.category} amount={item.amount} id={''} />
   ), []);
 
   const renderHiddenItem = useCallback((data: { item: ListItemProps }, rowMap: { [key: string]: any }) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
-        onPress={() => deleteRow(rowMap, data.item.item)}
+        onPress={() => deleteRow(rowMap, data.item.id)}
       >
         <Text style={styles.backTextWhite}>削除</Text>
       </TouchableOpacity>
@@ -87,7 +126,7 @@ const History: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>TagMo</Text>
-        <TouchableOpacity onPress={onSettingsPress} style={styles.settingsIconContainer}>
+        <TouchableOpacity onPress={onCancelPress} style={styles.settingsIconContainer}>
           <FontAwesome name="undo" size={28} color="black" />
         </TouchableOpacity>
       </View>
@@ -111,7 +150,7 @@ const History: React.FC = () => {
         closeOnRowPress={true} // 行を押したときに自動的に閉じる
         closeOnRowOpen={true}  // 他の行が開いたときに自動的に閉じる
         disableRightSwipe={true} // 右へのスワイプを無効化
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id} // 一意のキーを指定
         style={styles.list}
       />
     </SafeAreaView>
@@ -169,7 +208,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     backgroundColor: '#fff',
   },
-  item: {
+  category: {
     fontSize: 16,
   },
   amount: {
