@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
@@ -47,7 +47,15 @@ const History: React.FC = () => {
   }
 
   const onSettingsPress = () => {
-    Alert.alert('Settings', 'undo');
+    Alert.alert(
+      '取り消し',
+      '今までの操作を取り消しますか?',
+      [
+        { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+        { text: 'OK', onPress: () => setListData(initialData) },
+      ],
+      { cancelable: false }
+    );
   };
 
   const deleteRow = (rowMap: { [key: string]: any }, rowKey: string) => {
@@ -60,11 +68,11 @@ const History: React.FC = () => {
     setListData(newData);
   };
 
-  const renderItem = (data: { item: ListItemProps }) => (
+  const renderItem = useCallback((data: { item: ListItemProps }) => (
     <ListItem item={data.item.item} amount={data.item.amount} />
-  );
+  ), []);
 
-  const renderHiddenItem = (data: { item: ListItemProps }, rowMap: { [key: string]: any }) => (
+  const renderHiddenItem = useCallback((data: { item: ListItemProps }, rowMap: { [key: string]: any }) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
@@ -73,7 +81,7 @@ const History: React.FC = () => {
         <Text style={styles.backTextWhite}>削除</Text>
       </TouchableOpacity>
     </View>
-  );
+  ), [deleteRow]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,6 +108,9 @@ const History: React.FC = () => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         rightOpenValue={-75}
+        closeOnRowPress={true} // 行を押したときに自動的に閉じる
+        closeOnRowOpen={true}  // 他の行が開いたときに自動的に閉じる
+        disableRightSwipe={true} // 右へのスワイプを無効化
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
       />
