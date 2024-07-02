@@ -6,7 +6,8 @@ import { useFonts } from "expo-font";
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import App from '..';
+import { DrawerActions } from '@react-navigation/native';
+import App from '../..';
 
 type ListItemProps = {
   title: string;
@@ -53,10 +54,11 @@ const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, next
   );
 };
 
-const Home: React.FC = ({navigation}:any) => {
+const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
   const colorScheme = useColorScheme();
+  const navigation = useNavigation();
 
   const [loaded] = useFonts({
     "russo-one": require("@/assets/fonts/Russo_One.ttf"),
@@ -79,7 +81,7 @@ const Home: React.FC = ({navigation}:any) => {
   };
 
   const onSettingsPress = () => {
-    Alert.alert('Settings', 'Settings button pressed');
+    navigation.dispatch(DrawerActions.openDrawer());
   };
 
   
@@ -92,7 +94,7 @@ const Home: React.FC = ({navigation}:any) => {
           onPress={onSettingsPress}  
           // onPress={() => navigation.goBack()}
           style={styles.settingsIconContainer}>
-          <FontAwesome name="gear" size={28} color="black" />
+          <FontAwesome name="bars" size={28} color="black" />
         </TouchableOpacity>
       </View>
       <View style={styles.searchContainer}>
