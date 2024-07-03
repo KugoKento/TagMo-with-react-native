@@ -7,7 +7,9 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { DrawerActions } from '@react-navigation/native';
-import App from '../..';
+import { SquareButton } from '@/components/SquareButton';
+import { TagMoHeader } from '@/components/TagMoHeader';
+
 
 type ListItemProps = {
   title: string;
@@ -32,27 +34,6 @@ const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
     <Text style={styles.distance}>{distance}</Text>
   </View>
 );
-
-type SquareButtonProps = {
-  color:string;
-  iconName:keyof typeof MaterialIcons.glyphMap;
-  text:string;
-  nextScreen:string;
-}
-const SquareButton: React.FC<SquareButtonProps> = ({ color, iconName, text, nextScreen }) => {
-
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
-
-  return (
-    <TouchableOpacity
-      style={[styles.squareButton, { borderColor: color }]}
-      onPress={() => navigation.navigate(nextScreen)}
-    >
-      <MaterialIcons name={iconName} size={45} color={color} />
-      <Text style={[styles.squareButtonText, { color }]}>{text}</Text>
-    </TouchableOpacity>
-  );
-};
 
 const Home: React.FC = () => {
   const [searchText, setSearchText] = useState('');
@@ -84,19 +65,15 @@ const Home: React.FC = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
-  
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>TagMo</Text>
-        <TouchableOpacity 
-          onPress={onSettingsPress}  
-          // onPress={() => navigation.goBack()}
-          style={styles.settingsIconContainer}>
-          <FontAwesome name="bars" size={28} color="black" />
-        </TouchableOpacity>
-      </View>
+      <TagMoHeader 
+        hasLeftButton={false}
+        hasRightButton={true} 
+        rightFontAwesomeName={'bars'} 
+        rightcolor={'black'} 
+        onRightPress={onSettingsPress}
+      />
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -139,145 +116,10 @@ const Home: React.FC = () => {
   );
 };
 
-const Amount = ({navigation}:any) => {
-  
-  const [amount, setAmount] = useState('');
-
-  const squareButtonColor:string = "#495B6D";
-
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.backIcon}>
-            <FontAwesome name="chevron-left" size={28} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>TagMo</Text>
-          {/* <TouchableOpacity onPress={onSettingsPress} style={styles.settingsIconContainer}>
-            <FontAwesome name="gear" size={28} color="black" />
-          </TouchableOpacity> */}
-        </View>
-        <View style={styles.amountContainer}>
-          <Text style={styles.currency}>¥</Text>
-            <TextInput
-              style={styles.amountInput}
-              keyboardType="numeric"
-              placeholder="000000"
-              value={amount}
-              onChangeText={setAmount}
-            />
-          
-        </View>
-        {/* <FlatList
-          data={DATA}
-          renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.list}
-        /> */}
-        <View style={styles.buttonGroup}>
-          <SquareButton
-            color={squareButtonColor}
-            iconName="payments"
-            text="現金"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="credit-card"
-            text="クレジット"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="qr-code-2"
-            text="QRコード"
-            nextScreen='Amount'
-          />
-        </View>
-        <View style={styles.buttonGroup}>
-          <SquareButton
-            color={squareButtonColor}
-            iconName="commute"
-            text="交通系IC"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="savings"
-            text="口座振込"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="currency-exchange"
-            text="立て替え"
-            nextScreen='Amount'
-          />
-        </View>
-        <View style={styles.buttonGroup}>
-          <SquareButton
-            color={squareButtonColor}
-            iconName="thumb-up"
-            text="ポイント"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="card-giftcard"
-            text="商品券"
-            nextScreen='Amount'
-          />
-          <SquareButton
-            color={squareButtonColor}
-            iconName="help-outline"
-            text="その他"
-            nextScreen='Amount'
-          />
-        </View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
-  );
-};
-
-const Stack = createNativeStackNavigator();
-
-const HomeAmount = () => {
-  return (
-    <NavigationContainer  independent={true}>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-        <Stack.Screen name="Amount" component={Amount} options={{ headerShown: false }}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  headerTitle: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    fontFamily: "russo-one",
-  },
-  settingsIconContainer: {
-    position: 'absolute',
-    right: 16,
-  },
-  backIcon: {
-    position: 'absolute',
-    left: 20,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -329,18 +171,6 @@ const styles = StyleSheet.create({
     borderTopColor: '#eee',
     backgroundColor: '#fff',
   },
-  squareButton:{
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 122,
-    height: 120,
-    borderRadius: 10,
-    borderWidth: 6,
-  },
-  squareButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
 
   // Amountのスタイル
   buttonGroup: {
@@ -372,4 +202,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeAmount;
+export default Home;

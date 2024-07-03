@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, Aler
 import { FontAwesome } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { TagMoHeader } from '@/components/TagMoHeader';
 
 type ListItemProps = {
   id: string;
@@ -124,12 +125,13 @@ const History: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>TagMo</Text>
-        <TouchableOpacity onPress={onCancelPress} style={styles.settingsIconContainer}>
-          <FontAwesome name="undo" size={28} color="black" />
-        </TouchableOpacity>
-      </View>
+      <TagMoHeader 
+        hasLeftButton={false}
+        hasRightButton={true} 
+        rightFontAwesomeName={'undo'} 
+        rightcolor={'black'} 
+        onRightPress={onCancelPress}
+      />
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -161,24 +163,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  headerTitle: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    fontFamily: "russo-one",
-  },
-  settingsIconContainer: {
-    position: 'absolute',
-    right: 16,
   },
   searchContainer: {
     flexDirection: 'row',

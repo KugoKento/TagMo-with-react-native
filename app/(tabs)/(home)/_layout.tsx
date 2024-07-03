@@ -1,20 +1,28 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
+import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import 'react-native-reanimated';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import HomeAmount from './home';
-import Settings from './settings';
+import Home from './home';
+import Amount from './amount';
 
-export default function TabLayout() {
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
+
+export default function HomeAmountLayout() {
+
   const colorScheme = useColorScheme();
-  const Drawer = createDrawerNavigator();
+  const Stack = createNativeStackNavigator();
+  
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="home" component={HomeAmount} options={{ headerShown: false }}/>
-      <Drawer.Screen name="settings" component={Settings} options={{ headerShown: false }}/>
-    </Drawer.Navigator>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="Amount" component={Amount} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </ThemeProvider>
   );
 }

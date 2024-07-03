@@ -7,6 +7,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Dimensions } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
+import { TagMoHeader } from '@/components/TagMoHeader';
 
 type ListItemProps = {
   title: string;
@@ -109,9 +110,10 @@ const History: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>TagMo</Text>
-      </View>
+      <TagMoHeader 
+        hasLeftButton={false}
+        hasRightButton={false}
+      />
       <View>
       <PieChart
         data={chartData}
@@ -143,28 +145,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-  },
-  headerTitle: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    fontFamily: "russo-one",
-  },
-  settingsIconContainer: {
-    position: 'absolute',
-    right: 16,
-  },
-  backIcon: {
-    position: 'absolute',
-    left: 20,
   },
   searchContainer: {
     flexDirection: 'row',
