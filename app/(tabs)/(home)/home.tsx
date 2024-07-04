@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { useFonts } from "expo-font";
-// import Voice from 'react-native-voice';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useNavigation } from '@react-navigation/native';
 import { DrawerActions } from '@react-navigation/native';
 import { SquareButton } from '@/components/SquareButton';
 import { TagMoHeader } from '@/components/TagMoHeader';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-
-type ListItemProps = {
-  title: string;
-  distance: string;
-};
-
-const DATA: ListItemProps[] = [
+const DATA = [
   { title: '名古屋三交ビル', distance: '350m' },
   { title: 'セブンイレブン国際センター1号店', distance: '400m' },
   { title: 'すき家 名駅一丁目店', distance: '400m' },
@@ -28,6 +20,11 @@ const DATA: ListItemProps[] = [
   { title: 'Title', distance: 'Label' },
 ];
 
+type ListItemProps = {
+  title: string;
+  distance: string;
+};
+
 const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
   <View style={styles.listItem}>
     <Text style={styles.title}>{title}</Text>
@@ -35,10 +32,10 @@ const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
   </View>
 );
 
-const Home: React.FC = () => {
+const Drawer = createDrawerNavigator();
+
+const HomeMain: React.FC = () => {
   const [searchText, setSearchText] = useState('');
-  const [isListening, setIsListening] = useState(false);
-  const colorScheme = useColorScheme();
   const navigation = useNavigation();
 
   const [loaded] = useFonts({
@@ -48,18 +45,6 @@ const Home: React.FC = () => {
   if (!loaded) {
     return null; // フォントがロードされるまで何も表示しない
   }
-
-  const onSpeechStart = () => {
-    setIsListening(true);
-  };
-
-  const onSpeechEnd = () => {
-    setIsListening(false);
-  };
-
-  const onSpeechResults = (event: any) => {
-    setSearchText(event.value[0]);
-  };
 
   const onSettingsPress = () => {
     navigation.dispatch(DrawerActions.openDrawer());
@@ -82,9 +67,6 @@ const Home: React.FC = () => {
           value={searchText}
           onChangeText={setSearchText}
         />
-        <TouchableOpacity /*onPress={startListening}*/>
-          <FontAwesome name="microphone" size={20} color={isListening ? "red" : "#888"} style={styles.microphoneIcon} />
-        </TouchableOpacity>
       </View>
       <FlatList
         data={DATA}
@@ -116,6 +98,49 @@ const Home: React.FC = () => {
   );
 };
 
+const HomeSettings: React.FC = () => {
+  const [searchText, setSearchText] = useState('');
+  const navigation = useNavigation();
+
+  const [loaded] = useFonts({
+    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
+  });
+
+  if (!loaded) {
+    return null; // フォントがロードされるまで何も表示しない
+  }
+
+  const onSettingsPress = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <TagMoHeader 
+        hasLeftButton={false}
+        hasRightButton={true} 
+        rightFontAwesomeName={'bars'} 
+        rightcolor={'black'} 
+        onRightPress={onSettingsPress}
+      />
+
+    </SafeAreaView>
+  );
+}
+
+const Home: React.FC = () => {
+  return (
+    <Drawer.Navigator initialRouteName="HomeMain" screenOptions={{
+      drawerPosition: 'right', // ドロワーを右から開く設定
+    }}>
+      <Drawer.Screen name="Home" component={HomeMain} options={{ headerShown: false }}/>
+      <Drawer.Screen name="Settings" component={HomeSettings} options={{ headerShown: false }}/>
+    </Drawer.Navigator>
+  );
+}
+
+export default Home;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -134,18 +159,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
   },
-  microphoneIcon: {
-    marginLeft: 10,
-  },
-  // listContainer: {
-  //   flex: 2,
-  //   // position: 'absolute',
-  //   marginHorizontal: 5,
-  //   marginVertical: 0,
-  //   borderRadius: 10,
-  //   borderWidth: 8,
-  //   borderColor: '#D8D8D8',
-  // },
   list: {
     flex: 1,
     marginHorizontal: 16,
@@ -171,35 +184,4 @@ const styles = StyleSheet.create({
     borderTopColor: '#eee',
     backgroundColor: '#fff',
   },
-
-  // Amountのスタイル
-  buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingVertical: 4,
-    backgroundColor: '#fff',
-  },
-  amountContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    padding: 40,
-    backgroundColor: '#495B6D',
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-  },
-  currency: {
-    color: '#fff',
-    fontSize: 60,
-    marginRight: 10,
-  },
-  amountInput: {
-    color: '#fff',
-    fontSize: 60,
-    textAlign: 'center',
-  },
 });
-
-export default Home;
