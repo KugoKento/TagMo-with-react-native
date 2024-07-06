@@ -140,9 +140,6 @@ const History: React.FC = () => {
           value={searchText}
           onChangeText={setSearchText}
         />
-        <TouchableOpacity>
-          <FontAwesome name="microphone" size={20} color={isListening ? "red" : "#888"} style={styles.microphoneIcon} />
-        </TouchableOpacity>
       </View>
       <SwipeListView
         data={listData}

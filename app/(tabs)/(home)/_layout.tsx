@@ -15,6 +15,7 @@ SplashScreen.preventAutoHideAsync();
 export default function HomeAmountLayout() {
 
   const colorScheme = useColorScheme();
+  
   const Stack = createNativeStackNavigator();
   
   return (
