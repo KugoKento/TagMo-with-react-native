@@ -10,19 +10,19 @@ TagMo
 - シンプルで洗練されたUI
 
 - Home
-https://github.com/KugoKento/store-picture/blob/main/Home.jpg
+![](https://github.com/KugoKento/store-picture/blob/main/Home.jpg)
 
 - Settings
-https://github.com/KugoKento/store-picture/blob/main/Settings.jpg
+![](https://github.com/KugoKento/store-picture/blob/main/Settings.jpg)
 
 - Amount
-https://github.com/KugoKento/store-picture/blob/main/Amount.jpg
+![](https://github.com/KugoKento/store-picture/blob/main/Amount.jpg)
 
 - History
-https://github.com/KugoKento/store-picture/blob/main/History.jpg
+![](https://github.com/KugoKento/store-picture/blob/main/History.jpg)
 
 - Balance
-https://github.com/KugoKento/store-picture/blob/main/Balance.jpg
+![](https://github.com/KugoKento/store-picture/blob/main/Balance.jpg)
 
 ## 画面遷移
 
