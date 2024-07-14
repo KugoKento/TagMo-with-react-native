@@ -9,6 +9,21 @@ TagMo
 ## 画面デザイン
 - シンプルで洗練されたUI
 
+- Home
+https://github.com/KugoKento/store-picture/blob/main/Home.jpg
+
+- Settings
+https://github.com/KugoKento/store-picture/blob/main/Settings.jpg
+
+- Amount
+https://github.com/KugoKento/store-picture/blob/main/Amount.jpg
+
+- History
+https://github.com/KugoKento/store-picture/blob/main/History.jpg
+
+- Balance
+https://github.com/KugoKento/store-picture/blob/main/Balance.jpg
+
 ## 画面遷移
 
 ## 機能一覧
@@ -16,6 +31,13 @@ TagMo
 - 利用金額及び利用決済手段の記録
 - 記録内容の編集
 - カテゴリー、決済手段ごとの累計利用金額の表示
+
+## 技術構成
+- ReactNative
+- Typescript
+- Firebase
+ - Firebase Cloud Firestore(DB)
+ - Firebase Authentication(認証)
 
 ## インストール方法
 
