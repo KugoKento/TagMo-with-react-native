@@ -11,30 +11,34 @@ TagMo
 
 <table>
   <tr>
-    <td>- Home</td>
-    <td>- Settings</td>
+    <td>
+      - Home<br>
+      <img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="30%">
+    </td>
+    <td>
+      - Settings<br>
+      <img src="https://github.com/KugoKento/store-picture/blob/main/Settings.jpg" width="30%">
+    </td>
   </tr>
   <tr>
-    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="30%"></td>
-    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Settings.jpg" width="30%"></td>
+    <td>
+      - Amount<br>
+      <img src="https://github.com/KugoKento/store-picture/blob/main/Amount.jpg" width="30%">
+    </td>
+    <td>
+      - History<br>
+      <img src="https://github.com/KugoKento/store-picture/blob/main/History.jpg" width="30%">
+    </td>
   </tr>
   <tr>
-    <td>- Amount</td>
-    <td>- History</td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Amount.jpg" width="30%"></td>
-    <td><img src="https://github.com/KugoKento/store-picture/blob/main/History.jpg" width="30%"></td>
-  </tr>
-  <tr>
-    <td>- Balance</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Balance.jpg" width="30%"></td>
+    <td>
+      - Balance<br>
+      <img src="https://github.com/KugoKento/store-picture/blob/main/Balance.jpg" width="30%">
+    </td>
     <td></td>
   </tr>
 </table>
+
 
 
 
