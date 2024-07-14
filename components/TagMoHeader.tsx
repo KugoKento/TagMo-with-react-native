@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
 
 type Props = {
   //ヘッダの左側のボタン設定
@@ -17,6 +18,14 @@ type Props = {
 
 export const TagMoHeader: React.FC<Props> = ({hasLeftButton, leftFontAwesomeName, leftcolor, onLeftPress, hasRightButton, rightFontAwesomeName, rightcolor, onRightPress}) => {
 
+  const [loaded] = useFonts({
+    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
+  });
+
+  if (!loaded) {
+    return null; // フォントがロードされるまで何も表示しない
+  }
+  
   return (
     <View style={styles.header}>
       {hasLeftButton && (

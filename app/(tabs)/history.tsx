@@ -40,14 +40,6 @@ const History: React.FC = () => {
   const [listData, setListData] = useState(initialData);
   const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
 
-  const [loaded] = useFonts({
-    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
-  });
-
-  if (!loaded) {
-    return null; // フォントがロードされるまで何も表示しない
-  }
-
   const onCancelPress = () => {
     if (listHistory.length > 0) {
       Alert.alert(

@@ -82,14 +82,6 @@ const History: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const [isListening, setIsListening] = useState(false);
 
-  const [loaded] = useFonts({
-    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
-  });
-
-  if (!loaded) {
-    return null; // フォントがロードされるまで何も表示しない
-  }
-
   const onSpeechStart = () => {
     setIsListening(true);
   };
