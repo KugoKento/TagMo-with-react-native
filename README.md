@@ -34,8 +34,8 @@
 - ReactNative
 - Typescript
 - Firebase
- - Firebase Cloud Firestore(DB)
- - Firebase Authentication(認証)
+    - Firebase Cloud Firestore(DB)
+    - Firebase Authentication(認証)
 
 ## インストール方法
 
