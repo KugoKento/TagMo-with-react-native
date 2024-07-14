@@ -10,7 +10,7 @@ TagMo
 - シンプルで洗練されたUI
 
 - Home
-<img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg)" width="50%">
+<img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="50%">
 ![](https://github.com/KugoKento/store-picture/blob/main/Home.jpg)
 
 - Settings
