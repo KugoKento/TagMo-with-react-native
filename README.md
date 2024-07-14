@@ -9,20 +9,33 @@ TagMo
 ## 画面デザイン
 - シンプルで洗練されたUI
 
-- Home
-<img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="50%">
+<table>
+  <tr>
+    <td>- Home</td>
+    <td>- Settings</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="30%"></td>
+    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Settings.jpg" width="30%"></td>
+  </tr>
+  <tr>
+    <td>- Amount</td>
+    <td>- History</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Amount.jpg" width="30%"></td>
+    <td><img src="https://github.com/KugoKento/store-picture/blob/main/History.jpg" width="30%"></td>
+  </tr>
+  <tr>
+    <td>- Balance</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/KugoKento/store-picture/blob/main/Balance.jpg" width="30%"></td>
+    <td></td>
+  </tr>
+</table>
 
-- Settings
-<img src="https://github.com/KugoKento/store-picture/blob/main/Settings.jpg" width="50%">
-
-- Amount
-<img src="https://github.com/KugoKento/store-picture/blob/main/Amount.jpg" width="50%">
-
-- History
-<img src="https://github.com/KugoKento/store-picture/blob/main/History.jpg" width="50%">
-
-- Balance
-<img src="https://github.com/KugoKento/store-picture/blob/main/Balance.jpg" width="50%">
 
 
 ## 画面遷移
