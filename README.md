@@ -1,14 +1,11 @@
-# TagMo-with-react-native
-
-TagMo
+# TagMo タグ型家計簿アプリ
 
 ## コンセプト
 - Tag型家計簿アプリ
 - 位置情報による、小売店・飲食店などのタグ付けを用いて、支出の記録を容易にする
-
-## 画面デザイン
 - シンプルで洗練されたUI
 
+## 画面デザイン
 - Home
 <img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="40%">
 
