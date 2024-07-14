@@ -11,19 +11,19 @@ TagMo
 
 - Home
 <img src="https://github.com/KugoKento/store-picture/blob/main/Home.jpg" width="50%">
-![](https://github.com/KugoKento/store-picture/blob/main/Home.jpg)
 
 - Settings
-![](https://github.com/KugoKento/store-picture/blob/main/Settings.jpg)
+<img src="https://github.com/KugoKento/store-picture/blob/main/Settings.jpg" width="50%">
 
 - Amount
-![](https://github.com/KugoKento/store-picture/blob/main/Amount.jpg)
+<img src="https://github.com/KugoKento/store-picture/blob/main/Amount.jpg" width="50%">
 
 - History
-![](https://github.com/KugoKento/store-picture/blob/main/History.jpg)
+<img src="https://github.com/KugoKento/store-picture/blob/main/History.jpg" width="50%">
 
 - Balance
-![](https://github.com/KugoKento/store-picture/blob/main/Balance.jpg)
+<img src="https://github.com/KugoKento/store-picture/blob/main/Balance.jpg" width="50%">
+
 
 ## 画面遷移
 
