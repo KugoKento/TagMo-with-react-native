@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { RectangleButton } from "@/components/RectangleButton";
-import { Link, router } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 
 const handlePress = () => {
   // ログイン
@@ -21,6 +21,14 @@ const handlePress = () => {
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -49,7 +57,7 @@ const SignUp = () => {
           <RectangleButton title="Sign Up" onPress={handlePress} />
           <View style={styles.footer}>
             <Text style={styles.footerText}>Already registered ?</Text>
-            <Link href="/auth/login" asChild>
+            <Link replace href="/auth/login" asChild>
               {/* asChildは子コンポーネントに機能を継承する */}
               <TouchableOpacity>
                 <Text style={styles.footerLink}>Log In !</Text>

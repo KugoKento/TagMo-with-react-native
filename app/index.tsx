@@ -28,11 +28,7 @@ const Index = () => {
   }
 
   // return <Redirect href='(tabs)/(home)/home'/>
-  return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Redirect href="auth/login" />
-    </ThemeProvider>
-  );
+  return <Redirect href="auth/login" />;
 };
 
 export default Index;
