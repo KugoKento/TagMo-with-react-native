@@ -40,8 +40,10 @@
   - React Navigation
 - Typescript
 - expo
+  - expo-router(画面遷移)
+  - expo-sqlite(DB)
 - Firebase
-  - Firebase Cloud Firestore(DB)
+  - Firebase Cloud Firestore(バックアップ用 DB)
   - Firebase Authentication(認証)
 
 使う可能性あり
