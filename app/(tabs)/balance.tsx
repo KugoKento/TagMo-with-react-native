@@ -1,13 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity, Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
-import { FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { FontAwesome, MaterialIcons, Entypo } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 // import Voice from 'react-native-voice';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Dimensions } from 'react-native';
-import { PieChart } from 'react-native-chart-kit';
-import { TagMoHeader } from '@/components/TagMoHeader';
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
+import { Dimensions } from "react-native";
+import { PieChart } from "react-native-chart-kit";
+import { TagMoHeader } from "@/components/TagMoHeader";
 
 type ListItemProps = {
   title: string;
@@ -15,58 +29,58 @@ type ListItemProps = {
 };
 
 const DATA: ListItemProps[] = [
-  { title: '現金', distance: '¥3000' },
-  { title: 'クレジットカード', distance: '¥3500' },
-  { title: 'QRコード決済', distance: '¥3000' },
-  { title: '立て替え', distance: '¥4000' },
-  { title: 'ポイント', distance: '¥4000' },
-  { title: '商品券', distance: '¥7000' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
-  { title: 'Title', distance: 'Label' },
+  { title: "現金", distance: "¥3000" },
+  { title: "クレジットカード", distance: "¥3500" },
+  { title: "QRコード決済", distance: "¥3000" },
+  { title: "立て替え", distance: "¥4000" },
+  { title: "ポイント", distance: "¥4000" },
+  { title: "商品券", distance: "¥7000" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
+  { title: "Title", distance: "Label" },
 ];
 
-const screenWidth = Dimensions.get('window').width;
+const screenWidth = Dimensions.get("window").width;
 
 const chartData = [
   {
-    name: 'Google',
+    name: "Google",
     population: 30,
-    color: 'rgba(131, 167, 234, 1)',
-    legendFontColor: '#7F7F7F',
+    color: "rgba(131, 167, 234, 1)",
+    legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
   {
-    name: 'Apple',
+    name: "Apple",
     population: 30,
-    color: '#F00',
-    legendFontColor: '#7F7F7F',
+    color: "#F00",
+    legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
   {
-    name: 'Microsoft',
+    name: "Microsoft",
     population: 15,
-    color: 'red',
-    legendFontColor: '#7F7F7F',
+    color: "red",
+    legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
   {
-    name: 'Samsung',
+    name: "Samsung",
     population: 15,
-    color: 'rgb(0, 0, 255)',
-    legendFontColor: '#7F7F7F',
+    color: "rgb(0, 0, 255)",
+    legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
   {
-    name: 'Other',
+    name: "Other",
     population: 10,
-    color: 'green',
-    legendFontColor: '#7F7F7F',
+    color: "green",
+    legendFontColor: "#7F7F7F",
     legendFontSize: 15,
   },
 ];
@@ -79,53 +93,31 @@ const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
 );
 
 const History: React.FC = () => {
-  const [searchText, setSearchText] = useState('');
-  const [isListening, setIsListening] = useState(false);
-
-  const onSpeechStart = () => {
-    setIsListening(true);
-  };
-
-  const onSpeechEnd = () => {
-    setIsListening(false);
-  };
-
-  const onSpeechResults = (event: any) => {
-    setSearchText(event.value[0]);
-  };
-
-  const onSettingsPress = () => {
-    Alert.alert('Settings', 'undo');
-  };
-
-  
-
   return (
     <SafeAreaView style={styles.container}>
-      <TagMoHeader 
-        hasLeftButton={false}
-        hasRightButton={false}
-      />
+      <TagMoHeader hasLeftButton={false} hasRightButton={false} />
       <View>
-      <PieChart
-        data={chartData}
-        width={screenWidth}
-        height={220}
-        chartConfig={{
-          backgroundColor: '#1cc910',
-          backgroundGradientFrom: '#eff3ff',
-          backgroundGradientTo: '#efefef',
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-        }}
-        accessor="population"
-        backgroundColor="transparent"
-        paddingLeft="15"
-        absolute
-      />
-    </View>
+        <PieChart
+          data={chartData}
+          width={screenWidth}
+          height={220}
+          chartConfig={{
+            backgroundColor: "#1cc910",
+            backgroundGradientFrom: "#eff3ff",
+            backgroundGradientTo: "#efefef",
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          }}
+          accessor="population"
+          backgroundColor="transparent"
+          paddingLeft="15"
+          absolute
+        />
+      </View>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
+        renderItem={({ item }) => (
+          <ListItem title={item.title} distance={item.distance} />
+        )}
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
       />
@@ -136,14 +128,14 @@ const History: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     margin: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 10,
   },
@@ -159,29 +151,29 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   listItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: "#eee",
   },
   title: {
     fontSize: 16,
   },
   distance: {
-    color: '#888',
+    color: "#888",
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: '#eee',
-    backgroundColor: '#fff',
+    borderTopColor: "#eee",
+    backgroundColor: "#fff",
   },
-  squareButton:{
-    alignItems: 'center',
-    justifyContent: 'center',
+  squareButton: {
+    alignItems: "center",
+    justifyContent: "center",
     width: 122,
     height: 120,
     borderRadius: 10,
@@ -189,36 +181,36 @@ const styles = StyleSheet.create({
   },
   squareButtonText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   // Amountのスタイル
   buttonGroup: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     paddingVertical: 4,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   amountContainer: {
     marginTop: 10,
     marginBottom: 10,
     padding: 40,
-    backgroundColor: '#495B6D',
+    backgroundColor: "#495B6D",
     borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
   },
   currency: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 60,
     marginRight: 10,
   },
   amountInput: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 60,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

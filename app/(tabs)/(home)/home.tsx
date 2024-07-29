@@ -7,6 +7,8 @@ import {
   FlatList,
   StyleSheet,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -73,53 +75,60 @@ const HomeMain: React.FC = () => {
     navigation.dispatch(DrawerActions.openDrawer());
   };
 
+  //historyでは適切に動いたが、こっちでは動かない
+  const handleTouchOutside = () => {
+    Keyboard.dismiss(); // キーボードを閉じる
+  };
+
   return (
-    <SafeAreaView style={styles.container}>
-      <TagMoHeader
-        hasLeftButton={false}
-        hasRightButton={true}
-        rightFontAwesomeName={"bars"}
-        rightcolor={"black"}
-        onRightPress={onSettingsPress}
-      />
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          placeholderTextColor="#888"
-          value={searchText}
-          onChangeText={setSearchText}
+    <TouchableWithoutFeedback onPress={handleTouchOutside}>
+      <SafeAreaView style={styles.container}>
+        <TagMoHeader
+          hasLeftButton={false}
+          hasRightButton={true}
+          rightFontAwesomeName={"bars"}
+          rightcolor={"black"}
+          onRightPress={onSettingsPress}
         />
-      </View>
-      <FlatList
-        data={DATA}
-        renderItem={({ item }) => (
-          <ListItem title={item.title} distance={item.distance} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.list}
-      />
-      <View style={styles.footer}>
-        <SquareButton
-          color="red"
-          iconName="shopping-cart"
-          text="EC"
-          nextScreen="Amount"
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search"
+            placeholderTextColor="#888"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </View>
+        <FlatList
+          data={DATA}
+          renderItem={({ item }) => (
+            <ListItem title={item.title} distance={item.distance} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.list}
         />
-        <SquareButton
-          color="orange"
-          iconName="commute"
-          text="交通"
-          nextScreen="Amount"
-        />
-        <SquareButton
-          color="green"
-          iconName="help-outline"
-          text="その他"
-          nextScreen="Amount"
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.footer}>
+          <SquareButton
+            color="red"
+            iconName="shopping-cart"
+            text="EC"
+            nextScreen="Amount"
+          />
+          <SquareButton
+            color="orange"
+            iconName="commute"
+            text="交通"
+            nextScreen="Amount"
+          />
+          <SquareButton
+            color="green"
+            iconName="help-outline"
+            text="その他"
+            nextScreen="Amount"
+          />
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
