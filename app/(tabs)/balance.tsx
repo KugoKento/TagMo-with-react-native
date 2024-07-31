@@ -1,49 +1,14 @@
-import React, { useState, useEffect } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { FontAwesome, MaterialIcons, Entypo } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
-// import Voice from 'react-native-voice';
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+import React, { useState, useEffect, useCallback } from "react";
+import { SafeAreaView, View, Text, FlatList, StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import { TagMoHeader } from "@/components/TagMoHeader";
+import { useSQLiteContext } from "expo-sqlite";
 
 type ListItemProps = {
-  title: string;
-  distance: string;
+  category: string;
+  total_amount: string;
 };
-
-const DATA: ListItemProps[] = [
-  { title: "現金", distance: "¥3000" },
-  { title: "クレジットカード", distance: "¥3500" },
-  { title: "QRコード決済", distance: "¥3000" },
-  { title: "立て替え", distance: "¥4000" },
-  { title: "ポイント", distance: "¥4000" },
-  { title: "商品券", distance: "¥7000" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-];
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -85,14 +50,46 @@ const chartData = [
   },
 ];
 
-const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
+const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
-    <Text style={styles.title}>{title}</Text>
-    <Text style={styles.distance}>{distance}</Text>
+    <Text style={styles.category}>{ListItemProps.category}</Text>
+    <Text style={styles.total_amount}>¥{ListItemProps.total_amount}</Text>
   </View>
 );
 
 const History: React.FC = () => {
+  const [listData, setListData] = useState<ListItemProps[]>([]);
+  const db = useSQLiteContext();
+
+  const renderItem = useCallback(
+    ({ item }: { item: ListItemProps }) => (
+      <ListItem category={item.category} total_amount={item.total_amount} />
+    ),
+    []
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await db.getAllAsync<ListItemProps>(
+          `
+        SELECT 
+          category, 
+          SUM(amount) as total_amount 
+        FROM amount_list
+        GROUP BY category
+        ORDER BY total_amount DESC
+        `
+        );
+        setListData(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [db]);
+
   return (
     <SafeAreaView style={styles.container}>
       <TagMoHeader hasLeftButton={false} hasRightButton={false} />
@@ -114,10 +111,8 @@ const History: React.FC = () => {
         />
       </View>
       <FlatList
-        data={DATA}
-        renderItem={({ item }) => (
-          <ListItem title={item.title} distance={item.distance} />
-        )}
+        data={listData}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
       />
@@ -157,11 +152,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  title: {
+  category: {
     fontSize: 16,
   },
-  distance: {
-    color: "#888",
+  total_amount: {
+    fontSize: 16,
   },
   footer: {
     flexDirection: "row",

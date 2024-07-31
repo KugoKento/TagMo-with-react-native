@@ -73,6 +73,7 @@ const HomeMain: React.FC = () => {
 
   const onSettingsPress = () => {
     navigation.dispatch(DrawerActions.openDrawer());
+    Keyboard.dismiss(); // キーボードを閉じる
   };
 
   //historyでは適切に動いたが、こっちでは動かない
@@ -81,54 +82,54 @@ const HomeMain: React.FC = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleTouchOutside}>
-      <SafeAreaView style={styles.container}>
-        <TagMoHeader
-          hasLeftButton={false}
-          hasRightButton={true}
-          rightFontAwesomeName={"bars"}
-          rightcolor={"black"}
-          onRightPress={onSettingsPress}
+    // <TouchableWithoutFeedback onPress={handleTouchOutside}>
+    <SafeAreaView style={styles.container}>
+      <TagMoHeader
+        hasLeftButton={false}
+        hasRightButton={true}
+        rightFontAwesomeName={"bars"}
+        rightcolor={"black"}
+        onRightPress={onSettingsPress}
+      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#888"
+          value={searchText}
+          onChangeText={setSearchText}
         />
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search"
-            placeholderTextColor="#888"
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-        </View>
-        <FlatList
-          data={DATA}
-          renderItem={({ item }) => (
-            <ListItem title={item.title} distance={item.distance} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.list}
+      </View>
+      <FlatList
+        data={DATA}
+        renderItem={({ item }) => (
+          <ListItem title={item.title} distance={item.distance} />
+        )}
+        keyExtractor={(item, index) => index.toString()}
+        style={styles.list}
+      />
+      <View style={styles.footer}>
+        <SquareButton
+          color="red"
+          iconName="shopping-cart"
+          text="EC"
+          nextScreen="Amount"
         />
-        <View style={styles.footer}>
-          <SquareButton
-            color="red"
-            iconName="shopping-cart"
-            text="EC"
-            nextScreen="Amount"
-          />
-          <SquareButton
-            color="orange"
-            iconName="commute"
-            text="交通"
-            nextScreen="Amount"
-          />
-          <SquareButton
-            color="green"
-            iconName="help-outline"
-            text="その他"
-            nextScreen="Amount"
-          />
-        </View>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+        <SquareButton
+          color="orange"
+          iconName="commute"
+          text="交通"
+          nextScreen="Amount"
+        />
+        <SquareButton
+          color="green"
+          iconName="help-outline"
+          text="その他"
+          nextScreen="Amount"
+        />
+      </View>
+    </SafeAreaView>
+    // </TouchableWithoutFeedback>
   );
 };
 
