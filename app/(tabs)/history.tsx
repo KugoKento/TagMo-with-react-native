@@ -18,6 +18,7 @@ import { useSQLiteContext } from "expo-sqlite";
 
 type ListItemProps = {
   id: string;
+  transaction_date: string;
   category: string;
   payment_location: string;
   amount: string;
@@ -26,10 +27,22 @@ type ListItemProps = {
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
     {/* <Text style={styles.category}>{category}</Text> */}
+    <Text style={styles.category}>
+      {formatDateToYYYYMMDD(ListItemProps.transaction_date)}
+    </Text>
     <Text style={styles.category}>{ListItemProps.payment_location}</Text>
     <Text style={styles.amount}>¥{ListItemProps.amount}</Text>
   </View>
 );
+
+// 日付をyyyy-mm-dd形式に変換する関数
+const formatDateToYYYYMMDD = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 const History: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -112,10 +125,11 @@ const History: React.FC = () => {
   const renderItem = useCallback(
     ({ item }: { item: ListItemProps }) => (
       <ListItem
-        category={""}
+        transaction_date={item.transaction_date}
         amount={item.amount}
-        id={""}
         payment_location={item.payment_location}
+        id={""}
+        category={""}
       />
     ),
     []
