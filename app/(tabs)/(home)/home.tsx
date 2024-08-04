@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -11,7 +11,6 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerActions } from "@react-navigation/native";
 import { SquareButton } from "@/components/SquareButton";
@@ -19,28 +18,20 @@ import { TagMoHeader } from "@/components/TagMoHeader";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { RectangleButton } from "@/components/RectangleButton";
 import { router } from "expo-router";
-
-const DATA = [
-  { title: "名古屋三交ビル", distance: "350m" },
-  { title: "セブンイレブン国際センター1号店", distance: "400m" },
-  { title: "すき家 名駅一丁目店", distance: "400m" },
-  { title: "青果 石川", distance: "450m" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-];
+import getShopList from "@/services/api/shopListApi";
+import useCurrentLocation from "@/hooks/useCurrentLocation";
 
 type ListItemProps = {
-  title: string;
-  distance: string;
+  shopName: string;
+  shopLocationName: string;
+  distance: number;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
+const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
-    <Text style={styles.title}>{title}</Text>
-    <Text style={styles.distance}>{distance}</Text>
+    <Text style={styles.title}>{ListItemProps.shopName}</Text>
+    <Text style={styles.title}>{ListItemProps.shopLocationName}</Text>
+    <Text style={styles.distance}>{ListItemProps.distance}m</Text>
   </View>
 );
 
@@ -68,16 +59,35 @@ const handlePress = () => {
 };
 
 const HomeMain: React.FC = () => {
+  console.log("HomeMainが呼び出されてるか確認");
   const [searchText, setSearchText] = useState("");
+  const [shopList, setShopList] = useState<ListItemProps[]>([]);
+  const { currentLocation, error } = useCurrentLocation();
   const navigation = useNavigation();
 
-  const onSettingsPress = () => {
-    navigation.dispatch(DrawerActions.openDrawer());
+  useEffect(() => {
+    console.log("useEffectが呼び出されてるか確認");
+    const fetchShops = async () => {
+      console.log("fetchShopsが呼び出されてるか確認");
+      if (currentLocation.latitude && currentLocation.longitude) {
+        console.log("現在地緯度経度確認");
+        console.log(currentLocation.latitude);
+        console.log(currentLocation.longitude);
+        const list = await getShopList(searchText, currentLocation);
+        console.log("APIデバッグ用", list); // デバッグ用ログ
+        setShopList(list);
+      }
+    };
+
+    fetchShops();
+  }, [searchText, currentLocation]);
+
+  const handleTouchOutside = () => {
     Keyboard.dismiss(); // キーボードを閉じる
   };
 
-  //historyでは適切に動いたが、こっちでは動かない
-  const handleTouchOutside = () => {
+  const onSettingsPress = () => {
+    navigation.dispatch(DrawerActions.openDrawer());
     Keyboard.dismiss(); // キーボードを閉じる
   };
 
@@ -101,9 +111,13 @@ const HomeMain: React.FC = () => {
         />
       </View>
       <FlatList
-        data={DATA}
+        data={shopList}
         renderItem={({ item }) => (
-          <ListItem title={item.title} distance={item.distance} />
+          <ListItem
+            shopName={item.shopName}
+            shopLocationName={item.shopLocationName}
+            distance={item.distance}
+          />
         )}
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
@@ -227,8 +241,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center", // これを追加して要素を水平方向の中央に配置します
+    alignItems: "center",
     paddingHorizontal: 30,
-    marginTop: -100, // 上部のマージンを消すために負の値を設定
+    marginTop: -100,
   },
 });

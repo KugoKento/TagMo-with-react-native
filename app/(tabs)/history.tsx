@@ -45,7 +45,11 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
     >
       {formatDateToMyFormat(ListItemProps.transaction_date)}
     </Text>
-    <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
+    <Text
+      style={styles.payment_location}
+      numberOfLines={1}
+      ellipsizeMode="tail"
+    >
       {ListItemProps.payment_location}
     </Text>
     <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
@@ -241,7 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  category: {
+  payment_location: {
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "left", // テキストを左寄せ

@@ -52,8 +52,12 @@ const chartData = [
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
-    <Text style={styles.category}>{ListItemProps.category}</Text>
-    <Text style={styles.total_amount}>¥{ListItemProps.total_amount}</Text>
+    <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
+      {ListItemProps.category}
+    </Text>
+    <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
+      ¥{ListItemProps.total_amount}
+    </Text>
   </View>
 );
 
@@ -154,9 +158,15 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "left", // テキストを左寄せ
+    flex: 1, // 幅を保つためにflexを使用
   },
-  total_amount: {
+
+  amount: {
     fontSize: 16,
+    flex: 1, // 幅を保つためにflexを使用
+    textAlign: "right", // テキストを左寄せ
   },
   footer: {
     flexDirection: "row",

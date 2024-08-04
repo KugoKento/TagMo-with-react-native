@@ -42,9 +42,8 @@
 - expo
   - expo-router(画面遷移)
   - expo-sqlite(DB)
-- Firebase
-  - Firebase Cloud Firestore(バックアップ用 DB)
-  - Firebase Authentication(認証)
+  - expo-location(位置情報取得)
+- axios
 
 使う可能性あり
 
