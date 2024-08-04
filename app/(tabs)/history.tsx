@@ -24,25 +24,35 @@ type ListItemProps = {
   amount: string;
 };
 
-const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
-  <View style={styles.listItem}>
-    {/* <Text style={styles.category}>{category}</Text> */}
-    <Text style={styles.category}>
-      {formatDateToYYYYMMDD(ListItemProps.transaction_date)}
-    </Text>
-    <Text style={styles.category}>{ListItemProps.payment_location}</Text>
-    <Text style={styles.amount}>¥{ListItemProps.amount}</Text>
-  </View>
-);
-
 // 日付をyyyy-mm-dd形式に変換する関数
-const formatDateToYYYYMMDD = (dateString: string) => {
+const formatDateToMyFormat = (dateString: string) => {
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const day = String(date.getUTCDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${month}/${day} ${hours}:${minutes}`;
 };
+
+const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
+  <View style={styles.listItem}>
+    {/* <Text style={styles.category}>{category}</Text> */}
+    <Text
+      style={styles.transaction_date}
+      numberOfLines={1}
+      ellipsizeMode="tail"
+    >
+      {formatDateToMyFormat(ListItemProps.transaction_date)}
+    </Text>
+    <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
+      {ListItemProps.payment_location}
+    </Text>
+    <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
+      ¥{ListItemProps.amount}
+    </Text>
+  </View>
+);
 
 const History: React.FC = () => {
   const [searchText, setSearchText] = useState("");
@@ -219,18 +229,32 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flexDirection: "row",
+
     justifyContent: "space-between",
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
     backgroundColor: "#fff",
   },
+
+  transaction_date: {
+    fontSize: 16,
+  },
+
   category: {
     fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "left", // テキストを左寄せ
+    flex: 1, // 幅を保つためにflexを使用
+    marginLeft: 50, // 日付との間に幅を持たせる
   },
+
   amount: {
     fontSize: 16,
+    flex: 1, // 幅を保つためにflexを使用
+    textAlign: "right", // テキストを左寄せ
   },
+
   rowBack: {
     alignItems: "center",
     backgroundColor: "#fff",

@@ -50,7 +50,13 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
     await db.runAsync(
       "INSERT INTO amount_list (transaction_date, payment_location, category, payment_method, amount) VALUES (?, ?, ?, ?, ?)",
-      [new Date().toISOString(), "ツタヤ", "書籍", "現金", 1500]
+      [
+        new Date().toISOString(),
+        "ツタヤァァァァァァァァァァァァァァ",
+        "書籍",
+        "現金",
+        1500,
+      ]
     );
 
     await db.runAsync(
@@ -83,10 +89,10 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
       "INSERT INTO amount_list (transaction_date, payment_location, category, payment_method, amount) VALUES (?, ?, ?, ?, ?)",
       [
         new Date().toISOString(),
-        "Amazon",
+        "Amazonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
         "サブスクリプション",
         "クレジットカード",
-        500,
+        50000000000000000,
       ]
     );
 
