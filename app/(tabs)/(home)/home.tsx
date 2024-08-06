@@ -29,8 +29,10 @@ type ListItemProps = {
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
-    <Text style={styles.title}>{ListItemProps.shopName}</Text>
-    <Text style={styles.title}>{ListItemProps.shopLocationName}</Text>
+    <Text style={styles.shopName}>{ListItemProps.shopName}</Text>
+    <Text style={styles.shopLocationName}>
+      {ListItemProps.shopLocationName}
+    </Text>
     <Text style={styles.distance}>{ListItemProps.distance}m</Text>
   </View>
 );
@@ -223,8 +225,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
   },
-  title: {
+  shopName: {
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  shopLocationName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "left", // テキストを左寄せ
+    flex: 1, // 幅を保つためにflexを使用
+    marginLeft: 50, // 日付との間に幅を持たせる
   },
   distance: {
     color: "#888",

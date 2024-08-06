@@ -27,8 +27,8 @@ const Index = () => {
     return null;
   }
 
-  // return <Redirect href='(tabs)/(home)/home'/>
-  return <Redirect href="auth/login" />;
+  return <Redirect href="(tabs)/(home)/home" />;
+  // return <Redirect href="auth/login" />;
 };
 
 export default Index;

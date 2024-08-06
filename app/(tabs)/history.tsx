@@ -65,12 +65,23 @@ const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
 
+  const formatNumberWithCommas = (value: string): string => {
+    return Number(value).toLocaleString();
+  };
+
   useEffect(() => {
     async function setup() {
       const result = await db.getAllAsync<ListItemProps>(
         "SELECT * FROM amount_list"
       );
-      setListData(result);
+
+      // amount をカンマ区切りにフォーマット
+      const formattedResult = result.map((item) => ({
+        ...item,
+        amount: formatNumberWithCommas(item.amount),
+      }));
+
+      setListData(formattedResult);
       console.log("data in db:", result);
     }
     setup();

@@ -36,14 +36,16 @@
 
 使用済み
 
-- ReactNative
+- React
   - React Navigation
+  - react-loading
 - Typescript
 - expo
   - expo-router(画面遷移)
   - expo-sqlite(DB)
   - expo-location(位置情報取得)
 - axios
+- Overpass API(OpenStreetMap のデータを扱う API)
 
 使う可能性あり
 

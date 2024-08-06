@@ -47,11 +47,14 @@ const getShopList = async (
   searchString: string,
   currentLocation: LocationType
 ): Promise<MapList[]> => {
-  const searchRadius: number = 1000;
+  const searchRadius: number = 200;
   const query = `
   [out:json];
   (
     node["shop"]["name"~"${searchString}"](around:${searchRadius.toString()}, ${
+    currentLocation.latitude
+  }, ${currentLocation.longitude});
+    node["amenity"]["name"~"${searchString}"](around:${searchRadius.toString()}, ${
     currentLocation.latitude
   }, ${currentLocation.longitude});
   );
@@ -78,7 +81,7 @@ const getShopList = async (
         longitude: element.lon,
       };
       const distance = parseFloat(
-        haversineDistance(currentLocation, shopLocation).toFixed(2)
+        haversineDistance(currentLocation, shopLocation).toFixed(0)
       );
 
       return {

@@ -72,6 +72,10 @@ const History: React.FC = () => {
     []
   );
 
+  const formatNumberWithCommas = (value: string): string => {
+    return Number(value).toLocaleString();
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,7 +89,14 @@ const History: React.FC = () => {
         ORDER BY total_amount DESC
         `
         );
-        setListData(result);
+
+        // amount をカンマ区切りにフォーマット
+        const formattedResult = result.map((item) => ({
+          ...item,
+          total_amount: formatNumberWithCommas(item.total_amount),
+        }));
+
+        setListData(formattedResult);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
