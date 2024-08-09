@@ -21,7 +21,10 @@ import { RectangleButton } from "@/components/RectangleButton";
 import { router } from "expo-router";
 import getShopList from "@/services/api/shopListApi";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
-import ReactLoading from "react-loading";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Amount from "./amount";
+
+const NEXT_SCREEN: string = "Amount";
 
 type ListItemProps = {
   shopName: string;
@@ -127,11 +130,15 @@ const HomeMain: React.FC = () => {
           <FlatList
             data={shopList}
             renderItem={({ item }) => (
-              <ListItem
-                shopName={item.shopName}
-                shopLocationName={item.shopLocationName}
-                distance={item.distance}
-              />
+              <TouchableOpacity
+              onPress={() => navigation.navigate(NEXT_SCREEN, { shop: item })}
+              >
+                <ListItem
+                  shopName={item.shopName}
+                  shopLocationName={item.shopLocationName}
+                  distance={item.distance}
+                />
+              </TouchableOpacity>
             )}
             keyExtractor={(item, index) => index.toString()}
             style={styles.list}
@@ -143,19 +150,19 @@ const HomeMain: React.FC = () => {
           color="red"
           iconName="shopping-cart"
           text="EC"
-          nextScreen="Amount"
+          nextScreen={NEXT_SCREEN}
         />
         <SquareButton
           color="orange"
           iconName="commute"
           text="交通"
-          nextScreen="Amount"
+          nextScreen={NEXT_SCREEN}
         />
         <SquareButton
           color="green"
           iconName="help-outline"
           text="その他"
-          nextScreen="Amount"
+          nextScreen={NEXT_SCREEN}
         />
       </View>
     </SafeAreaView>
