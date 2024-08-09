@@ -38,7 +38,7 @@
 
 - React
   - React Navigation
-  - react-loading
+  - react-loading → react native では利用できない
 - Typescript
 - expo
   - expo-router(画面遷移)

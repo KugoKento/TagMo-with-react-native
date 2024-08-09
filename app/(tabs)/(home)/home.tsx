@@ -9,6 +9,7 @@ import {
   Alert,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -20,6 +21,7 @@ import { RectangleButton } from "@/components/RectangleButton";
 import { router } from "expo-router";
 import getShopList from "@/services/api/shopListApi";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
+import ReactLoading from "react-loading";
 
 type ListItemProps = {
   shopName: string;
@@ -64,10 +66,13 @@ const HomeMain: React.FC = () => {
   console.log("HomeMainが呼び出されてるか確認");
   const [searchText, setSearchText] = useState("");
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
+  const [isLoading, setIsloading] = useState(true);
   const { currentLocation, error } = useCurrentLocation();
   const navigation = useNavigation();
 
   useEffect(() => {
+    setIsloading(true);
+    console.log("isLoading：" + isLoading);
     console.log("useEffectが呼び出されてるか確認");
     const fetchShops = async () => {
       console.log("fetchShopsが呼び出されてるか確認");
@@ -78,6 +83,7 @@ const HomeMain: React.FC = () => {
         const list = await getShopList(searchText, currentLocation);
         console.log("APIデバッグ用", list); // デバッグ用ログ
         setShopList(list);
+        setIsloading(false);
       }
     };
 
@@ -112,18 +118,26 @@ const HomeMain: React.FC = () => {
           onChangeText={setSearchText}
         />
       </View>
-      <FlatList
-        data={shopList}
-        renderItem={({ item }) => (
-          <ListItem
-            shopName={item.shopName}
-            shopLocationName={item.shopLocationName}
-            distance={item.distance}
+      <>
+        {isLoading ? (
+          <View style={styles.activityIndicator}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : (
+          <FlatList
+            data={shopList}
+            renderItem={({ item }) => (
+              <ListItem
+                shopName={item.shopName}
+                shopLocationName={item.shopLocationName}
+                distance={item.distance}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            style={styles.list}
           />
         )}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.list}
-      />
+      </>
       <View style={styles.footer}>
         <SquareButton
           color="red"
@@ -217,6 +231,10 @@ const styles = StyleSheet.create({
   list: {
     flex: 1,
     marginHorizontal: 16,
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: "center",
   },
   listItem: {
     flexDirection: "row",

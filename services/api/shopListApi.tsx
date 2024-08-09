@@ -47,7 +47,7 @@ const getShopList = async (
   searchString: string,
   currentLocation: LocationType
 ): Promise<MapList[]> => {
-  const searchRadius: number = 200;
+  const searchRadius: number = 500;
   const query = `
   [out:json];
   (
