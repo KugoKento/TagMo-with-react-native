@@ -70,7 +70,7 @@ const HomeMain: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
   const [isLoading, setIsloading] = useState(true);
-  const { currentLocation, error } = useCurrentLocation();
+  const { currentLocation, error } = useCurrentLocation(searchText);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -131,7 +131,7 @@ const HomeMain: React.FC = () => {
             data={shopList}
             renderItem={({ item }) => (
               <TouchableOpacity
-              onPress={() => navigation.navigate(NEXT_SCREEN, { shop: item })}
+                onPress={() => navigation.navigate(NEXT_SCREEN, { shop: item })}
               >
                 <ListItem
                   shopName={item.shopName}
