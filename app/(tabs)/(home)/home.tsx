@@ -11,18 +11,17 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerActions } from "@react-navigation/native";
-import { SquareButton } from "@/components/SquareButton";
+import { SquareButtonInHome } from "@/components/SquareButtonInHome";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { RectangleButton } from "@/components/RectangleButton";
 import { router } from "expo-router";
-import getShopList from "@/services/api/shopListApi";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Amount from "./amount";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import { getShopList } from "@/services/api/ShopListApi";
 
 const NEXT_SCREEN: string = "Amount";
 
@@ -70,8 +69,9 @@ const HomeMain: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
   const [isLoading, setIsloading] = useState(true);
+  // const [refreshing, setRefreshing] = useState(false);
   const { currentLocation, error } = useCurrentLocation(searchText);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   useEffect(() => {
     setIsloading(true);
@@ -129,9 +129,20 @@ const HomeMain: React.FC = () => {
         ) : (
           <FlatList
             data={shopList}
+            // refreshing={refreshing}
+            // onRefresh={async () => {
+            //   setRefreshing(true);
+            //   setSearchText(searchText);
+            //   setRefreshing(false);
+            // }}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate(NEXT_SCREEN, { shop: item })}
+                onPress={() => {
+                  console.log(item.shopName);
+                  navigation.navigate(NEXT_SCREEN, {
+                    item: item,
+                  });
+                }}
               >
                 <ListItem
                   shopName={item.shopName}
@@ -146,19 +157,19 @@ const HomeMain: React.FC = () => {
         )}
       </>
       <View style={styles.footer}>
-        <SquareButton
+        <SquareButtonInHome
           color="red"
           iconName="shopping-cart"
           text="EC"
           nextScreen={NEXT_SCREEN}
         />
-        <SquareButton
+        <SquareButtonInHome
           color="orange"
           iconName="commute"
           text="交通"
           nextScreen={NEXT_SCREEN}
         />
-        <SquareButton
+        <SquareButtonInHome
           color="green"
           iconName="help-outline"
           text="その他"

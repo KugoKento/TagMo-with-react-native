@@ -64,6 +64,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const db = useSQLiteContext();
+  const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = useCallback(
     ({ item }: { item: ListItemProps }) => (
@@ -97,13 +98,15 @@ const History: React.FC = () => {
         }));
 
         setListData(formattedResult);
+        setRefreshing(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [db]);
+    setRefreshing(false);
+  }, [refreshing]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,6 +131,10 @@ const History: React.FC = () => {
       <FlatList
         data={listData}
         renderItem={renderItem}
+        refreshing={refreshing}
+        onRefresh={() => {
+          setRefreshing(true);
+        }}
         keyExtractor={(item, index) => index.toString()}
         style={styles.list}
       />

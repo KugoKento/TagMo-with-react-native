@@ -12,35 +12,101 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { FontAwesome, MaterialIcons, Entypo } from "@expo/vector-icons";
-import { SquareButton } from "@/components/SquareButton";
+import { SquareButtonInAmount } from "@/components/SquareButtonInAmount";
 import { TagMoHeader } from "@/components/TagMoHeader";
+import { RouteProp, useRoute } from "@react-navigation/native";
+
+const NEXT_SCREEN = "Home";
+
+// type ListItemProps = {
+//   title: string;
+//   distance: string;
+// };
+
+// const DATA: ListItemProps[] = [
+//   { title: "名古屋三交ビル", distance: "350m" },
+//   { title: "セブンイレブン国際センター1号店", distance: "400m" },
+//   { title: "すき家 名駅一丁目店", distance: "400m" },
+//   { title: "青果 石川", distance: "450m" },
+//   { title: "Title", distance: "Label" },
+//   { title: "Title", distance: "Label" },
+//   { title: "Title", distance: "Label" },
+//   { title: "Title", distance: "Label" },
+//   { title: "Title", distance: "Label" },
+// ];
 
 type ListItemProps = {
-  title: string;
-  distance: string;
+  shopName: string;
+  shopLocationName: string;
 };
 
-const DATA: ListItemProps[] = [
-  { title: "名古屋三交ビル", distance: "350m" },
-  { title: "セブンイレブン国際センター1号店", distance: "400m" },
-  { title: "すき家 名駅一丁目店", distance: "400m" },
-  { title: "青果 石川", distance: "450m" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-  { title: "Title", distance: "Label" },
-];
+type RootParamList = {
+  Home: undefined;
+  Amount: { item: ListItemProps };
+};
 
-const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
-  <View style={styles.listItem}>
-    <Text style={styles.title}>{title}</Text>
-    <Text style={styles.distance}>{distance}</Text>
-  </View>
-);
+type RegisteredProps = {
+  transaction_date: Date;
+  payment_location: string;
+  category: string;
+  payment_method: string;
+  amount: string;
+};
 
-const Amount = ({ navigation }: any) => {
-  const [amount, setAmount] = useState("");
+// const ListItem: React.FC<ListItemProps> = ({ title, distance }) => (
+//   <View style={styles.listItem}>
+//     <Text style={styles.title}>{title}</Text>
+//     <Text style={styles.distance}>{distance}</Text>
+//   </View>
+// );
+
+const Amount: React.FC = ({ navigation }: any) => {
+  const [amount, setAmount] = useState("0"); //入力金額
+  const route = useRoute<RouteProp<RootParamList, "Amount">>(); //Home画面から変数を受ける
+  // const { shopName, shopLocationName } = route.params as {
+  //   shopName: string;
+  //   shopLocationName: string;
+  // };
+
+  // 受け取ったパラメータを安全に確認
+  console.log();
+  // console.log(shopName);
+  // console.log(shopLocationName);
+  // console.log("item : " + route.params.item.shopLocationName);
+  // console.log("shopName : " + route.params.item.shopName);
+  // console.log("shopName : " + route.params.item.shopLocationName);
+  // const item = route.params?.item ?? {
+  //   shopName: "Unknown",
+  //   shopLocationName: "Unknown",
+  // };
+  // console.log("item : " + item);
+  console.log(route);
+  console.log(route.params);
+  console.log(route.params.item.shopName);
+  console.log();
+  const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
+    transaction_date: new Date(),
+    payment_location:
+      (route.params.item.shopName ?? "") +
+      " " +
+      (route.params.item.shopLocationName ?? ""),
+    category: "",
+    payment_method: "",
+    amount: "0",
+  });
+
+  // console.log(route.params.item.shopLocationName);
+
+  useEffect(() => {
+    setRegisteredProps((prev) => ({
+      ...prev,
+      amount: amount,
+    }));
+  }, [amount]);
+
+  // console.log("Shop Name:", shopName);
+  // console.log("Shop Location Name:", shopLocationName);
+  // console.log("Distance:", distance);
 
   const squareButtonColor: string = "#495B6D";
 
@@ -79,63 +145,72 @@ const Amount = ({ navigation }: any) => {
           style={styles.list}
         /> */}
         <View style={styles.buttonGroup}>
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="payments"
             text="現金"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="credit-card"
             text="クレジット"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="qr-code-2"
             text="QRコード"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
         </View>
         <View style={styles.buttonGroup}>
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="commute"
             text="交通系IC"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="savings"
             text="口座振込"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="currency-exchange"
             text="立て替え"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
         </View>
         <View style={styles.buttonGroup}>
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="thumb-up"
             text="ポイント"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="card-giftcard"
             text="商品券"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
-          <SquareButton
+          <SquareButtonInAmount
             color={squareButtonColor}
             iconName="help-outline"
             text="その他"
-            nextScreen="Amount"
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
           />
         </View>
       </SafeAreaView>

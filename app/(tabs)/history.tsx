@@ -9,6 +9,7 @@ import {
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
+  FlatList,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -64,6 +65,7 @@ const History: React.FC = () => {
   const db = useSQLiteContext();
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
+  const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
 
   const formatNumberWithCommas = (value: string): string => {
     return Number(value).toLocaleString();
@@ -82,10 +84,11 @@ const History: React.FC = () => {
       }));
 
       setListData(formattedResult);
-      console.log("data in db:", result);
+      // console.log("data in db:", result);
     }
     setup();
-  }, []);
+    setRefreshing(false);
+  }, [refreshing]);
 
   const onCancelPress = () => {
     if (listHistory.length > 0) {
@@ -183,7 +186,6 @@ const History: React.FC = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={handleTouchOutside}>
       <SafeAreaView style={styles.container}>
         <TagMoHeader
           hasLeftButton={false}
@@ -205,15 +207,31 @@ const History: React.FC = () => {
           data={listData}
           renderItem={renderItem}
           renderHiddenItem={renderHiddenItem}
+          refreshing={refreshing}
+          onRefresh={() => setRefreshing(true)}
           rightOpenValue={-75}
           closeOnRowPress={true} // 行を押したときに自動的に閉じる
           closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
           disableRightSwipe={true} // 右へのスワイプを無効化
           keyExtractor={(item) => item.id} // 一意のキーを指定
           style={styles.list}
+          ListEmptyComponent={
+            <View style={styles.list}>
+              <Text>No items available</Text>
+            </View>
+          }
         />
+        {/* <FlatList
+          data={listData}
+          renderItem={renderItem}
+          refreshing={refreshing}
+          onRefresh={() => {
+            setRefreshing(true);
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          style={styles.list}
+        /> */}
       </SafeAreaView>
-    </TouchableWithoutFeedback>
   );
 };
 
