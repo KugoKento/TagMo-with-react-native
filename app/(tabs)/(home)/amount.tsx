@@ -61,7 +61,7 @@ type RegisteredProps = {
 // );
 
 const Amount: React.FC = ({ navigation }: any) => {
-  const [amount, setAmount] = useState("0"); //入力金額
+  const [amount, setAmount] = useState(""); //入力金額
   const route = useRoute<RouteProp<RootParamList, "Amount">>(); //Home画面から変数を受ける
   // const { shopName, shopLocationName } = route.params as {
   //   shopName: string;

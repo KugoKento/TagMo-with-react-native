@@ -37,7 +37,7 @@ const formatDateToMyFormat = (dateString: string) => {
 };
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
-  <View style={styles.listItem}>
+  <View style={styles.listItemFirst}>
     {/* <Text style={styles.category}>{category}</Text> */}
     <Text
       style={styles.transaction_date}
@@ -46,16 +46,18 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
     >
       {formatDateToMyFormat(ListItemProps.transaction_date)}
     </Text>
-    <Text
-      style={styles.payment_location}
-      numberOfLines={1}
-      ellipsizeMode="tail"
-    >
-      {ListItemProps.payment_location}
-    </Text>
-    <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
-      ¥{ListItemProps.amount}
-    </Text>
+    <View style={styles.listItemSecond}>
+      <Text
+        style={styles.payment_location}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
+        {ListItemProps.payment_location}
+      </Text>
+      <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
+        ¥{ListItemProps.amount}
+      </Text>
+    </View>
   </View>
 );
 
@@ -186,42 +188,42 @@ const History: React.FC = () => {
   };
 
   return (
-      <SafeAreaView style={styles.container}>
-        <TagMoHeader
-          hasLeftButton={false}
-          hasRightButton={true}
-          rightFontAwesomeName={"undo"}
-          rightcolor={"black"}
-          onRightPress={onCancelPress}
+    <SafeAreaView style={styles.container}>
+      <TagMoHeader
+        hasLeftButton={false}
+        hasRightButton={true}
+        rightFontAwesomeName={"undo"}
+        rightcolor={"black"}
+        onRightPress={onCancelPress}
+      />
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search"
+          placeholderTextColor="#888"
+          value={searchText}
+          onChangeText={setSearchText}
         />
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search"
-            placeholderTextColor="#888"
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-        </View>
-        <SwipeListView
-          data={listData}
-          renderItem={renderItem}
-          renderHiddenItem={renderHiddenItem}
-          refreshing={refreshing}
-          onRefresh={() => setRefreshing(true)}
-          rightOpenValue={-75}
-          closeOnRowPress={true} // 行を押したときに自動的に閉じる
-          closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
-          disableRightSwipe={true} // 右へのスワイプを無効化
-          keyExtractor={(item) => item.id} // 一意のキーを指定
-          style={styles.list}
-          ListEmptyComponent={
-            <View style={styles.list}>
-              <Text>No items available</Text>
-            </View>
-          }
-        />
-        {/* <FlatList
+      </View>
+      <SwipeListView
+        data={listData}
+        renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        refreshing={refreshing}
+        onRefresh={() => setRefreshing(true)}
+        rightOpenValue={-75}
+        closeOnRowPress={true} // 行を押したときに自動的に閉じる
+        closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
+        disableRightSwipe={true} // 右へのスワイプを無効化
+        keyExtractor={(item) => item.id} // 一意のキーを指定
+        style={styles.list}
+        ListEmptyComponent={
+          <View style={styles.list}>
+            <Text>No items available</Text>
+          </View>
+        }
+      />
+      {/* <FlatList
           data={listData}
           renderItem={renderItem}
           refreshing={refreshing}
@@ -231,7 +233,7 @@ const History: React.FC = () => {
           keyExtractor={(item, index) => index.toString()}
           style={styles.list}
         /> */}
-      </SafeAreaView>
+    </SafeAreaView>
   );
 };
 
@@ -260,32 +262,35 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
   },
-  listItem: {
-    flexDirection: "row",
-
+  listItemFirst: {
     justifyContent: "space-between",
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
     backgroundColor: "#fff",
   },
-
+  listItemSecond: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+  },
   transaction_date: {
     fontSize: 16,
   },
 
   payment_location: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: "left", // テキストを左寄せ
-    flex: 1, // 幅を保つためにflexを使用
-    marginLeft: 50, // 日付との間に幅を持たせる
+    flex: 3, // 幅を保つためにflexを使用
+    marginLeft: 20, // 日付との間に幅を持たせる
   },
 
   amount: {
     fontSize: 16,
     flex: 1, // 幅を保つためにflexを使用
-    textAlign: "right", // テキストを左寄せ
+    textAlign: "right", // テキストを右寄せ
   },
 
   rowBack: {
@@ -294,15 +299,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "flex-end",
-    paddingLeft: 15,
-    paddingRight: 15,
   },
   backRightBtn: {
     alignItems: "center",
-    bottom: 0,
     justifyContent: "center",
-    position: "absolute",
-    top: 0,
+    height: "100%", // 高さをリストアイテムに合わせる
     width: 75,
   },
   backRightBtnRight: {
