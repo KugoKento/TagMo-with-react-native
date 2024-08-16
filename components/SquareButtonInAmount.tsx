@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { registerShopList } from "@/services/api/ShopListApi";
+import ShopListApi from "@/services/api/ShopListApi";
+import { LoadListContext } from "@/app/_layout";
 
 type RegisteredProps = {
   transaction_date: Date;
@@ -30,8 +31,9 @@ export const SquareButtonInAmount: React.FC<SquareButtonProps> = ({
   registeredProps,
 }) => {
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const { loadList, setLoadList } = useContext(LoadListContext);
 
-  const handlePress = () => {
+  const handlePress = async () => {
     navigation.navigate(nextScreen);
     //undefinedがありえるため避けた
     if (registeredProps === undefined) {
@@ -41,8 +43,15 @@ export const SquareButtonInAmount: React.FC<SquareButtonProps> = ({
     console.log("DBに登録する項目");
     console.log(registeredProps);
     console.log("registeredProps : " + registeredProps);
-    registerShopList(registeredProps);
+    await ShopListApi.registerShopList(registeredProps);
     console.log("データベース登録が実行されているか確認");
+    console.log();
+    console.log("SquareButtonのloadList確認");
+    console.log(loadList);
+    //history, balanceのリストを更新するため一時的に値を変更
+    setLoadList(!loadList);
+    console.log(loadList);
+    console.log();
     Alert.alert("入力完了", "入力が完了しました。");
   };
   return (

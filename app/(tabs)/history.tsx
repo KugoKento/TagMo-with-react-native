@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import {
   SafeAreaView,
   View,
@@ -16,6 +16,7 @@ import { useFonts } from "expo-font";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
+import { LoadListContext } from "@/app/_layout";
 
 type ListItemProps = {
   id: string;
@@ -68,6 +69,7 @@ const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
+  const { loadList, setLoadList } = useContext(LoadListContext);
 
   const formatNumberWithCommas = (value: string): string => {
     return Number(value).toLocaleString();
@@ -75,22 +77,26 @@ const History: React.FC = () => {
 
   useEffect(() => {
     async function setup() {
-      const result = await db.getAllAsync<ListItemProps>(
-        "SELECT * FROM amount_list"
-      );
-
-      // amount をカンマ区切りにフォーマット
-      const formattedResult = result.map((item) => ({
-        ...item,
-        amount: formatNumberWithCommas(item.amount),
-      }));
-
-      setListData(formattedResult);
-      // console.log("data in db:", result);
+      try {
+        // データベースからデータを取得
+        const result = await db.getAllAsync<ListItemProps>(
+          "SELECT * FROM amount_list ORDER BY transaction_date DESC"
+        );
+        // amount をカンマ区切りにフォーマット
+        const formattedResult = result.map((item) => ({
+          ...item,
+          amount: formatNumberWithCommas(item.amount),
+        }));
+        // フォーマットされたデータをセット
+        setListData(formattedResult);
+        setRefreshing(false);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
     }
-    setup();
-    setRefreshing(false);
-  }, [refreshing]);
+
+    setup(); // setup関数を呼び出して非同期処理を開始
+  }, [refreshing, loadList]); // `refreshing` または `loadList` が変わったときに実行される
 
   const onCancelPress = () => {
     if (listHistory.length > 0) {
@@ -210,18 +216,20 @@ const History: React.FC = () => {
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         refreshing={refreshing}
-        onRefresh={() => setRefreshing(true)}
+        onRefresh={() => {
+          setRefreshing(true);
+        }}
         rightOpenValue={-75}
         closeOnRowPress={true} // 行を押したときに自動的に閉じる
         closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
         disableRightSwipe={true} // 右へのスワイプを無効化
         keyExtractor={(item) => item.id} // 一意のキーを指定
         style={styles.list}
-        ListEmptyComponent={
-          <View style={styles.list}>
-            <Text>No items available</Text>
-          </View>
-        }
+        // ListEmptyComponent={
+        //   <View style={styles.list}>
+        //     <Text>No items available</Text>
+        //   </View>
+        // }
       />
       {/* <FlatList
           data={listData}

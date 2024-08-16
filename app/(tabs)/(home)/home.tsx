@@ -21,7 +21,7 @@ import { router } from "expo-router";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-import { getShopList } from "@/services/api/ShopListApi";
+import ShopListApi from "@/services/api/ShopListApi";
 
 const NEXT_SCREEN: string = "Amount";
 
@@ -69,8 +69,10 @@ const HomeMain: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
   const [isLoading, setIsloading] = useState(true);
-  // const [refreshing, setRefreshing] = useState(false);
-  const { currentLocation, error } = useCurrentLocation(searchText);
+  const [refreshing, setRefreshing] = useState(false);
+
+  //useCurrentLocationは引数の変更によって新しい値を返す
+  const { currentLocation, error } = useCurrentLocation(searchText, refreshing);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const HomeMain: React.FC = () => {
         console.log("現在地緯度経度確認");
         console.log(currentLocation.latitude);
         console.log(currentLocation.longitude);
-        const list = await getShopList(searchText, currentLocation);
+        const list = await ShopListApi.getShopList(searchText, currentLocation);
         console.log("APIデバッグ用", list); // デバッグ用ログ
         setShopList(list);
         setIsloading(false);
@@ -129,12 +131,13 @@ const HomeMain: React.FC = () => {
         ) : (
           <FlatList
             data={shopList}
-            // refreshing={refreshing}
-            // onRefresh={async () => {
-            //   setRefreshing(true);
-            //   setSearchText(searchText);
-            //   setRefreshing(false);
-            // }}
+            refreshing={refreshing}
+            onRefresh={async () => {
+              //更新で最新現在地の取得とショップ検索
+              setRefreshing(true);
+              setSearchText(searchText);
+              setRefreshing(false);
+            }}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {

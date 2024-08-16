@@ -44,11 +44,11 @@ const haversineDistance = (
   return R * c * 1000;
 };
 
-export const getShopList = async (
+const getShopList = async (
   searchString: string,
   currentLocation: LocationType
 ): Promise<MapList[]> => {
-  const searchRadius: number = 1000;
+  const searchRadius: number = 300;
   const query = `
   [out:json];
   (
@@ -110,7 +110,7 @@ type TagMoDBProps = {
   amount?: string;
 };
 
-export const registerShopList = async (props: TagMoDBProps): Promise<void> => {
+const registerShopList = async (props: TagMoDBProps): Promise<void> => {
   console.log("registerShopList呼ばれている確認1");
   console.log("props : " + props);
   const db = await SQLite.openDatabaseAsync("tagmo.db");
@@ -138,3 +138,5 @@ export const registerShopList = async (props: TagMoDBProps): Promise<void> => {
   const result = await db.runAsync("SELECT * FROM amount_list");
   console.log("DB : " + result);
 };
+
+export default { getShopList, registerShopList };

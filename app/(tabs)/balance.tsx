@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView, View, Text, FlatList, StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
+import { LoadListContext } from "@/app/_layout";
 
 type ListItemProps = {
   category: string;
@@ -65,6 +66,7 @@ const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const db = useSQLiteContext();
   const [refreshing, setRefreshing] = useState(false);
+  const { loadList, setLoadList } = useContext(LoadListContext);
 
   const renderItem = useCallback(
     ({ item }: { item: ListItemProps }) => (
@@ -92,13 +94,12 @@ const History: React.FC = () => {
         );
 
         // amount をカンマ区切りにフォーマット
-        const formattedResult = result.map((item) => ({
+        const formattedResult = await result.map((item) => ({
           ...item,
           total_amount: formatNumberWithCommas(item.total_amount),
         }));
 
-        setListData(formattedResult);
-        setRefreshing(false);
+        await setListData(formattedResult);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -106,7 +107,12 @@ const History: React.FC = () => {
 
     fetchData();
     setRefreshing(false);
-  }, [refreshing]);
+    console.log();
+    console.log("balanceがloadListの変更に反応しているか確認");
+    console.log(loadList);
+    console.log(listData);
+    console.log();
+  }, [refreshing, loadList]);
 
   return (
     <SafeAreaView style={styles.container}>

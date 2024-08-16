@@ -6,7 +6,7 @@ import {
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -17,8 +17,17 @@ import { migrateDbIfNeeded } from "@/services/database";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
+export const LoadListContext = createContext({
+  loadList: false,
+  setLoadList: (value: boolean) => {},
+});
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  //金額入力したらすべてのリストが再ロードされるようにする
+  const [loadList, setLoadList] = useState(false);
+
   const [loaded] = useFonts({
     SpaceMono: require("@/assets/fonts/SpaceMono-Regular.ttf"),
   });
@@ -34,14 +43,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <SQLiteProvider databaseName="tagmo.db" onInit={migrateDbIfNeeded}>
-        <Stack>
-          {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="+not-found" /> */}
-        </Stack>
-      </SQLiteProvider>
-    </ThemeProvider>
+    <LoadListContext.Provider value={{ loadList, setLoadList }}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <SQLiteProvider databaseName="tagmo.db" onInit={migrateDbIfNeeded}>
+          <Stack>
+            {/* <Stack.Screen name="index" options={{ headerShown: false }} /> */}
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            {/* <Stack.Screen name="+not-found" /> */}
+          </Stack>
+        </SQLiteProvider>
+      </ThemeProvider>
+    </LoadListContext.Provider>
   );
 }
