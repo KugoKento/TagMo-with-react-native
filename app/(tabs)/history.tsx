@@ -17,17 +17,20 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
+import DBApi from "@/services/database/DBApi";
 
 type ListItemProps = {
   id: string;
-  transaction_date: string;
+  transaction_date: Date;
   category: string;
   payment_location: string;
+  payment_method: string;
   amount: string;
 };
 
 // 日付をyyyy-mm-dd形式に変換する関数
-const formatDateToMyFormat = (dateString: string) => {
+const formatDateToMyFormat = (dateTime: Date) => {
+  const dateString = dateTime.toString();
   const date = new Date(dateString);
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
@@ -79,9 +82,11 @@ const History: React.FC = () => {
     async function setup() {
       try {
         // データベースからデータを取得
-        const result = await db.getAllAsync<ListItemProps>(
-          "SELECT * FROM amount_list ORDER BY transaction_date DESC"
-        );
+        const result: ListItemProps[] = await DBApi.getAmountList();
+        console.log();
+        console.log("DBに登録されている項目確認");
+        console.log(result);
+        console.log();
         // amount をカンマ区切りにフォーマット
         const formattedResult = result.map((item) => ({
           ...item,
@@ -166,6 +171,7 @@ const History: React.FC = () => {
         payment_location={item.payment_location}
         id={""}
         category={""}
+        payment_method={""}
       />
     ),
     []

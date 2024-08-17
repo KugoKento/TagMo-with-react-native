@@ -101,12 +101,4 @@ const getShopList = async (
   }
 };
 
-type TagMoDBProps = {
-  transaction_date?: Date;
-  payment_location?: string;
-  category?: string;
-  payment_method?: string;
-  amount?: string;
-};
-
 export default { getShopList };
