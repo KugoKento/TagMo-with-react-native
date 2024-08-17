@@ -3,7 +3,7 @@ import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { registerShopList } from "@/services/api/ShopListApi";
+import { registerShopList } from "@/services/overpass/ShopListApi";
 
 type ListItemProps = {
   shopName: string;

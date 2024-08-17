@@ -21,7 +21,7 @@ import { router } from "expo-router";
 import useCurrentLocation from "@/hooks/useCurrentLocation";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
-import ShopListApi from "@/services/api/ShopListApi";
+import ShopListApi from "@/services/overpass/ShopListApi";
 
 const NEXT_SCREEN: string = "Amount";
 

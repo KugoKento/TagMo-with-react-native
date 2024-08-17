@@ -3,8 +3,8 @@ import { Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import ShopListApi from "@/services/api/ShopListApi";
 import { LoadListContext } from "@/app/_layout";
+import DBApi from "@/services/database/DBApi";
 
 type RegisteredProps = {
   transaction_date: Date;
@@ -43,7 +43,7 @@ export const SquareButtonInAmount: React.FC<SquareButtonProps> = ({
     console.log("DBに登録する項目");
     console.log(registeredProps);
     console.log("registeredProps : " + registeredProps);
-    await ShopListApi.registerShopList(registeredProps);
+    await DBApi.registerAmountList(registeredProps);
     console.log("データベース登録が実行されているか確認");
     console.log();
     console.log("SquareButtonのloadList確認");
