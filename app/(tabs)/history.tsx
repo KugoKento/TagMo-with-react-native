@@ -67,10 +67,9 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 
 const History: React.FC = () => {
   const [searchText, setSearchText] = useState("");
-
-  const db = useSQLiteContext();
+  // const db = useSQLiteContext();
   const [listData, setListData] = useState<ListItemProps[]>([]);
-  const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
+  // const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
   const { loadList, setLoadList } = useContext(LoadListContext);
 
@@ -103,59 +102,69 @@ const History: React.FC = () => {
     setup(); // setup関数を呼び出して非同期処理を開始
   }, [refreshing, loadList]); // `refreshing` または `loadList` が変わったときに実行される
 
-  const onCancelPress = () => {
-    if (listHistory.length > 0) {
-      Alert.alert(
-        "取り消し確認",
-        "最後の操作を取り消しますか?",
-        [
-          {
-            text: "No",
-            style: "cancel",
-          },
-          {
-            text: "OK",
-            onPress: () => {
-              const previousState = listHistory[listHistory.length - 1];
-              setListData(previousState);
-              setListHistory(listHistory.slice(0, -1));
-            },
-          },
-        ],
-        { cancelable: false }
-      );
-    } else {
-      Alert.alert("取り消し", "操作履歴がありません。");
-    }
-  };
+  // const onCancelPress = () => {
+  //   if (listHistory.length > 0) {
+  //     Alert.alert(
+  //       "取り消し確認",
+  //       "最後の操作を取り消しますか?",
+  //       [
+  //         {
+  //           text: "No",
+  //           style: "cancel",
+  //         },
+  //         {
+  //           text: "OK",
+  //           onPress: () => {
+  //             const previousState = listHistory[listHistory.length - 1];
+  //             setListData(previousState);
+  //             setListHistory(listHistory.slice(0, -1));
+  //           },
+  //         },
+  //       ],
+  //       { cancelable: false }
+  //     );
+  //   } else {
+  //     Alert.alert("取り消し", "操作履歴がありません。");
+  //   }
+  // };
 
-  const deleteRow = (rowMap: { [key: string]: any }, rowKey: string) => {
+  const deleteRow = (rowMap: { [id: string]: any }, id: string) => {
     Alert.alert(
-      "リスト項目削除",
-      "この項目を削除しますか？",
+      "データ削除",
+      "選択されたデータが削除されますが、よろしいですか？",
       [
         {
           text: "No",
           onPress: () => {
-            if (rowMap[rowKey]) {
-              rowMap[rowKey].closeRow(); // スライドして削除ボタンが出ている項目を元に戻す
+            if (rowMap[id]) {
+              rowMap[id].closeRow(); // スライドして削除ボタンが出ている項目を元に戻す
             }
           },
           style: "cancel",
         },
         {
           text: "OK",
-          onPress: () => {
-            if (rowMap[rowKey]) {
-              rowMap[rowKey].closeRow();
-            }
-            const newData = [...listData];
-            const prevIndex = listData.findIndex((item) => item.id === rowKey);
-            if (prevIndex >= 0) {
-              setListHistory([...listHistory, listData]); // 現在の状態を操作履歴に追加
-              newData.splice(prevIndex, 1);
-              setListData(newData);
-            }
+          onPress: async () => {
+            // if (rowMap[rowKey]) {
+            //   rowMap[rowKey].closeRow();
+            // }
+            // const newData = [...listData];
+            // const prevIndex = listData.findIndex((item) => item.id === rowKey);
+            // if (prevIndex >= 0) {
+            //   setListHistory([...listHistory, listData]); // 現在の状態を操作履歴に追加
+            //   newData.splice(prevIndex, 1);
+            //   setListData(newData);
+            // }
+            // console.log();
+            // console.log("listHistory確認");
+            // console.log(listHistory);
+            // console.log(listData);
+            // console.log(prevIndex);
+            // console.log(newData);
+            // console.log();
+            await DBApi.deleteAmountList(id);
+            await setLoadList(!loadList);
+            await Alert.alert("削除が完了しました。");
           },
         },
       ],
@@ -203,10 +212,10 @@ const History: React.FC = () => {
     <SafeAreaView style={styles.container}>
       <TagMoHeader
         hasLeftButton={false}
-        hasRightButton={true}
-        rightFontAwesomeName={"undo"}
-        rightcolor={"black"}
-        onRightPress={onCancelPress}
+        hasRightButton={false}
+        // rightFontAwesomeName={"undo"}
+        // rightcolor={"black"}
+        // onRightPress={onCancelPress}
       />
       <View style={styles.searchContainer}>
         <TextInput

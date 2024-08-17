@@ -52,9 +52,10 @@ const registerAmountList = async (props: TagMoDBProps): Promise<void> => {
   }
 };
 
-const deleteAmountList = async (props: TagMoDBProps): Promise<void> => {
+const deleteAmountList = async (id: string) => {
   const db = await SQLite.openDatabaseAsync("tagmo.db");
   try {
+    await db.runAsync("DELETE FROM amount_list WHERE id = ?", id);
   } catch (error) {
     console.error("Error in database operation:", error);
   }

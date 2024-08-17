@@ -1,6 +1,6 @@
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Tabs } from "expo-router";
-import React from "react";
+import { Tabs, useNavigation } from "expo-router";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
@@ -8,6 +8,19 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  // const navigation = useNavigation();
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener("blur", (e) => {
+  //     // History画面からフォーカスが外れた時に起動する処理
+  //     if (e.target == "history") {
+
+  //     }
+  //   });
+
+  //   // クリーンアップ
+  //   return unsubscribe;
+  // }, [navigation]);
 
   return (
     <Tabs
