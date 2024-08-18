@@ -107,11 +107,11 @@ const History: React.FC = () => {
 
     fetchData();
     setRefreshing(false);
-    console.log();
-    console.log("balanceがloadListの変更に反応しているか確認");
-    console.log(loadList);
-    console.log(listData);
-    console.log();
+    // console.log();
+    // console.log("balanceがloadListの変更に反応しているか確認");
+    // console.log(loadList);
+    // console.log(listData);
+    // console.log();
   }, [refreshing, loadList]);
 
   return (

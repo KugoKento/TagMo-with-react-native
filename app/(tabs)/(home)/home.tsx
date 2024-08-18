@@ -65,7 +65,7 @@ const handlePress = () => {
 };
 
 const HomeMain: React.FC = () => {
-  console.log("HomeMainが呼び出されてるか確認");
+  // console.log("HomeMainが呼び出されてるか確認");
   const [searchText, setSearchText] = useState("");
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
   const [isLoading, setIsloading] = useState(true);
@@ -77,16 +77,16 @@ const HomeMain: React.FC = () => {
 
   useEffect(() => {
     setIsloading(true);
-    console.log("isLoading：" + isLoading);
-    console.log("useEffectが呼び出されてるか確認");
+    // console.log("isLoading：" + isLoading);
+    // console.log("useEffectが呼び出されてるか確認");
     const fetchShops = async () => {
-      console.log("fetchShopsが呼び出されてるか確認");
+      // console.log("fetchShopsが呼び出されてるか確認");
       if (currentLocation.latitude && currentLocation.longitude) {
-        console.log("現在地緯度経度確認");
-        console.log(currentLocation.latitude);
-        console.log(currentLocation.longitude);
+        // console.log("現在地緯度経度確認");
+        // console.log(currentLocation.latitude);
+        // console.log(currentLocation.longitude);
         const list = await ShopListApi.getShopList(searchText, currentLocation);
-        console.log("APIデバッグ用", list); // デバッグ用ログ
+        // console.log("APIデバッグ用", list); // デバッグ用ログ
         setShopList(list);
         setIsloading(false);
       }

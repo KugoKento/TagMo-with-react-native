@@ -18,23 +18,6 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 
 const NEXT_SCREEN = "Home";
 
-// type ListItemProps = {
-//   title: string;
-//   distance: string;
-// };
-
-// const DATA: ListItemProps[] = [
-//   { title: "名古屋三交ビル", distance: "350m" },
-//   { title: "セブンイレブン国際センター1号店", distance: "400m" },
-//   { title: "すき家 名駅一丁目店", distance: "400m" },
-//   { title: "青果 石川", distance: "450m" },
-//   { title: "Title", distance: "Label" },
-//   { title: "Title", distance: "Label" },
-//   { title: "Title", distance: "Label" },
-//   { title: "Title", distance: "Label" },
-//   { title: "Title", distance: "Label" },
-// ];
-
 type ListItemProps = {
   shopName: string;
   shopLocationName: string;
@@ -80,10 +63,10 @@ const Amount: React.FC = ({ navigation }: any) => {
   //   shopLocationName: "Unknown",
   // };
   // console.log("item : " + item);
-  console.log(route);
-  console.log(route.params);
-  console.log(route.params.item.shopName);
-  console.log();
+  // console.log(route);
+  // console.log(route.params);
+  // console.log(route.params.item.shopName);
+  // console.log();
   const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
     transaction_date: new Date(),
     payment_location:

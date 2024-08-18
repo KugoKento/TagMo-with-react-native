@@ -18,6 +18,7 @@ import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
+import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
 
 type ListItemProps = {
   id: string;
@@ -82,10 +83,10 @@ const History: React.FC = () => {
       try {
         // データベースからデータを取得
         const result: ListItemProps[] = await DBApi.getAmountList();
-        console.log();
-        console.log("DBに登録されている項目確認");
-        console.log(result);
-        console.log();
+        // console.log();
+        // console.log("DBに登録されている項目確認");
+        // console.log(result);
+        // console.log();
         // amount をカンマ区切りにフォーマット
         const formattedResult = result.map((item) => ({
           ...item,
@@ -130,11 +131,11 @@ const History: React.FC = () => {
 
   const deleteRow = (rowMap: { [id: string]: any }, id: string) => {
     Alert.alert(
-      "データ削除",
-      "選択されたデータが削除されますが、よろしいですか？",
+      HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.HEADER,
+      HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.MESSAGE,
       [
         {
-          text: "No",
+          text: COMMON_MESSAGE.BUTTON.PATTERN_NO,
           onPress: () => {
             if (rowMap[id]) {
               rowMap[id].closeRow(); // スライドして削除ボタンが出ている項目を元に戻す
@@ -143,7 +144,7 @@ const History: React.FC = () => {
           style: "cancel",
         },
         {
-          text: "OK",
+          text: COMMON_MESSAGE.BUTTON.PATTERN_YES,
           onPress: async () => {
             // if (rowMap[rowKey]) {
             //   rowMap[rowKey].closeRow();
@@ -164,7 +165,7 @@ const History: React.FC = () => {
             // console.log();
             await DBApi.deleteAmountList(id);
             await setLoadList(!loadList);
-            await Alert.alert("削除が完了しました。");
+            await Alert.alert(HISTORY_MESSAGE.BUTTON_DELETE.CLICK_END.MESSAGE);
           },
         },
       ],
@@ -193,7 +194,9 @@ const History: React.FC = () => {
           style={[styles.backRightBtn, styles.backRightBtnRight]}
           onPress={() => deleteRow(rowMap, data.item.id)}
         >
-          <Text style={styles.backTextWhite}>削除</Text>
+          <Text style={styles.backTextWhite}>
+            {HISTORY_MESSAGE.BUTTON_DELETE.DISPLAY}
+          </Text>
         </TouchableOpacity>
       </View>
     ),
