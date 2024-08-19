@@ -10,13 +10,13 @@ export const COMMON_MESSAGE = {
 
 export const HISTORY_MESSAGE = {
   BUTTON_DELETE: {
-    DISPLAY:"削除",
+    DISPLAY: "削除",
     CLICK_START: {
       HEADER: "データ削除",
       MESSAGE: "選択されたデータが削除されますが、よろしいですか？",
     },
     CLICK_END: {
-      MESSAGE:"削除が完了しました"
-    }
+      MESSAGE: "削除が完了しました",
+    },
   },
 } as const;

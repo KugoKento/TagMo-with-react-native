@@ -39,6 +39,7 @@
 - React
   - React Navigation
   - react-loading → react native では利用できない
+  - react-native-community/datetimepicker(カレンダー機能)
 - Typescript
 - expo
   - expo-router(画面遷移)

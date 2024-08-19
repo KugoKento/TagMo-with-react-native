@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   FlatList,
+  Button,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
@@ -19,6 +20,8 @@ import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
 import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { DateSelecter } from "@/components/DateSelecter";
 
 type ListItemProps = {
   id: string;
@@ -73,6 +76,9 @@ const History: React.FC = () => {
   // const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
   const { loadList, setLoadList } = useContext(LoadListContext);
+  // const [date, setDate] = useState(new Date(1598051730000));
+  // const [mode, setMode] = useState("date");
+  // const [show, setShow] = useState(false);
 
   const formatNumberWithCommas = (value: string): string => {
     return Number(value).toLocaleString();
@@ -211,6 +217,12 @@ const History: React.FC = () => {
     // setListData(await result);
   };
 
+  // const onChange = (event: any, selectedDate: any) => {
+  //   const currentDate = selectedDate;
+  //   setShow(false);
+  //   setDate(currentDate);
+  // };
+
   return (
     <SafeAreaView style={styles.container}>
       <TagMoHeader
@@ -220,14 +232,17 @@ const History: React.FC = () => {
         // rightcolor={"black"}
         // onRightPress={onCancelPress}
       />
-      <View style={styles.searchContainer}>
-        <TextInput
+      {/* <View style={styles.searchContainer}> */}
+      {/* <TextInput
           style={styles.searchInput}
           placeholder="Search"
           placeholderTextColor="#888"
           value={searchText}
           onChangeText={setSearchText}
-        />
+        /> */}
+      {/* </View> */}
+      <View>
+        <DateSelecter />
       </View>
       <SwipeListView
         data={listData}

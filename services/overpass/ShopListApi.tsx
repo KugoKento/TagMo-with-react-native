@@ -1,4 +1,5 @@
 import axios from "axios";
+import { API_VALUE } from "@/constants/appConstants";
 
 type LocationType = {
   latitude: number | null;
@@ -47,7 +48,7 @@ const getShopList = async (
   searchString: string,
   currentLocation: LocationType
 ): Promise<MapList[]> => {
-  const searchRadius: number = 300;
+  const searchRadius: number = API_VALUE.SHOPLIST_API.SEARCH_RADIUS;
   const query = `
   [out:json];
   (
