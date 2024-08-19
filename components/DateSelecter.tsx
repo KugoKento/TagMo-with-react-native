@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { View, Button, Text, StyleSheet, Modal } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import { HISTORY_MESSAGE } from "@/constants/message";
 
-export const DateSelecter: React.FC = () => {
+type DateSelecterProps = {
+  onDatesChange: (startDate: Date | null, endDate: Date | null) => void;
+};
+
+export const DateSelecter: React.FC<DateSelecterProps> = (
+  dateSelecterProps: DateSelecterProps
+) => {
   const dayOneMonthAgo = new Date();
   dayOneMonthAgo.setMonth(dayOneMonthAgo.getMonth() - 1);
 
@@ -26,7 +33,9 @@ export const DateSelecter: React.FC = () => {
     <View style={styles.container}>
       {/* Group 1: Start Date */}
       <View style={styles.group}>
-        <Text style={styles.label}>Start Date</Text>
+        <Text style={styles.label}>
+          {HISTORY_MESSAGE.SEARCH_PERIOD_MESSAGE.START_DATE}
+        </Text>
         <Button
           onPress={() => {
             setModalVisible(true);
@@ -43,7 +52,7 @@ export const DateSelecter: React.FC = () => {
             onRequestClose={() => setModalVisible(false)}
           >
             <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
+              <View style={styles.modalContentStart}>
                 <DateTimePicker
                   value={startDate}
                   mode="date"
@@ -51,8 +60,11 @@ export const DateSelecter: React.FC = () => {
                   onChange={onChangeStart}
                 />
                 <Button
-                  title="Close"
-                  onPress={() => setModalVisible(false)}
+                  title={HISTORY_MESSAGE.MORDAL_MESSAGE.CLOSE}
+                  onPress={() => {
+                    setModalVisible(false);
+                    dateSelecterProps.onDatesChange(startDate, endDate);
+                  }}
                   color="#4CAF50"
                 />
               </View>
@@ -63,7 +75,9 @@ export const DateSelecter: React.FC = () => {
 
       {/* Group 2: End Date */}
       <View style={styles.group}>
-        <Text style={styles.label}>End Date</Text>
+        <Text style={styles.label}>
+          {HISTORY_MESSAGE.SEARCH_PERIOD_MESSAGE.END_DATE}
+        </Text>
         <Button
           onPress={() => {
             setModalVisible(true);
@@ -82,7 +96,7 @@ export const DateSelecter: React.FC = () => {
             }}
           >
             <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
+              <View style={styles.modalContentEnd}>
                 <DateTimePicker
                   value={endDate}
                   mode="date"
@@ -90,8 +104,11 @@ export const DateSelecter: React.FC = () => {
                   onChange={onChangeEnd}
                 />
                 <Button
-                  title="Close"
-                  onPress={() => setModalVisible(false)}
+                  title={HISTORY_MESSAGE.MORDAL_MESSAGE.CLOSE}
+                  onPress={() => {
+                    setModalVisible(false);
+                    dateSelecterProps.onDatesChange(startDate, endDate);
+                  }}
                   color="#F44336"
                 />
               </View>
@@ -130,10 +147,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  modalContent: {
+  modalContentStart: {
     width: 300,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#e6ffe6",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  modalContentEnd: {
+    width: 300,
+    padding: 16,
+    backgroundColor: "#f5dedc",
     borderRadius: 8,
     alignItems: "center",
   },

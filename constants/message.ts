@@ -19,4 +19,13 @@ export const HISTORY_MESSAGE = {
       MESSAGE: "削除が完了しました",
     },
   },
+
+  SEARCH_PERIOD_MESSAGE: {
+    START_DATE: "表示期間開始日",
+    END_DATE: "表示期間終了日",
+  },
+
+  MORDAL_MESSAGE: {
+    CLOSE: "閉じる",
+  },
 } as const;

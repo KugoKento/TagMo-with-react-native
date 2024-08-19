@@ -71,15 +71,16 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 
 const History: React.FC = () => {
   const [searchText, setSearchText] = useState("");
-  // const db = useSQLiteContext();
   const [listData, setListData] = useState<ListItemProps[]>([]);
-  // const [listHistory, setListHistory] = useState<ListItemProps[][]>([]);
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
   const { loadList, setLoadList } = useContext(LoadListContext);
-  // const [date, setDate] = useState(new Date(1598051730000));
-  // const [mode, setMode] = useState("date");
-  // const [show, setShow] = useState(false);
-
+  const [dates, setDates] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: null,
+    endDate: null,
+  });
   const formatNumberWithCommas = (value: string): string => {
     return Number(value).toLocaleString();
   };
@@ -88,7 +89,10 @@ const History: React.FC = () => {
     async function setup() {
       try {
         // データベースからデータを取得
-        const result: ListItemProps[] = await DBApi.getAmountList();
+        const result: ListItemProps[] = await DBApi.getAmountList(
+          dates.startDate,
+          dates.endDate
+        );
         // console.log();
         // console.log("DBに登録されている項目確認");
         // console.log(result);
@@ -107,33 +111,7 @@ const History: React.FC = () => {
     }
 
     setup(); // setup関数を呼び出して非同期処理を開始
-  }, [refreshing, loadList]); // `refreshing` または `loadList` が変わったときに実行される
-
-  // const onCancelPress = () => {
-  //   if (listHistory.length > 0) {
-  //     Alert.alert(
-  //       "取り消し確認",
-  //       "最後の操作を取り消しますか?",
-  //       [
-  //         {
-  //           text: "No",
-  //           style: "cancel",
-  //         },
-  //         {
-  //           text: "OK",
-  //           onPress: () => {
-  //             const previousState = listHistory[listHistory.length - 1];
-  //             setListData(previousState);
-  //             setListHistory(listHistory.slice(0, -1));
-  //           },
-  //         },
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //   } else {
-  //     Alert.alert("取り消し", "操作履歴がありません。");
-  //   }
-  // };
+  }, [refreshing, loadList, dates]); // `refreshing` または `loadList` が変わったときに実行される
 
   const deleteRow = (rowMap: { [id: string]: any }, id: string) => {
     Alert.alert(
@@ -217,11 +195,9 @@ const History: React.FC = () => {
     // setListData(await result);
   };
 
-  // const onChange = (event: any, selectedDate: any) => {
-  //   const currentDate = selectedDate;
-  //   setShow(false);
-  //   setDate(currentDate);
-  // };
+  const handleDatesChange = (startDate: Date | null, endDate: Date | null) => {
+    setDates({ startDate, endDate });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -242,7 +218,7 @@ const History: React.FC = () => {
         /> */}
       {/* </View> */}
       <View>
-        <DateSelecter />
+        <DateSelecter onDatesChange={handleDatesChange} />
       </View>
       <SwipeListView
         data={listData}
