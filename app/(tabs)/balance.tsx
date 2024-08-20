@@ -5,56 +5,86 @@ import { PieChart } from "react-native-chart-kit";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
+import { HOME_VALUE } from "@/constants/appConstants";
 
 type ListItemProps = {
-  category: string;
+  payment_method: string;
   total_amount: string;
 };
 
 const screenWidth = Dimensions.get("window").width;
 
-const chartData = [
-  {
-    name: "Google",
-    population: 30,
-    color: "rgba(131, 167, 234, 1)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Apple",
-    population: 30,
-    color: "#F00",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Microsoft",
-    population: 15,
-    color: "red",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Samsung",
-    population: 15,
-    color: "rgb(0, 0, 255)",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
-  {
-    name: "Other",
-    population: 10,
-    color: "green",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15,
-  },
+let chartData: any[] = [];
+
+const colorCodes: string[] = [
+  "#0e0e0e",
+  "#0b1828",
+  "#0d404c",
+  "#157473",
+  "#2f9d8d",
+  "#61cab0",
+  "#8ff7d2",
+  "#bdffd1",
+  "#ecffef",
 ];
+
+const percentage: number[] = [10, 10, 10, 10, 40, 10, 10, 10, 10];
+
+for (let i = 0; i < Object.keys(HOME_VALUE.AMOUNT).length; i++) {
+  const buttonKey = `BUTTON_${i + 1}`;
+  const text = HOME_VALUE.AMOUNT[buttonKey]?.TEXT;
+
+  chartData.push({
+    name: text,
+    population: percentage[i],
+    color: colorCodes[i],
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 15,
+  });
+}
+
+// const chartData = [
+//   {
+//     name: "Google",
+//     population: 30,
+//     color: "rgba(131, 167, 234, 1)",
+//     legendFontColor: "#7F7F7F",
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: "Apple",
+//     population: 30,
+//     color: "#F00",
+//     legendFontColor: "#7F7F7F",
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: "Microsoft",
+//     population: 15,
+//     color: "red",
+//     legendFontColor: "#7F7F7F",
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: "Samsung",
+//     population: 15,
+//     color: "rgb(0, 0, 255)",
+//     legendFontColor: "#7F7F7F",
+//     legendFontSize: 15,
+//   },
+//   {
+//     name: "Other",
+//     population: 10,
+//     color: "green",
+//     legendFontColor: "#7F7F7F",
+//     legendFontSize: 15,
+//   },
+// ];
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
     <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
-      {ListItemProps.category}
+      {ListItemProps.payment_method}
     </Text>
     <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
       ¥{ListItemProps.total_amount}
@@ -70,7 +100,10 @@ const History: React.FC = () => {
 
   const renderItem = useCallback(
     ({ item }: { item: ListItemProps }) => (
-      <ListItem category={item.category} total_amount={item.total_amount} />
+      <ListItem
+        payment_method={item.payment_method}
+        total_amount={item.total_amount}
+      />
     ),
     []
   );
@@ -85,10 +118,10 @@ const History: React.FC = () => {
         const result = await db.getAllAsync<ListItemProps>(
           `
         SELECT 
-          category, 
+          payment_method, 
           SUM(amount) as total_amount 
         FROM amount_list
-        GROUP BY category
+        GROUP BY payment_method
         ORDER BY total_amount DESC
         `
         );

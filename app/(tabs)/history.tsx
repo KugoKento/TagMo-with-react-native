@@ -3,24 +3,16 @@ import {
   SafeAreaView,
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   Alert,
-  TouchableWithoutFeedback,
   Keyboard,
-  FlatList,
-  Button,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { useFonts } from "expo-font";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TagMoHeader } from "@/components/TagMoHeader";
-import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
 import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { DateSelecter } from "@/components/DateSelecter";
 
 type ListItemProps = {
@@ -41,7 +33,7 @@ const formatDateToMyFormat = (dateTime: Date) => {
   const day = String(date.getUTCDate()).padStart(2, "0");
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${month}/${day} ${hours}:${minutes}`;
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
@@ -70,7 +62,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 );
 
 const History: React.FC = () => {
-  const [searchText, setSearchText] = useState("");
+  // const [searchText, setSearchText] = useState("");
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
   const { loadList, setLoadList } = useContext(LoadListContext);
@@ -81,9 +73,6 @@ const History: React.FC = () => {
     startDate: null,
     endDate: null,
   });
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
 
   useEffect(() => {
     async function setup() {
@@ -109,11 +98,14 @@ const History: React.FC = () => {
         console.error("Error fetching data: ", error);
       }
     }
-
     setup(); // setup関数を呼び出して非同期処理を開始
   }, [refreshing, loadList, dates]); // `refreshing` または `loadList` が変わったときに実行される
 
-  const deleteRow = (rowMap: { [id: string]: any }, id: string) => {
+  const formatNumberWithCommas = (value: string): string => {
+    return Number(value).toLocaleString();
+  };
+
+  const deleteRow = (rowMap: { [id: string]: any }, id: string): void => {
     Alert.alert(
       HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.HEADER,
       HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.MESSAGE,

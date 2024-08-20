@@ -19,14 +19,29 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState<"start" | "end" | null>(null);
 
-  const onChangeStart = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const onChangeStart = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ): void => {
     const currentDate = selectedDate || startDate;
     setStartDate(currentDate);
   };
 
-  const onChangeEnd = (event: DateTimePickerEvent, selectedDate?: Date) => {
+  const onChangeEnd = (
+    event: DateTimePickerEvent,
+    selectedDate?: Date
+  ): void => {
     const currentDate = selectedDate || endDate;
     setEndDate(currentDate);
+  };
+
+  const onModalOpen = (modalType: "start" | "end" | null): void => {
+    setModalVisible(true);
+    setModalType(modalType);
+  };
+
+  const onModalClose = (): void => {
+    setModalVisible(false);
   };
 
   return (
@@ -38,8 +53,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
         </Text>
         <Button
           onPress={() => {
-            setModalVisible(true);
-            setModalType("start");
+            onModalOpen("start");
           }}
           title={startDate.toLocaleDateString()}
           color="#4CAF50"
@@ -49,7 +63,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
             animationType="slide"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
+            onRequestClose={onModalClose}
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContentStart}>
@@ -80,8 +94,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
         </Text>
         <Button
           onPress={() => {
-            setModalVisible(true);
-            setModalType("end");
+            onModalOpen("end");
           }}
           title={endDate.toLocaleDateString()}
           color="#F44336"
@@ -91,9 +104,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
             animationType="slide"
             transparent={true}
             visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(false);
-            }}
+            onRequestClose={onModalClose}
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContentEnd}>

@@ -15,6 +15,7 @@ import { FontAwesome, MaterialIcons, Entypo } from "@expo/vector-icons";
 import { SquareButtonInAmount } from "@/components/SquareButtonInAmount";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { HOME_VALUE } from "@/constants/appConstants";
 
 const NEXT_SCREEN = "Home";
 
@@ -91,7 +92,7 @@ const Amount: React.FC = ({ navigation }: any) => {
   // console.log("Shop Location Name:", shopLocationName);
   // console.log("Distance:", distance);
 
-  const squareButtonColor: string = "#495B6D";
+  const squareButtonColor: string = "#0a7ea4";
 
   const formatNumberWithCommas = (value: string): string => {
     return Number(value).toLocaleString();
@@ -130,45 +131,22 @@ const Amount: React.FC = ({ navigation }: any) => {
         <View style={styles.buttonGroup}>
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="payments"
-            text="現金"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_1.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_1.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="credit-card"
-            text="クレジット"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_2.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_2.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="qr-code-2"
-            text="QRコード"
-            nextScreen={NEXT_SCREEN}
-            registeredProps={registeredProps}
-          />
-        </View>
-        <View style={styles.buttonGroup}>
-          <SquareButtonInAmount
-            color={squareButtonColor}
-            iconName="commute"
-            text="交通系IC"
-            nextScreen={NEXT_SCREEN}
-            registeredProps={registeredProps}
-          />
-          <SquareButtonInAmount
-            color={squareButtonColor}
-            iconName="savings"
-            text="口座振込"
-            nextScreen={NEXT_SCREEN}
-            registeredProps={registeredProps}
-          />
-          <SquareButtonInAmount
-            color={squareButtonColor}
-            iconName="currency-exchange"
-            text="立て替え"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_3.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_3.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
@@ -176,22 +154,45 @@ const Amount: React.FC = ({ navigation }: any) => {
         <View style={styles.buttonGroup}>
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="thumb-up"
-            text="ポイント"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_4.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_4.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="card-giftcard"
-            text="商品券"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_5.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_5.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
           <SquareButtonInAmount
             color={squareButtonColor}
-            iconName="help-outline"
-            text="その他"
+            iconName={HOME_VALUE.AMOUNT.BUTTON_6.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_6.TEXT}
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
+          />
+        </View>
+        <View style={styles.buttonGroup}>
+          <SquareButtonInAmount
+            color={squareButtonColor}
+            iconName={HOME_VALUE.AMOUNT.BUTTON_7.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_7.TEXT}
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
+          />
+          <SquareButtonInAmount
+            color={squareButtonColor}
+            iconName={HOME_VALUE.AMOUNT.BUTTON_8.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_8.TEXT}
+            nextScreen={NEXT_SCREEN}
+            registeredProps={registeredProps}
+          />
+          <SquareButtonInAmount
+            color={squareButtonColor}
+            iconName={HOME_VALUE.AMOUNT.BUTTON_9.ICON_NAME}
+            text={HOME_VALUE.AMOUNT.BUTTON_9.TEXT}
             nextScreen={NEXT_SCREEN}
             registeredProps={registeredProps}
           />
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     padding: 40,
-    backgroundColor: "#495B6D",
+    backgroundColor: "#0a7ea4",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
