@@ -7,14 +7,12 @@ import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import { HOME_VALUE } from "@/constants/appConstants";
 
+//支払い手法は一元管理し、そこから利用する形にする
+
 type ListItemProps = {
   payment_method: string;
-  total_amount: string;
+  total_amount_each_method: string;
 };
-
-const screenWidth = Dimensions.get("window").width;
-
-let chartData: any[] = [];
 
 const colorCodes: string[] = [
   "#0e0e0e",
@@ -28,58 +26,75 @@ const colorCodes: string[] = [
   "#ecffef",
 ];
 
-const percentage: number[] = [10, 10, 10, 10, 40, 10, 10, 10, 10];
+const colorLegendFont = "#7F7F7F";
 
-for (let i = 0; i < Object.keys(HOME_VALUE.AMOUNT).length; i++) {
-  const buttonKey = `BUTTON_${i + 1}`;
-  const text = HOME_VALUE.AMOUNT[buttonKey]?.TEXT;
-
-  chartData.push({
-    name: text,
-    population: percentage[i],
-    color: colorCodes[i],
-    legendFontColor: "#7F7F7F",
+const chartDataInitial = [
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_1.TEXT,
+    population: 0,
+    color: colorCodes[0],
+    legendFontColor: colorLegendFont,
     legendFontSize: 15,
-  });
-}
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_2.TEXT,
+    population: 0,
+    color: colorCodes[1],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_3.TEXT,
+    population: 0,
+    color: colorCodes[2],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_4.TEXT,
+    population: 0,
+    color: colorCodes[3],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_5.TEXT,
+    population: 0,
+    color: colorCodes[4],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_6.TEXT,
+    population: 0,
+    color: colorCodes[5],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_7.TEXT,
+    population: 0,
+    color: colorCodes[6],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_8.TEXT,
+    population: 0,
+    color: colorCodes[7],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+  {
+    name: HOME_VALUE.AMOUNT.BUTTON_9.TEXT,
+    population: 0,
+    color: colorCodes[8],
+    legendFontColor: colorLegendFont,
+    legendFontSize: 15,
+  },
+];
 
-// const chartData = [
-//   {
-//     name: "Google",
-//     population: 30,
-//     color: "rgba(131, 167, 234, 1)",
-//     legendFontColor: "#7F7F7F",
-//     legendFontSize: 15,
-//   },
-//   {
-//     name: "Apple",
-//     population: 30,
-//     color: "#F00",
-//     legendFontColor: "#7F7F7F",
-//     legendFontSize: 15,
-//   },
-//   {
-//     name: "Microsoft",
-//     population: 15,
-//     color: "red",
-//     legendFontColor: "#7F7F7F",
-//     legendFontSize: 15,
-//   },
-//   {
-//     name: "Samsung",
-//     population: 15,
-//     color: "rgb(0, 0, 255)",
-//     legendFontColor: "#7F7F7F",
-//     legendFontSize: 15,
-//   },
-//   {
-//     name: "Other",
-//     population: 10,
-//     color: "green",
-//     legendFontColor: "#7F7F7F",
-//     legendFontSize: 15,
-//   },
-// ];
+const screenWidth = Dimensions.get("window").width;
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   <View style={styles.listItem}>
@@ -87,7 +102,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
       {ListItemProps.payment_method}
     </Text>
     <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
-      ¥{ListItemProps.total_amount}
+      ¥{ListItemProps.total_amount_each_method}
     </Text>
   </View>
 );
@@ -96,13 +111,14 @@ const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const db = useSQLiteContext();
   const [refreshing, setRefreshing] = useState(false);
-  const { loadList, setLoadList } = useContext(LoadListContext);
+  const { loadList } = useContext(LoadListContext);
+  const [chartData, setChartData] = useState(chartDataInitial);
 
   const renderItem = useCallback(
     ({ item }: { item: ListItemProps }) => (
       <ListItem
         payment_method={item.payment_method}
-        total_amount={item.total_amount}
+        total_amount_each_method={item.total_amount_each_method}
       />
     ),
     []
@@ -113,23 +129,29 @@ const History: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (createChart: {
+      (result: ListItemProps[]): void;
+    }) => {
       try {
         const result = await db.getAllAsync<ListItemProps>(
           `
         SELECT 
           payment_method, 
-          SUM(amount) as total_amount 
+          SUM(amount) as total_amount_each_method
         FROM amount_list
         GROUP BY payment_method
-        ORDER BY total_amount DESC
+        ORDER BY total_amount_each_method DESC
         `
         );
+
+        await createChart(result);
 
         // amount をカンマ区切りにフォーマット
         const formattedResult = await result.map((item) => ({
           ...item,
-          total_amount: formatNumberWithCommas(item.total_amount),
+          total_amount_each_method: formatNumberWithCommas(
+            item.total_amount_each_method
+          ),
         }));
 
         await setListData(formattedResult);
@@ -138,19 +160,36 @@ const History: React.FC = () => {
       }
     };
 
-    fetchData();
+    const createChart = (result: ListItemProps[]): void => {
+      let newChartData = [...chartDataInitial];
+
+      //円グラフのためのデータ作成
+      let sumAmount: number = 0;
+      result.forEach((item) => {
+        sumAmount += Number(item.total_amount_each_method);
+      });
+      result.forEach((item) => {
+        const per: number = Math.floor(
+          ((Number(item.total_amount_each_method) || 0) * 100) / sumAmount
+        );
+        const targetItem = newChartData.find(
+          (targetItem) => targetItem.name === item.payment_method
+        );
+        if (targetItem) {
+          targetItem.population = per;
+        }
+        setChartData(newChartData);
+      });
+    };
+
+    fetchData(createChart);
     setRefreshing(false);
-    // console.log();
-    // console.log("balanceがloadListの変更に反応しているか確認");
-    // console.log(loadList);
-    // console.log(listData);
-    // console.log();
   }, [refreshing, loadList]);
 
   return (
     <SafeAreaView style={styles.container}>
       <TagMoHeader hasLeftButton={false} hasRightButton={false} />
-      <View>
+      <View style={styles.chartBackground}>
         <PieChart
           data={chartData}
           width={screenWidth}
@@ -194,6 +233,9 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     paddingHorizontal: 10,
+  },
+  chartBackground: {
+    backgroundColor: "white",
   },
   searchInput: {
     flex: 1,

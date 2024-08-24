@@ -34,7 +34,7 @@ export const HOME_VALUE = {
     },
     BUTTON_7: {
       ICON_NAME: "thumb-up",
-      TEXT: "ポイント",
+      TEXT: "POINT",
     },
     BUTTON_8: {
       ICON_NAME: "card-giftcard",

@@ -4,7 +4,7 @@
 
 - Tag 型家計簿アプリ
 - 位置情報による、小売店・飲食店などのタグ付けを用いて、支出の記録を容易にする
-- シンプルで洗練された UI
+- シンプルで洗練された UI、あくまで使いやすく
 
 ## 画面デザイン
 
@@ -38,15 +38,15 @@
 
 - React
   - React Navigation
-  - react-loading → react native では利用できない
+  - react-loading → react native では利用できないため、react native の機能で実装
   - react-native-community/datetimepicker(カレンダー機能)
 - Typescript
 - expo
   - expo-router(画面遷移)
   - expo-sqlite(DB)
   - expo-location(位置情報取得)
-- axios
 - Overpass API(OpenStreetMap のデータを扱う API)
+- axios(overpass api のための HTTP メソッド)
 
 使う可能性あり
 
