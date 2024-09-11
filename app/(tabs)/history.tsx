@@ -64,6 +64,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 const History: React.FC = () => {
   // const [searchText, setSearchText] = useState("");
   const [listData, setListData] = useState<ListItemProps[]>([]);
+  const [totalAmount, setTotalAmount] = useState("0");
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
   const { loadList, setLoadList } = useContext(LoadListContext);
   const [dates, setDates] = useState<{
@@ -91,8 +92,18 @@ const History: React.FC = () => {
           ...item,
           amount: formatNumberWithCommas(item.amount),
         }));
+
+        const sumAmount = (result: ListItemProps[]) => {
+          const sum: number = result.reduce(
+            (sum, item) => sum + Number(item.amount),
+            0
+          );
+          return sum.toString();
+        };
+
         // フォーマットされたデータをセット
         setListData(formattedResult);
+        setTotalAmount(sumAmount(result));
         setRefreshing(false);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -203,7 +214,7 @@ const History: React.FC = () => {
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          ¥ {formatNumberWithCommas("9000000")}
+          ¥ {formatNumberWithCommas(totalAmount)}
         </Text>
       </View>
       <SwipeListView
