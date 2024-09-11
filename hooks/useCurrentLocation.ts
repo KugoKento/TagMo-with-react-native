@@ -7,7 +7,7 @@ type LocationType = {
 };
 
 // 現在地を取得するカスタムフック
-function useCurrentLocation(searchText: string, refreshing: boolean) {
+function useCurrentLocation(refreshing: boolean) {
   const [currentLocation, setCurrentLocation] = useState<LocationType>({
     latitude: null,
     longitude: null,
@@ -28,7 +28,7 @@ function useCurrentLocation(searchText: string, refreshing: boolean) {
         longitude: location.coords.longitude,
       });
     })();
-  }, [searchText, refreshing]);
+  }, [refreshing]);
 
   return { currentLocation, error };
 }

@@ -70,34 +70,32 @@ const HomeMain: React.FC = () => {
   const [shopList, setShopList] = useState<ListItemProps[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-
   //useCurrentLocationは引数の変更によって新しい値を返す
-  const { currentLocation, error } = useCurrentLocation(searchText, refreshing);
+  const { currentLocation, error } = useCurrentLocation(refreshing);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
+  console.log("useEffect前");
   useEffect(() => {
+    console.log("フェッチ前前");
     setIsloading(true);
-    // console.log("isLoading：" + isLoading);
-    // console.log("useEffectが呼び出されてるか確認");
+    console.log("フェッチ前");
     const fetchShops = async () => {
-      // console.log("fetchShopsが呼び出されてるか確認");
+      console.log("データフェッチ前前");
       if (currentLocation.latitude && currentLocation.longitude) {
-        // console.log("現在地緯度経度確認");
-        // console.log(currentLocation.latitude);
-        // console.log(currentLocation.longitude);
+        await console.log("データフェッチ前");
         const list = await ShopListApi.getShopList(searchText, currentLocation);
-        // console.log("APIデバッグ用", list); // デバッグ用ログ
-        setShopList(list);
-        setIsloading(false);
+        await console.log("データフェッチ後");
+        await setShopList(list);
+        await setIsloading(false);
       }
     };
 
     fetchShops();
   }, [searchText, currentLocation]);
 
-  const handleTouchOutside = () => {
-    Keyboard.dismiss(); // キーボードを閉じる
-  };
+  // const handleTouchOutside = () => {
+  //   Keyboard.dismiss(); // キーボードを閉じる
+  // };
 
   const onSettingsPress = () => {
     navigation.dispatch(DrawerActions.openDrawer());

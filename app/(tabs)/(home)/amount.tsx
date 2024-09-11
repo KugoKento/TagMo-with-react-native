@@ -4,20 +4,16 @@ import {
   View,
   Text,
   TextInput,
-  FlatList,
   StyleSheet,
-  TouchableOpacity,
-  Alert,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { FontAwesome, MaterialIcons, Entypo } from "@expo/vector-icons";
 import { SquareButtonInAmount } from "@/components/SquareButtonInAmount";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { HOME_VALUE } from "@/constants/appConstants";
 
-const NEXT_SCREEN = "Home";
+const NEXT_SCREEN = "Category";
 
 type ListItemProps = {
   shopName: string;
@@ -30,7 +26,7 @@ type RootParamList = {
 };
 
 type RegisteredProps = {
-  transaction_date: Date;
+  transaction_date?: Date;
   payment_location: string;
   category: string;
   payment_method: string;
@@ -69,7 +65,6 @@ const Amount: React.FC = ({ navigation }: any) => {
   // console.log(route.params.item.shopName);
   // console.log();
   const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
-    transaction_date: new Date(),
     payment_location:
       (route.params.item.shopName ?? "") +
       " " +
@@ -92,15 +87,15 @@ const Amount: React.FC = ({ navigation }: any) => {
   // console.log("Shop Location Name:", shopLocationName);
   // console.log("Distance:", distance);
 
-  const squareButtonColor: string = "#0a7ea4";
+  const squareButtonColor: string = "#495B6D";
 
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
+  // const formatNumberWithCommas = (value: string): string => {
+  //   return Number(value).toLocaleString();
+  // };
 
-  const handleAmount = (amount: string) => {
-    setAmount(formatNumberWithCommas(amount));
-  };
+  // const handleAmount = (amount: string) => {
+  //   setAmount(formatNumberWithCommas(amount));
+  // };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -269,7 +264,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     padding: 40,
-    backgroundColor: "#0a7ea4",
+    backgroundColor: "#495B6D",
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",

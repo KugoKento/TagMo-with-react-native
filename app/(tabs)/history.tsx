@@ -105,6 +105,7 @@ const History: React.FC = () => {
     return Number(value).toLocaleString();
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const deleteRow = (rowMap: { [id: string]: any }, id: string): void => {
     Alert.alert(
       HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.HEADER,
@@ -122,26 +123,9 @@ const History: React.FC = () => {
         {
           text: COMMON_MESSAGE.BUTTON.PATTERN_YES,
           onPress: async () => {
-            // if (rowMap[rowKey]) {
-            //   rowMap[rowKey].closeRow();
-            // }
-            // const newData = [...listData];
-            // const prevIndex = listData.findIndex((item) => item.id === rowKey);
-            // if (prevIndex >= 0) {
-            //   setListHistory([...listHistory, listData]); // 現在の状態を操作履歴に追加
-            //   newData.splice(prevIndex, 1);
-            //   setListData(newData);
-            // }
-            // console.log();
-            // console.log("listHistory確認");
-            // console.log(listHistory);
-            // console.log(listData);
-            // console.log(prevIndex);
-            // console.log(newData);
-            // console.log();
             await DBApi.deleteAmountList(id);
-            await setLoadList(!loadList);
-            await Alert.alert(HISTORY_MESSAGE.BUTTON_DELETE.CLICK_END.MESSAGE);
+            setLoadList(!loadList);
+            Alert.alert(HISTORY_MESSAGE.BUTTON_DELETE.CLICK_END.MESSAGE);
           },
         },
       ],
@@ -212,6 +196,16 @@ const History: React.FC = () => {
       <View>
         <DateSelecter onDatesChange={handleDatesChange} />
       </View>
+      <View style={styles.totalAmountContainer}>
+        <Text style={styles.totalAmountLabel}>合計金額：</Text>
+        <Text
+          style={styles.totalAmountText}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          ¥ {formatNumberWithCommas("9000000")}
+        </Text>
+      </View>
       <SwipeListView
         data={listData}
         renderItem={renderItem}
@@ -250,6 +244,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  totalAmountContainer: {
+    marginVertical: 10,
+    marginHorizontal: 16,
+    flexDirection: "row", // 横方向にアイテムを配置
+    justifyContent: "space-between", // スペースを均等に配置
+    alignItems: "center", // 垂直方向に中央揃え
+    paddingVertical: 2,
+    borderBottomWidth: 1,
+    borderBottomColor: "black", // 下線のスタイルを追加
+    overflow: "hidden", // はみ出る部分を隠す
+  },
+  totalAmountLabel: {
+    flex: 2, // ラベルの幅を少し狭くする
+    fontSize: 20, // ラベルの文字サイズを大きくする
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "left", // テキストを左寄せ
+  },
+  totalAmountText: {
+    flex: 4, // 金額の幅を広くする
+    fontSize: 30, // 金額の文字をさらに大きくする
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "right", // テキストを右寄せ
   },
   searchContainer: {
     flexDirection: "row",
