@@ -29,7 +29,7 @@ export default function BalanceLayout() {
       />
       <MaterialTopTabs.Screen
         name="balanceCategory"
-        options={{ title: "カテゴリ" }}
+        options={{ title: "分類" }}
       />
     </MaterialTopTabs>
   );
