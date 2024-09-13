@@ -107,7 +107,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
   </View>
 );
 
-const History: React.FC = () => {
+const BalanceMethod: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const db = useSQLiteContext();
   const [refreshing, setRefreshing] = useState(false);
@@ -188,7 +188,6 @@ const History: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TagMoHeader hasLeftButton={false} hasRightButton={false} />
       <View style={styles.chartBackground}>
         <PieChart
           data={chartData}
@@ -318,4 +317,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default History;
+export default BalanceMethod;

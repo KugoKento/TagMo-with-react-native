@@ -8,7 +8,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  
+
   return (
     <Tabs
       screenOptions={{
@@ -41,7 +41,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="balance"
+        name="(top-tabs)"
         options={{
           title: "Balance",
           tabBarIcon: ({ color, focused }) => (
