@@ -13,6 +13,7 @@ import { TagMoHeader } from "@/components/TagMoHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { HOME_VALUE } from "@/constants/appConstants";
 import { SquareButtonInCategory } from "@/components/SquareButtonInCategory";
+import { CategoryHeader } from "@/components/CategoryHeader";
 
 const NEXT_SCREEN = "Home";
 
@@ -57,7 +58,7 @@ const Category: React.FC = ({ navigation }: any) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <TagMoHeader
+        <CategoryHeader
           hasLeftButton={true}
           hasRightButton={false}
           leftFontAwesomeName={"chevron-left"}

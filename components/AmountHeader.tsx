@@ -17,7 +17,7 @@ type Props = {
   onRightPress?: () => void;
 };
 
-export const TagMoHeader: React.FC<Props> = ({
+export const AmountHeader: React.FC<Props> = ({
   hasLeftButton,
   leftFontAwesomeName,
   leftcolor,
@@ -27,14 +27,6 @@ export const TagMoHeader: React.FC<Props> = ({
   rightcolor,
   onRightPress,
 }) => {
-  const [loaded] = useFonts({
-    "russo-one": require("@/assets/fonts/Russo_One.ttf"),
-  });
-
-  if (!loaded) {
-    return null; // フォントがロードされるまで何も表示しない
-  }
-
   return (
     <View style={styles.header}>
       {hasLeftButton && (
@@ -42,7 +34,7 @@ export const TagMoHeader: React.FC<Props> = ({
           <FontAwesome name={leftFontAwesomeName} size={28} color={leftcolor} />
         </TouchableOpacity>
       )}
-      <Text style={styles.headerTitle}>{COMMON_MESSAGE.APP_TITLE}</Text>
+      <Text style={styles.headerTitle}>金額/支払方法</Text>
       {hasRightButton && (
         <TouchableOpacity onPress={onRightPress} style={styles.rightButton}>
           <FontAwesome
@@ -67,9 +59,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   headerTitle: {
-    fontSize: 35,
+    fontSize: 23,
     fontWeight: "bold",
-    fontFamily: "russo-one",
+    fontFamily: "meiryo",
   },
   leftButton: {
     position: "absolute",

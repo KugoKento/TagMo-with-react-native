@@ -9,9 +9,9 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { SquareButtonInAmount } from "@/components/SquareButtonInAmount";
-import { TagMoHeader } from "@/components/TagMoHeader";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { HOME_VALUE } from "@/constants/appConstants";
+import { AmountHeader } from "@/components/AmountHeader";
 
 const NEXT_SCREEN = "Category";
 
@@ -100,7 +100,7 @@ const Amount: React.FC = ({ navigation }: any) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <TagMoHeader
+        <AmountHeader
           hasLeftButton={true}
           hasRightButton={false}
           leftFontAwesomeName={"chevron-left"}

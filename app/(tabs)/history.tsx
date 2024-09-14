@@ -174,14 +174,6 @@ const History: React.FC = () => {
     [deleteRow]
   );
 
-  const handleTouchOutside = () => {
-    Keyboard.dismiss(); // キーボードを閉じる
-    // const result = db.getAllAsync<ListItemProps>(
-    //   "SELECT * FROM amount_list WHERE payment_location = `%${searchText}%`"
-    // );
-    // setListData(await result);
-  };
-
   const handleDatesChange = (startDate: Date | null, endDate: Date | null) => {
     setDates({ startDate, endDate });
   };
@@ -228,7 +220,7 @@ const History: React.FC = () => {
         rightOpenValue={-75}
         closeOnRowPress={true} // 行を押したときに自動的に閉じる
         closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
-        disableRightSwipe={true} // 右へのスワイプを無効化
+        // disableRightSwipe={true} // 右へのスワイプを無効化
         keyExtractor={(item) => item.id} // 一意のキーを指定
         style={styles.list}
         // ListEmptyComponent={
