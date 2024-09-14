@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView, View, Text, FlatList, StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
-import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import { HOME_VALUE } from "@/constants/appConstants";

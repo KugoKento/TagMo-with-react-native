@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useContext } from "react";
 import { SafeAreaView, View, Text, FlatList, StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
-import { TagMoHeader } from "@/components/TagMoHeader";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import { HOME_VALUE } from "@/constants/appConstants";
@@ -32,7 +31,15 @@ const colorCodes: string[] = [
 
 const colorLegendFont = "#7F7F7F";
 
-const chartDataInitial = [
+type ChartDataItem = {
+  name: string;
+  population: number;
+  color: string;
+  legendFontColor: string;
+  legendFontSize: number;
+};
+
+const chartDataInitial: ChartDataItem[] = [
   {
     name: HOME_VALUE.CATEGORY.BUTTON_1.TEXT,
     population: 0,
@@ -238,7 +245,7 @@ const BalanceCategory: React.FC = () => {
         <PieChart
           data={chartData}
           width={screenWidth}
-          height={260}
+          height={220}
           chartConfig={{
             backgroundColor: "#1cc910",
             backgroundGradientFrom: "#eff3ff",

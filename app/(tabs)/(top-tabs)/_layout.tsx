@@ -7,6 +7,8 @@ import {
   MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs";
 import { withLayoutContext } from "expo-router";
+import { SafeAreaView, StyleSheet } from "react-native";
+import { TagMoHeader } from "@/components/TagMoHeader";
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -22,15 +24,25 @@ SplashScreen.preventAutoHideAsync();
 
 export default function BalanceLayout() {
   return (
-    <MaterialTopTabs>
-      <MaterialTopTabs.Screen
-        name="balanceMethod"
-        options={{ title: "支払方法" }}
-      />
-      <MaterialTopTabs.Screen
-        name="balanceCategory"
-        options={{ title: "分類" }}
-      />
-    </MaterialTopTabs>
+    <SafeAreaView style={styles.container}>
+      <TagMoHeader hasLeftButton={false} hasRightButton={false} />
+      <MaterialTopTabs>
+        <MaterialTopTabs.Screen
+          name="balanceMethod"
+          options={{ title: "支払方法" }}
+        />
+        <MaterialTopTabs.Screen
+          name="balanceCategory"
+          options={{ title: "分類" }}
+        />
+      </MaterialTopTabs>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
