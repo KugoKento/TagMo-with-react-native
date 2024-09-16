@@ -8,6 +8,10 @@ type LocationType = {
 
 // 現在地を取得するカスタムフック
 function useCurrentLocation(refreshing: boolean) {
+  console.log();
+  console.log("現在地取得中");
+  console.log();
+
   const [currentLocation, setCurrentLocation] = useState<LocationType>({
     latitude: null,
     longitude: null,
@@ -22,10 +26,11 @@ function useCurrentLocation(refreshing: boolean) {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      // let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getLastKnownPositionAsync({});
       setCurrentLocation({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude: location?.coords.latitude ?? null,
+        longitude: location?.coords.longitude ?? null,
       });
     })();
   }, [refreshing]);

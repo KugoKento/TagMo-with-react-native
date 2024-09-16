@@ -53,11 +53,11 @@ const getShopList = async (
   [out:json];
   (
     node["shop"]["name"~"${searchString}"](around:${searchRadius.toString()}, ${
-    currentLocation.latitude
-  }, ${currentLocation.longitude});
+      currentLocation.latitude
+    }, ${currentLocation.longitude});
     node["amenity"]["name"~"${searchString}"](around:${searchRadius.toString()}, ${
-    currentLocation.latitude
-  }, ${currentLocation.longitude});
+      currentLocation.latitude
+    }, ${currentLocation.longitude});
   );
   out body;
   `;

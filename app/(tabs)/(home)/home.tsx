@@ -71,7 +71,7 @@ const HomeMain: React.FC = () => {
   const [isLoading, setIsloading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   //useCurrentLocationは引数の変更によって新しい値を返す
-  const { currentLocation, error } = useCurrentLocation(refreshing);
+  const { currentLocation } = useCurrentLocation(refreshing);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
   console.log("useEffect前");
@@ -82,16 +82,24 @@ const HomeMain: React.FC = () => {
     const fetchShops = async () => {
       console.log("データフェッチ前前");
       if (currentLocation.latitude && currentLocation.longitude) {
-        await console.log("データフェッチ前");
+        console.log("データフェッチ前");
         const list = await ShopListApi.getShopList(searchText, currentLocation);
-        await console.log("データフェッチ後");
-        await setShopList(list);
-        await setIsloading(false);
+        console.log("データフェッチ後");
+        setShopList(list);
+        setIsloading(false);
       }
+
+      // const list = await ShopListApi.getShopList(searchText, {
+      //   latitude: 35.6762, // 東京の緯度
+      //   longitude: 139.6503, // 東京の経度
+      // });
+      // setShopList(list);
+      // setIsloading(false);
+      console.log("if分後");
     };
 
     fetchShops();
-  }, [searchText, currentLocation]);
+  }, [currentLocation, searchText]);
 
   // const handleTouchOutside = () => {
   //   Keyboard.dismiss(); // キーボードを閉じる
@@ -214,7 +222,7 @@ const Home: React.FC = () => {
       }}
     >
       <Drawer.Screen
-        name="Home"
+        name="HomeMain"
         component={HomeMain}
         options={{ headerShown: false }}
       />
