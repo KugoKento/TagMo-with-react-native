@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { SafeAreaView, View, Text, FlatList, StyleSheet } from "react-native";
+import { SafeAreaView, View, Text, FlatList, StyleSheet, Platform, StatusBar } from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import { useSQLiteContext } from "expo-sqlite";
@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   searchContainer: {
     flexDirection: "row",

@@ -7,7 +7,7 @@ import {
   MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs";
 import { withLayoutContext } from "expo-router";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { TagMoHeader } from "@/components/TagMoHeader";
 
 const { Navigator } = createMaterialTopTabNavigator();
@@ -44,5 +44,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

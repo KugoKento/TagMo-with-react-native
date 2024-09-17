@@ -2,7 +2,7 @@
 
 export const API_VALUE = {
   SHOPLIST_API: {
-    SEARCH_RADIUS: 100,
+    SEARCH_RADIUS: 500,
   },
 } as const;
 

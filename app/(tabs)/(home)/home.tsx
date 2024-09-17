@@ -10,6 +10,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DrawerActions } from "@react-navigation/native";
@@ -95,7 +97,6 @@ const HomeMain: React.FC = () => {
       // });
       // setShopList(list);
       // setIsloading(false);
-      console.log("if分後");
     };
 
     fetchShops();
@@ -241,6 +242,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   searchContainer: {
     flexDirection: "row",

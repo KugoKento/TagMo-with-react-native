@@ -7,6 +7,8 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { SquareButtonInAmount } from "@/components/SquareButtonInAmount";
 import { TagMoHeader } from "@/components/TagMoHeader";
@@ -191,6 +193,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   searchContainer: {
     flexDirection: "row",

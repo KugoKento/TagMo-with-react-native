@@ -26,8 +26,16 @@ function useCurrentLocation(refreshing: boolean) {
         return;
       }
 
+      const startTime = performance.now();
+
       // let location = await Location.getCurrentPositionAsync({});
       let location = await Location.getLastKnownPositionAsync({});
+
+      const endTime = performance.now();
+
+      console.log("取得時間");
+      console.log(endTime - startTime + "ms");
+
       setCurrentLocation({
         latitude: location?.coords.latitude ?? null,
         longitude: location?.coords.longitude ?? null,

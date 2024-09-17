@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Alert,
   Keyboard,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { TagMoHeader } from "@/components/TagMoHeader";
@@ -179,7 +181,7 @@ const History: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <TagMoHeader
         hasLeftButton={false}
         hasRightButton={false}
@@ -239,7 +241,7 @@ const History: React.FC = () => {
           keyExtractor={(item, index) => index.toString()}
           style={styles.list}
         /> */}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -247,6 +249,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   totalAmountContainer: {
     marginVertical: 10,
