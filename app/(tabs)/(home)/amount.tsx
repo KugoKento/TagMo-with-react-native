@@ -45,27 +45,7 @@ type RegisteredProps = {
 const Amount: React.FC = ({ navigation }: any) => {
   const [amount, setAmount] = useState(""); //入力金額
   const route = useRoute<RouteProp<RootParamList, "Amount">>(); //Home画面から変数を受ける
-  // const { shopName, shopLocationName } = route.params as {
-  //   shopName: string;
-  //   shopLocationName: string;
-  // };
 
-  // 受け取ったパラメータを安全に確認
-  console.log();
-  // console.log(shopName);
-  // console.log(shopLocationName);
-  // console.log("item : " + route.params.item.shopLocationName);
-  // console.log("shopName : " + route.params.item.shopName);
-  // console.log("shopName : " + route.params.item.shopLocationName);
-  // const item = route.params?.item ?? {
-  //   shopName: "Unknown",
-  //   shopLocationName: "Unknown",
-  // };
-  // console.log("item : " + item);
-  // console.log(route);
-  // console.log(route.params);
-  // console.log(route.params.item.shopName);
-  // console.log();
   const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
     payment_location:
       (route.params.item.shopName ?? "") +
@@ -76,8 +56,6 @@ const Amount: React.FC = ({ navigation }: any) => {
     amount: "0",
   });
 
-  // console.log(route.params.item.shopLocationName);
-
   useEffect(() => {
     setRegisteredProps((prev) => ({
       ...prev,
@@ -85,19 +63,7 @@ const Amount: React.FC = ({ navigation }: any) => {
     }));
   }, [amount]);
 
-  // console.log("Shop Name:", shopName);
-  // console.log("Shop Location Name:", shopLocationName);
-  // console.log("Distance:", distance);
-
   const squareButtonColor: string = "#495B6D";
-
-  // const formatNumberWithCommas = (value: string): string => {
-  //   return Number(value).toLocaleString();
-  // };
-
-  // const handleAmount = (amount: string) => {
-  //   setAmount(formatNumberWithCommas(amount));
-  // };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -119,12 +85,6 @@ const Amount: React.FC = ({ navigation }: any) => {
             onChangeText={setAmount}
           />
         </View>
-        {/* <FlatList
-          data={DATA}
-          renderItem={({ item }) => <ListItem title={item.title} distance={item.distance} />}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.list}
-        /> */}
         <View style={styles.buttonGroup}>
           <SquareButtonInAmount
             color={squareButtonColor}
@@ -221,15 +181,6 @@ const styles = StyleSheet.create({
   microphoneIcon: {
     marginLeft: 10,
   },
-  // listContainer: {
-  //   flex: 2,
-  //   // position: 'absolute',
-  //   marginHorizontal: 5,
-  //   marginVertical: 0,
-  //   borderRadius: 10,
-  //   borderWidth: 8,
-  //   borderColor: '#D8D8D8',
-  // },
   list: {
     flex: 1,
     marginHorizontal: 16,

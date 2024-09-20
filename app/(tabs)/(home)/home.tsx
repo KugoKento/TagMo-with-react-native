@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Alert,
   Keyboard,
-  TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
   StatusBar,
@@ -62,7 +61,7 @@ const handlePress = () => {
         },
       },
     ],
-    { cancelable: false }
+    { cancelable: false },
   );
 };
 

@@ -6,7 +6,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
   const DATABASE_VERSION = 1;
 
   let result = await db.getFirstAsync<{ user_version: number }>(
-    "PRAGMA user_version"
+    "PRAGMA user_version",
   );
 
   let currentDbVersion = result ? result.user_version : 0; //resultが定義されていれば前代入、そうでなければ0代入
@@ -26,7 +26,8 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         payment_location TEXT NOT NULL,
         payment_method TEXT NOT NULL,
         category TEXT NOT NULL,
-        amount INTEGER NOT NULL
+        amount INTEGER NOT NULL,
+        memo TEXT
         );
     `);
 

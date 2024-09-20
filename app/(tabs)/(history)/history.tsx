@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   SafeAreaView,
   View,
@@ -6,16 +6,17 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  Keyboard,
   Platform,
   StatusBar,
+  FlatList,
 } from "react-native";
-import { SwipeListView } from "react-native-swipe-list-view";
 import { TagMoHeader } from "@/components/TagMoHeader";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
 import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
 import { DateSelecter } from "@/components/DateSelecter";
+import { useNavigation } from "expo-router";
+import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 
 type ListItemProps = {
   id: string;
@@ -65,6 +66,7 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
 
 const History: React.FC = () => {
   // const [searchText, setSearchText] = useState("");
+  const navigation = useNavigation<NativeStackNavigationProp<any>>();
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [totalAmount, setTotalAmount] = useState("0");
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
@@ -83,7 +85,7 @@ const History: React.FC = () => {
         // データベースからデータを取得
         const result: ListItemProps[] = await DBApi.getAmountList(
           dates.startDate,
-          dates.endDate
+          dates.endDate,
         );
         // console.log();
         // console.log("DBに登録されている項目確認");
@@ -98,7 +100,7 @@ const History: React.FC = () => {
         const sumAmount = (result: ListItemProps[]) => {
           const sum: number = result.reduce(
             (sum, item) => sum + Number(item.amount),
-            0
+            0,
           );
           return sum.toString();
         };
@@ -142,62 +144,17 @@ const History: React.FC = () => {
           },
         },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   };
-
-  const renderItem = useCallback(
-    ({ item }: { item: ListItemProps }) => (
-      <ListItem
-        transaction_date={item.transaction_date}
-        amount={item.amount}
-        payment_location={item.payment_location}
-        id={""}
-        category={""}
-        payment_method={""}
-      />
-    ),
-    []
-  );
-
-  const renderHiddenItem = useCallback(
-    (data: { item: ListItemProps }, rowMap: { [key: string]: any }) => (
-      <View style={styles.rowBack}>
-        <TouchableOpacity
-          style={[styles.backRightBtn, styles.backRightBtnRight]}
-          onPress={() => deleteRow(rowMap, data.item.id)}
-        >
-          <Text style={styles.backTextWhite}>
-            {HISTORY_MESSAGE.BUTTON_DELETE.DISPLAY}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    ),
-    [deleteRow]
-  );
 
   const handleDatesChange = (startDate: Date | null, endDate: Date | null) => {
     setDates({ startDate, endDate });
   };
 
   return (
-    <View style={styles.container}>
-      <TagMoHeader
-        hasLeftButton={false}
-        hasRightButton={false}
-        // rightFontAwesomeName={"undo"}
-        // rightcolor={"black"}
-        // onRightPress={onCancelPress}
-      />
-      {/* <View style={styles.searchContainer}> */}
-      {/* <TextInput
-          style={styles.searchInput}
-          placeholder="Search"
-          placeholderTextColor="#888"
-          value={searchText}
-          onChangeText={setSearchText}
-        /> */}
-      {/* </View> */}
+    <SafeAreaView style={styles.container}>
+      <TagMoHeader hasLeftButton={false} hasRightButton={false} />
       <View>
         <DateSelecter onDatesChange={handleDatesChange} />
       </View>
@@ -211,37 +168,31 @@ const History: React.FC = () => {
           ¥ {formatNumberWithCommas(totalAmount)}
         </Text>
       </View>
-      <SwipeListView
+      <FlatList
         data={listData}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
         refreshing={refreshing}
-        onRefresh={() => {
-          setRefreshing(true);
-        }}
-        rightOpenValue={-75}
-        closeOnRowPress={true} // 行を押したときに自動的に閉じる
-        closeOnRowOpen={true} // 他の行が開いたときに自動的に閉じる
-        // disableRightSwipe={true} // 右へのスワイプを無効化
+        renderItem={({ item }: { item: ListItemProps }) => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("HistoryDetail", {
+                item: item,
+              });
+            }}
+          >
+            <ListItem
+              transaction_date={item.transaction_date}
+              amount={item.amount}
+              payment_location={item.payment_location}
+              id={""}
+              category={""}
+              payment_method={""}
+            />
+          </TouchableOpacity>
+        )}
         keyExtractor={(item) => item.id} // 一意のキーを指定
         style={styles.list}
-        // ListEmptyComponent={
-        //   <View style={styles.list}>
-        //     <Text>No items available</Text>
-        //   </View>
-        // }
       />
-      {/* <FlatList
-          data={listData}
-          renderItem={renderItem}
-          refreshing={refreshing}
-          onRefresh={() => {
-            setRefreshing(true);
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          style={styles.list}
-        /> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
