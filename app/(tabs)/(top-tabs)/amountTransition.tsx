@@ -101,129 +101,8 @@ const chartDataInitial = [
   },
 ];
 
-const screenWidth = Dimensions.get("window").width;
-
-const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
-  <View style={styles.listItem}>
-    <Text style={styles.category} numberOfLines={1} ellipsizeMode="tail">
-      {ListItemProps.payment_method}
-    </Text>
-    <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
-      ¥{ListItemProps.total_amount_each_method}
-    </Text>
-  </View>
-);
-
-const BalanceMethod: React.FC = () => {
-  const [listData, setListData] = useState<ListItemProps[]>([]);
-  const db = useSQLiteContext();
-  const [refreshing, setRefreshing] = useState(false);
-  const { loadList } = useContext(LoadListContext);
-  const [chartData, setChartData] = useState(chartDataInitial);
-
-  const renderItem = useCallback(
-    ({ item }: { item: ListItemProps }) => (
-      <ListItem
-        payment_method={item.payment_method}
-        total_amount_each_method={item.total_amount_each_method}
-      />
-    ),
-    [],
-  );
-
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
-
-  useEffect(() => {
-    const fetchData = async (createChart: {
-      (result: ListItemProps[]): void;
-    }) => {
-      try {
-        const result = await db.getAllAsync<ListItemProps>(
-          `
-        SELECT 
-          payment_method, 
-          SUM(amount) as total_amount_each_method
-        FROM amount_list
-        GROUP BY payment_method
-        ORDER BY total_amount_each_method DESC
-        `,
-        );
-
-        await createChart(result);
-
-        // amount をカンマ区切りにフォーマット
-        const formattedResult = await result.map((item) => ({
-          ...item,
-          total_amount_each_method: formatNumberWithCommas(
-            item.total_amount_each_method,
-          ),
-        }));
-
-        await setListData(formattedResult);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    const createChart = (result: ListItemProps[]): void => {
-      let newChartData = [...chartDataInitial];
-
-      //円グラフのためのデータ作成
-      let sumAmount: number = 0;
-      result.forEach((item) => {
-        sumAmount += Number(item.total_amount_each_method);
-      });
-      result.forEach((item) => {
-        const per: number = Math.floor(
-          ((Number(item.total_amount_each_method) || 0) * 100) / sumAmount,
-        );
-        const targetItem = newChartData.find(
-          (targetItem) => targetItem.name === item.payment_method,
-        );
-        if (targetItem) {
-          targetItem.population = per;
-        }
-        setChartData(newChartData);
-      });
-    };
-
-    fetchData(createChart);
-    setRefreshing(false);
-  }, [refreshing, loadList]);
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.chartBackground}>
-        <PieChart
-          data={chartData}
-          width={screenWidth}
-          height={220}
-          chartConfig={{
-            backgroundColor: "#1cc910",
-            backgroundGradientFrom: "#eff3ff",
-            backgroundGradientTo: "#efefef",
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
-          accessor="population"
-          backgroundColor="transparent"
-          paddingLeft="15"
-          absolute
-        />
-      </View>
-      <FlatList
-        data={listData}
-        renderItem={renderItem}
-        refreshing={refreshing}
-        onRefresh={() => {
-          setRefreshing(true);
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        style={styles.list}
-      />
-    </SafeAreaView>
-  );
+const amountTransition: React.FC = () => {
+  return <></>;
 };
 
 const styles = StyleSheet.create({
@@ -325,4 +204,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BalanceMethod;
+export default amountTransition;

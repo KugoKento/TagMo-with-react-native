@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 type Props = {
+  title: string;
   //ヘッダの左側のボタン設定
   hasLeftButton: boolean;
   leftFontAwesomeName?: React.ComponentProps<typeof FontAwesome>["name"];
@@ -15,7 +16,8 @@ type Props = {
   onRightPress?: () => void;
 };
 
-export const HistoryDetailHeader: React.FC<Props> = ({
+export const CommonHeader: React.FC<Props> = ({
+  title,
   hasLeftButton,
   leftFontAwesomeName,
   leftcolor,
@@ -29,10 +31,10 @@ export const HistoryDetailHeader: React.FC<Props> = ({
     <View style={styles.header}>
       {hasLeftButton && (
         <TouchableOpacity onPress={onLeftPress} style={styles.leftButton}>
-          <FontAwesome name={leftFontAwesomeName} size={28} color={leftcolor} />
+          <FontAwesome name={leftFontAwesomeName} size={18} color={leftcolor} />
         </TouchableOpacity>
       )}
-      <Text style={styles.headerTitle}>項目詳細</Text>
+      <Text style={styles.headerTitle}>{title}</Text>
       {hasRightButton && (
         <TouchableOpacity onPress={onRightPress} style={styles.rightButton}>
           <FontAwesome
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    // paddingVertical: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
   },
@@ -63,7 +65,8 @@ const styles = StyleSheet.create({
   },
   leftButton: {
     position: "absolute",
-    left: 16,
+    left: 0,
+    padding: 24,
   },
   rightButton: {
     position: "absolute",

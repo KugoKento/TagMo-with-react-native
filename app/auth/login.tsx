@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from "react-native";
-import { TagMoHeader } from "@/components/TagMoHeader";
+import { TagMoHeader } from "@/components/header/TagMoHeader";
 import { RectangleButton } from "@/components/RectangleButton";
 import { Link, router, useNavigation } from "expo-router";
 

@@ -8,7 +8,7 @@ import {
 } from "@react-navigation/material-top-tabs";
 import { withLayoutContext } from "expo-router";
 import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
-import { TagMoHeader } from "@/components/TagMoHeader";
+import { TagMoHeader } from "@/components/header/TagMoHeader";
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -28,12 +28,16 @@ export default function BalanceLayout() {
       <TagMoHeader hasLeftButton={false} hasRightButton={false} />
       <MaterialTopTabs>
         <MaterialTopTabs.Screen
+          name="balanceCategory"
+          options={{ title: "分類" }}
+        />
+        <MaterialTopTabs.Screen
           name="balanceMethod"
           options={{ title: "支払方法" }}
         />
         <MaterialTopTabs.Screen
-          name="balanceCategory"
-          options={{ title: "分類" }}
+          name="amountTransition"
+          options={{ title: "支出推移" }}
         />
       </MaterialTopTabs>
     </SafeAreaView>

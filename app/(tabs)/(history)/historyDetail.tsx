@@ -12,8 +12,8 @@ import {
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { HistoryDetailHeader } from "@/components/HistoryDetailHeader";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { CommonHeader } from "@/components/header/CommonHeader";
 
 type RootParamList = {
   History: undefined;
@@ -78,7 +78,8 @@ const HistoryDetail: React.FC = ({ navigation }: any) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
-        <HistoryDetailHeader
+        <CommonHeader
+          title={"項目詳細"}
           hasLeftButton={true}
           hasRightButton={false}
           leftFontAwesomeName={"chevron-left"}

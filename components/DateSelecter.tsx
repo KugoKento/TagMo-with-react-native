@@ -12,7 +12,9 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
   dateSelecterProps: DateSelecterProps,
 ) => {
   const dayOneMonthAgo = new Date();
-  dayOneMonthAgo.setMonth(dayOneMonthAgo.getMonth() - 1);
+  dayOneMonthAgo.setDate(
+    dayOneMonthAgo.getDate() - dayOneMonthAgo.getDate() + 1,
+  );
 
   const [startDate, setStartDate] = useState(dayOneMonthAgo);
   const [endDate, setEndDate] = useState(new Date());

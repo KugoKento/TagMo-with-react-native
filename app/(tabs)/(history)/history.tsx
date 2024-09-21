@@ -10,7 +10,7 @@ import {
   StatusBar,
   FlatList,
 } from "react-native";
-import { TagMoHeader } from "@/components/TagMoHeader";
+import { TagMoHeader } from "@/components/header/TagMoHeader";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
 import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
