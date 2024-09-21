@@ -9,7 +9,7 @@ type DateSelecterProps = {
 };
 
 export const DateSelecter: React.FC<DateSelecterProps> = (
-  dateSelecterProps: DateSelecterProps
+  dateSelecterProps: DateSelecterProps,
 ) => {
   const dayOneMonthAgo = new Date();
   dayOneMonthAgo.setMonth(dayOneMonthAgo.getMonth() - 1);
@@ -21,7 +21,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
 
   const onChangeStart = (
     event: DateTimePickerEvent,
-    selectedDate?: Date
+    selectedDate?: Date,
   ): void => {
     const currentDate = selectedDate || startDate;
     setStartDate(currentDate);
@@ -29,7 +29,7 @@ export const DateSelecter: React.FC<DateSelecterProps> = (
 
   const onChangeEnd = (
     event: DateTimePickerEvent,
-    selectedDate?: Date
+    selectedDate?: Date,
   ): void => {
     const currentDate = selectedDate || endDate;
     setEndDate(currentDate);

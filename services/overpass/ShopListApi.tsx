@@ -15,7 +15,7 @@ type MapList = {
 //haversine fomula（半正矢関数 ※単位はmとする
 const haversineDistance = (
   location1: LocationType,
-  location2: LocationType
+  location2: LocationType,
 ): number => {
   const R = 6371; // 地球の半径（キロメートル）
 
@@ -46,7 +46,7 @@ const haversineDistance = (
 
 const getShopList = async (
   searchString: string,
-  currentLocation: LocationType
+  currentLocation: LocationType,
 ): Promise<MapList[]> => {
   const searchRadius: number = API_VALUE.SHOPLIST_API.SEARCH_RADIUS;
   const query = `
@@ -70,7 +70,7 @@ const getShopList = async (
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-      }
+      },
     );
 
     const shopList: MapList[] = response.data.elements.map((element: any) => {
@@ -82,7 +82,7 @@ const getShopList = async (
         longitude: element.lon,
       };
       const distance = parseFloat(
-        haversineDistance(currentLocation, shopLocation).toFixed(0)
+        haversineDistance(currentLocation, shopLocation).toFixed(0),
       );
 
       return {

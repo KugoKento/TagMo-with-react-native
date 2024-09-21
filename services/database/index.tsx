@@ -31,7 +31,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
         );
     `);
 
-    // await insertSampleData(db); // データ挿入関数を呼び出す
+    await insertSampleData(db); // データ挿入関数を呼び出す
 
     currentDbVersion = 1;
   }
@@ -42,51 +42,51 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 }
 
 // 日付を1日ずつずらして10000個のデータを挿入する関数
-// async function insertSampleData(db: SQLiteDatabase) {
-//   const startDate = new Date(); // 現在の日付から始める
-//   const numberOfRecords = 100;
-//   const paymentMethods = [
-//     "現金",
-//     "クレジット",
-//     "QRコード",
-//     "交通系IC",
-//     "口座振込",
-//     "立て替え",
-//     "POINT",
-//     "商品券",
-//     "その他",
-//   ];
-//   const categories = [
-//     "食品",
-//     "交通",
-//     "光熱費",
-//     "娯楽",
-//     "医療",
-//     "教育",
-//     "その他",
-//   ];
+async function insertSampleData(db: SQLiteDatabase) {
+  const startDate = new Date(); // 現在の日付から始める
+  const numberOfRecords = 100;
+  const paymentMethods = [
+    "現金",
+    "クレジット",
+    "QRコード",
+    "交通系IC",
+    "口座振込",
+    "立て替え",
+    "POINT",
+    "商品券",
+    "その他",
+  ];
+  const categories = [
+    "食品",
+    "交通",
+    "光熱費",
+    "娯楽",
+    "医療",
+    "教育",
+    "その他",
+  ];
 
-//   const inserts = [];
+  const inserts = [];
 
-//   for (let i = 0; i < numberOfRecords; i++) {
-//     const transactionDate = new Date(startDate);
-//     transactionDate.setDate(startDate.getDate() + i);
+  for (let i = 0; i < numberOfRecords; i++) {
+    const transactionDate = new Date(startDate);
+    transactionDate.setDate(startDate.getDate() + i);
 
-//     const paymentMethod = paymentMethods[i % paymentMethods.length];
-//     const category = categories[i % categories.length];
-//     const amount = Math.floor(Math.random() * 10000) + 1; // 1 から 10000 のランダムな金額
+    const paymentMethod = paymentMethods[i % paymentMethods.length];
+    const category = categories[i % categories.length];
+    const amount = Math.floor(Math.random() * 10000) + 1; // 1 から 10000 のランダムな金額
 
-//     inserts.push(`
-//       (${i + 1}, '${transactionDate.toISOString()}', 'Location ${
-//       i + 1
-//     }', '${paymentMethod}', '${category}', ${amount})
-//     `);
-//   }
+    inserts.push(`
+      (${i + 1}, '${transactionDate.toISOString()}', 'Location ${
+        i + 1
+      }', '${paymentMethod}', '${category}', ${amount})
+    `);
+  }
 
-//   const insertQuery = `
-//     INSERT INTO amount_list (id, transaction_date, payment_location, payment_method, category, amount) VALUES
-//     ${inserts.join(", ")}
-//   `;
+  const insertQuery = `
+    INSERT INTO amount_list (id, transaction_date, payment_location, payment_method, category, amount) VALUES
+    ${inserts.join(", ")}
+  `;
 
-//   await db.execAsync(insertQuery);
-// }
+  await db.execAsync(insertQuery);
+}

@@ -7,18 +7,17 @@ import {
   Keyboard,
   Platform,
   StatusBar,
-  Button,
   TouchableOpacity,
-  KeyboardAvoidingView,
   TextInput,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HistoryDetailHeader } from "@/components/HistoryDetailHeader";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 type RootParamList = {
   History: undefined;
-  HistoryDetail: { registerItems: RegisteredProps };
+  HistoryDetail: { item: RegisteredProps };
 };
 
 type RegisteredProps = {
@@ -42,18 +41,39 @@ const formatDateToMyFormat = (dateTime: Date) => {
   return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
+const formatNumberWithCommas = (value: string): string => {
+  return Number(value).toLocaleString();
+};
+
 const HistoryDetail: React.FC = ({ navigation }: any) => {
   const route = useRoute<RouteProp<RootParamList, "HistoryDetail">>();
-  const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
-    id: route.params?.registerItems?.id ?? "",
-    transaction_date:
-      route.params?.registerItems?.transaction_date ?? new Date(),
-    payment_location: route.params?.registerItems?.payment_location ?? "",
-    category: route.params?.registerItems?.category ?? "",
-    payment_method: route.params?.registerItems?.payment_method ?? "",
-    amount: route.params?.registerItems?.amount ?? "",
-    memo: "",
-  });
+  // const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
+  //   id: route.params?.item?.id ?? "",
+  //   transaction_date: route.params?.item?.transaction_date ?? new Date(),
+  //   payment_location: route.params?.item?.payment_location ?? "",
+  //   category: route.params?.item?.category ?? "",
+  //   payment_method: route.params?.item?.payment_method ?? "",
+  //   amount: route.params?.item?.amount ?? "",
+  //   memo: "",
+  // });
+
+  // const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
+  //   id: "",
+  //   transaction_date: new Date(),
+  //   payment_location: "",
+  //   category: "",
+  //   payment_method: "",
+  //   amount: "",
+  //   memo: "",
+  // });
+
+  const [id, setId] = useState<string>("");
+  const [transactionDate, setTransactionDate] = useState<Date>(new Date());
+  const [paymentLocation, setPaymentLocation] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
+  const [memo, setMemo] = useState<string>("");
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -65,43 +85,51 @@ const HistoryDetail: React.FC = ({ navigation }: any) => {
           leftcolor={"black"}
           onLeftPress={() => navigation.goBack()}
         />
-        {/* <View style={styles.inputContainer}> */}
         <View style={styles.inputRow}>
-          <Text style={styles.label}>日付</Text>
+          <Text style={styles.label}>日付:</Text>
           <TextInput
             style={styles.input}
-            // value={formatDateToMyFormat(registeredProps.transaction_date)}
-            placeholder={formatDateToMyFormat(registeredProps.transaction_date)}
-            // editable={false} // 日付は編集不可
+            value={amount}
+            placeholder={formatDateToMyFormat(
+              route.params.item.transaction_date,
+            )}
+            keyboardType="numeric"
+            placeholderTextColor="#888"
+            onChangeText={setAmount}
           />
         </View>
         <View style={styles.inputRow}>
-          <Text style={styles.label}>金額</Text>
+          <Text style={styles.label}>金額:</Text>
           <TextInput
             style={styles.input}
-            value={registeredProps.amount}
-            placeholder={registeredProps.amount}
+            value={amount}
+            placeholder={route.params.item.amount}
             keyboardType="numeric"
+            placeholderTextColor="#888"
+            onChangeText={setAmount}
           />
         </View>
         <View style={styles.inputRow}>
           <Text style={styles.label}>カテゴリ:</Text>
           <TextInput
             style={styles.input}
-            value={registeredProps.category}
-            placeholder={registeredProps.category}
+            value={category}
+            placeholder={route.params.item.category}
+            placeholderTextColor="#888"
+            onChangeText={setCategory}
           />
         </View>
         <View style={styles.memoContainer}>
           <Text style={styles.label}>メモ:</Text>
           <TextInput
             style={styles.memoInput}
-            value={registeredProps.memo}
+            value={memo}
             placeholder="メモを入力"
             multiline
+            placeholderTextColor="#888"
+            onChangeText={setMemo}
           />
         </View>
-        {/* ボタンを下部に配置 */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={[styles.button, styles.saveButton]}>
             <Text style={styles.buttonText}>保存</Text>
@@ -110,7 +138,6 @@ const HistoryDetail: React.FC = ({ navigation }: any) => {
             <Text style={styles.buttonText}>削除</Text>
           </TouchableOpacity>
         </View>
-        {/* </View> */}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -119,67 +146,73 @@ const HistoryDetail: React.FC = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF", // 背景を白に
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 16,
   },
-  inputContainer: {
-    paddingVertical: 10,
-  },
-  inner: {
-    flex: 1,
-    justifyContent: "space-between", // 上下に要素を配置し、ボタンを下に配置
-  },
   inputRow: {
-    flexDirection: "row", // 横並び
-    alignItems: "center", // 垂直方向で中央揃え
-    marginBottom: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 16,
+    backgroundColor: "#FFF",
+    padding: 12,
+    borderRadius: 8,
   },
   label: {
     fontSize: 18,
-    width: 80, // ラベルの固定幅
+    width: 80,
     color: "#333",
+    fontWeight: "bold", // ラベルを太字に
   },
   input: {
-    flex: 1, // 入力フィールドが横幅いっぱいに広がる
+    flex: 1,
+    borderColor: "#E0E0E0", // 淡い灰色の枠線
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 8,
-    paddingVertical: 8,
+    paddingVertical: 14,
     paddingHorizontal: 12,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#F9F9F9",
   },
   memoContainer: {
-    flex: 1, // メモ欄に残りの高さを割り当てる
+    flex: 1,
+    marginTop: 16,
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    padding: 12,
   },
   memoInput: {
-    flex: 1, // メモ欄が最大限の高さを取る
+    flex: 1,
+    borderColor: "#E0E0E0",
     borderWidth: 1,
-    borderColor: "#ccc",
     borderRadius: 8,
     fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     textAlignVertical: "top",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#F9F9F9",
   },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 24,
   },
   button: {
     flex: 1,
-    marginHorizontal: 8,
-    borderRadius: 8,
+    paddingVertical: 16,
+    borderRadius: 12,
     alignItems: "center",
+    marginHorizontal: 8,
   },
   buttonText: {
-    color: "#fff",
+    color: "#FFF",
     fontSize: 18,
+    fontWeight: "bold",
   },
   saveButton: {
-    backgroundColor: "#4CAF50", // 保存ボタンの背景色
+    backgroundColor: "#4CAF50", // 保存ボタンを緑に
   },
   deleteButton: {
-    backgroundColor: "#F44336", // 削除ボタンの背景色
+    backgroundColor: "#F44336", // 削除ボタンを赤に
   },
 });
 

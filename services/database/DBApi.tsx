@@ -23,7 +23,7 @@ type ListItemProps = {
 
 const getAmountList = async (
   startDate: Date | null,
-  endDate: Date | null
+  endDate: Date | null,
 ): Promise<ListItemProps[]> => {
   const db = await SQLite.openDatabaseAsync("tagmo.db");
   try {
@@ -36,7 +36,7 @@ const getAmountList = async (
         " WHERE DATE(transaction_date) >= ? AND DATE(transaction_date) <= ?";
       params.push(
         startDate.toISOString().split("T")[0],
-        endDate.toISOString().split("T")[0]
+        endDate.toISOString().split("T")[0],
       );
     } else if (startDate) {
       query += " WHERE DATE(transaction_date) >= ?";
@@ -68,7 +68,7 @@ const registerAmountList = async (props: TagMoDBProps): Promise<void> => {
         props.category ?? null,
         props.payment_method ?? null,
         props.amount ?? null,
-      ]
+      ],
     );
   } catch (error) {
     console.error("Error in database operation:", error);
