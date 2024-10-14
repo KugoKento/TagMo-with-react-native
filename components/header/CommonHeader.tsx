@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
   rightButton: {
     position: "absolute",
-    right: 16,
+    right: 0,
+    padding: 24,
   },
 });

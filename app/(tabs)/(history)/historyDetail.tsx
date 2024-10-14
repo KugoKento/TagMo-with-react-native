@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useContext,  useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -38,17 +38,6 @@ type RegisteredProps = {
   payment_method: string;
   amount: string;
   memo: string;
-};
-
-const formatDateToMyFormat = (dateTime: Date) => {
-  const dateString = dateTime.toString();
-  const date = new Date(dateString);
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  // const hours = String(date.getHours()).padStart(2, "0");
-  // const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${year}/${month}/${day}`;
 };
 
 const formatNumberWithCommas = (value: string): string => {
@@ -130,16 +119,42 @@ const HistoryDetail: React.FC = () => {
     );
   };
 
+  const onDeleteHistory = async () => {
+    Alert.alert(
+      "項目削除",
+      "この項目を削除しますか？",
+      [
+        {
+          text: COMMON_MESSAGE.BUTTON.PATTERN_NO,
+          style: "cancel",
+        },
+        {
+          text: COMMON_MESSAGE.BUTTON.PATTERN_YES,
+          onPress: async () => {
+            await DBApi.deleteAmountList(route.params.item.id);
+            await setLoadList(!loadList);
+            await navigation.navigate("History");
+            await Alert.alert("削除が完了しました");
+          },
+        },
+      ],
+      { cancelable: false },
+    );
+  };
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
         <CommonHeader
           title={"項目詳細"}
           hasLeftButton={true}
-          hasRightButton={false}
+          hasRightButton={true}
           leftFontAwesomeName={"chevron-left"}
           leftcolor={"black"}
           onLeftPress={() => navigation.goBack()}
+          rightFontAwesomeName={"trash"}
+          rightcolor={"red"}
+          onRightPress={onDeleteHistory}
         />
         <View style={styles.inputRow}>
           <Text style={styles.label}>日付:</Text>

@@ -76,7 +76,7 @@ const History: React.FC = () => {
   const [listData, setListData] = useState<ListItemProps[]>([]);
   const [totalAmount, setTotalAmount] = useState("0");
   const [refreshing, setRefreshing] = useState(false); //Historyリストを更新するフラグ
-  const { loadList, setLoadList } = useContext(LoadListContext);
+  const { loadList } = useContext(LoadListContext);
   const [dates, setDates] = useState<{
     startDate: Date | null;
     endDate: Date | null;
