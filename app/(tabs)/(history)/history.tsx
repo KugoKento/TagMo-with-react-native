@@ -23,6 +23,7 @@ type ListItemProps = {
   payment_location: string;
   payment_method: string;
   amount: string;
+  memo: string;
 };
 
 // 日付をyyyy-mm-dd形式に変換する関数
@@ -54,6 +55,9 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
         ellipsizeMode="tail"
       >
         {ListItemProps.payment_location}
+      </Text>
+      <Text style={styles.memo} numberOfLines={1} ellipsizeMode="tail">
+        {ListItemProps.memo}
       </Text>
       <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
         ¥{formatNumberWithCommas(ListItemProps.amount)}
@@ -149,6 +153,7 @@ const History: React.FC = () => {
               id={""}
               category={""}
               payment_method={""}
+              memo={item.memo}
             />
           </TouchableOpacity>
         )}
@@ -231,10 +236,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "left", // テキストを左寄せ
-    flex: 3, // 幅を保つためにflexを使用
+    flex: 2, // 幅を保つためにflexを使用
     marginLeft: 20, // 日付との間に幅を持たせる
   },
-
+  memo: {
+    fontSize: 14, // 小さくする
+    color: "#aaa", // 色を薄くする（例えば薄いグレー）
+    flex: 2, // 幅を保つためにflexを使用
+    textAlign: "left", // テキストを左寄せ
+    alignSelf: "center", // 中央に揃える
+  },
   amount: {
     fontSize: 16,
     flex: 1, // 幅を保つためにflexを使用
