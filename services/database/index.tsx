@@ -44,7 +44,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 // 日付を1日ずつずらして10000個のデータを挿入する関数
 async function insertSampleData(db: SQLiteDatabase) {
   const startDate = new Date(); // 現在の日付から始める
-  const numberOfRecords = 100;
+  const numberOfRecords = 3;
   const paymentMethods = [
     "現金",
     "クレジット",

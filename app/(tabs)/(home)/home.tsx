@@ -75,27 +75,14 @@ const HomeMain: React.FC = () => {
   const { currentLocation } = useCurrentLocation(refreshing);
   const navigation = useNavigation<NativeStackNavigationProp<any>>();
 
-  console.log("useEffect前");
   useEffect(() => {
-    console.log("フェッチ前前");
     setIsloading(true);
-    console.log("フェッチ前");
     const fetchShops = async () => {
-      console.log("データフェッチ前前");
       if (currentLocation.latitude && currentLocation.longitude) {
-        console.log("データフェッチ前");
         const list = await ShopListApi.getShopList(searchText, currentLocation);
-        console.log("データフェッチ後");
         setShopList(list);
         setIsloading(false);
       }
-
-      // const list = await ShopListApi.getShopList(searchText, {
-      //   latitude: 35.6762, // 東京の緯度
-      //   longitude: 139.6503, // 東京の経度
-      // });
-      // setShopList(list);
-      // setIsloading(false);
     };
 
     fetchShops();

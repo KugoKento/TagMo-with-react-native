@@ -125,7 +125,9 @@ const BalanceMethod: React.FC = () => {
     ({ item }: { item: ListItemProps }) => (
       <ListItem
         payment_method={item.payment_method}
-        total_amount_each_method={item.total_amount_each_method}
+        total_amount_each_method={formatNumberWithCommas(
+          item.total_amount_each_method,
+        )}
       />
     ),
     [],
@@ -154,14 +156,14 @@ const BalanceMethod: React.FC = () => {
         await createChart(result);
 
         // amount をカンマ区切りにフォーマット
-        const formattedResult = await result.map((item) => ({
-          ...item,
-          total_amount_each_method: formatNumberWithCommas(
-            item.total_amount_each_method,
-          ),
-        }));
+        // const formattedResult = await result.map((item) => ({
+        //   ...item,
+        //   total_amount_each_method: formatNumberWithCommas(
+        //     item.total_amount_each_method,
+        //   ),
+        // }));
 
-        await setListData(formattedResult);
+        await setListData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

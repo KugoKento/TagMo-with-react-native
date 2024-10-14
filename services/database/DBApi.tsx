@@ -10,6 +10,7 @@ type TagMoDBProps = {
   category?: string;
   payment_method?: string;
   amount?: string;
+  memo?: string;
 };
 
 type ListItemProps = {
@@ -19,6 +20,7 @@ type ListItemProps = {
   payment_location: string;
   payment_method: string;
   amount: string;
+  memo: string;
 };
 
 const getAmountList = async (
@@ -68,6 +70,7 @@ const registerAmountList = async (props: TagMoDBProps): Promise<void> => {
         props.category ?? null,
         props.payment_method ?? null,
         props.amount ?? null,
+        props.memo ?? null,
       ],
     );
   } catch (error) {
@@ -84,4 +87,27 @@ const deleteAmountList = async (id: string) => {
   }
 };
 
-export default { getAmountList, registerAmountList, deleteAmountList };
+const updateAmountList = async (props: ListItemProps) => {
+  const db = await SQLite.openDatabaseAsync("tagmo.db");
+  try {
+    await db.runAsync(
+      "UPDATE amount_list SET transaction_date = ?, payment_location = ?, category = ?, payment_method = ?, amount = ?, memo = ? WHERE id = ?",
+      props.transaction_date.toISOString(),
+      props.payment_location,
+      props.category,
+      props.payment_method,
+      Number(props.amount),
+      props.memo,
+      props.id,
+    );
+  } catch (error) {
+    console.error("Error in database operation:", error);
+  }
+};
+
+export default {
+  getAmountList,
+  registerAmountList,
+  deleteAmountList,
+  updateAmountList,
+};

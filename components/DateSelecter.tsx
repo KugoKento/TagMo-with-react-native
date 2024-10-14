@@ -11,12 +11,9 @@ type DateSelecterProps = {
 export const DateSelecter: React.FC<DateSelecterProps> = (
   dateSelecterProps: DateSelecterProps,
 ) => {
-  const dayOneMonthAgo = new Date();
-  dayOneMonthAgo.setDate(
-    dayOneMonthAgo.getDate() - dayOneMonthAgo.getDate() + 1,
+  const [startDate, setStartDate] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1),
   );
-
-  const [startDate, setStartDate] = useState(dayOneMonthAgo);
   const [endDate, setEndDate] = useState(new Date());
   const [modalVisible, setModalVisible] = useState(false);
   const [modalType, setModalType] = useState<"start" | "end" | null>(null);

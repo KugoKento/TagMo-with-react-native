@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   Platform,
   StatusBar,
   FlatList,
@@ -13,7 +12,6 @@ import {
 import { TagMoHeader } from "@/components/header/TagMoHeader";
 import { LoadListContext } from "@/app/_layout";
 import DBApi from "@/services/database/DBApi";
-import { COMMON_MESSAGE, HISTORY_MESSAGE } from "@/constants/message";
 import { DateSelecter } from "@/components/DateSelecter";
 import { useNavigation } from "expo-router";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
@@ -34,9 +32,9 @@ const formatDateToMyFormat = (dateTime: Date) => {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const day = String(date.getUTCDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  return `${year}/${month}/${day} ${hours}:${minutes}`;
+  // const hours = String(date.getHours()).padStart(2, "0");
+  // const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${year}/${month}/${day}`;
 };
 
 const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
@@ -58,11 +56,15 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
         {ListItemProps.payment_location}
       </Text>
       <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
-        ¥{ListItemProps.amount}
+        ¥{formatNumberWithCommas(ListItemProps.amount)}
       </Text>
     </View>
   </View>
 );
+
+const formatNumberWithCommas = (value: string): string => {
+  return Number(value).toLocaleString();
+};
 
 const History: React.FC = () => {
   // const [searchText, setSearchText] = useState("");
@@ -75,8 +77,8 @@ const History: React.FC = () => {
     startDate: Date | null;
     endDate: Date | null;
   }>({
-    startDate: null,
-    endDate: null,
+    startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    endDate: new Date(),
   });
 
   useEffect(() => {
@@ -87,15 +89,6 @@ const History: React.FC = () => {
           dates.startDate,
           dates.endDate,
         );
-        // console.log();
-        // console.log("DBに登録されている項目確認");
-        // console.log(result);
-        // console.log();
-        // amount をカンマ区切りにフォーマット
-        const formattedResult = result.map((item) => ({
-          ...item,
-          amount: formatNumberWithCommas(item.amount),
-        }));
 
         const sumAmount = (result: ListItemProps[]) => {
           const sum: number = result.reduce(
@@ -106,7 +99,7 @@ const History: React.FC = () => {
         };
 
         // フォーマットされたデータをセット
-        setListData(formattedResult);
+        setListData(result);
         setTotalAmount(sumAmount(result));
         setRefreshing(false);
       } catch (error) {
@@ -115,38 +108,6 @@ const History: React.FC = () => {
     }
     setup(); // setup関数を呼び出して非同期処理を開始
   }, [refreshing, loadList, dates]); // `refreshing` または `loadList` が変わったときに実行される
-
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const deleteRow = (rowMap: { [id: string]: any }, id: string): void => {
-    Alert.alert(
-      HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.HEADER,
-      HISTORY_MESSAGE.BUTTON_DELETE.CLICK_START.MESSAGE,
-      [
-        {
-          text: COMMON_MESSAGE.BUTTON.PATTERN_NO,
-          onPress: () => {
-            if (rowMap[id]) {
-              rowMap[id].closeRow(); // スライドして削除ボタンが出ている項目を元に戻す
-            }
-          },
-          style: "cancel",
-        },
-        {
-          text: COMMON_MESSAGE.BUTTON.PATTERN_YES,
-          onPress: async () => {
-            await DBApi.deleteAmountList(id);
-            setLoadList(!loadList);
-            Alert.alert(HISTORY_MESSAGE.BUTTON_DELETE.CLICK_END.MESSAGE);
-          },
-        },
-      ],
-      { cancelable: false },
-    );
-  };
 
   const handleDatesChange = (startDate: Date | null, endDate: Date | null) => {
     setDates({ startDate, endDate });
@@ -174,6 +135,8 @@ const History: React.FC = () => {
         renderItem={({ item }: { item: ListItemProps }) => (
           <TouchableOpacity
             onPress={() => {
+              console.log("categoryから値遅れているか確認");
+              console.log(item);
               navigation.navigate("HistoryDetail", {
                 item: item,
               });

@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { SafeAreaView, View, Text, FlatList, StyleSheet, Platform, StatusBar } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Platform,
+  StatusBar,
+} from "react-native";
 import { Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 import { useSQLiteContext } from "expo-sqlite";
@@ -171,10 +179,12 @@ const BalanceCategory: React.FC = () => {
     ({ item }: { item: ListItemProps }) => (
       <ListItem
         category={item.category}
-        total_amount_each_category={item.total_amount_each_category}
+        total_amount_each_category={formatNumberWithCommas(
+          item.total_amount_each_category,
+        )}
       />
     ),
-    []
+    [],
   );
 
   const formatNumberWithCommas = (value: string): string => {
@@ -194,20 +204,20 @@ const BalanceCategory: React.FC = () => {
         FROM amount_list
         GROUP BY category
         ORDER BY total_amount_each_category DESC
-        `
+        `,
         );
 
         await createChart(result);
 
         // amount をカンマ区切りにフォーマット
-        const formattedResult = await result.map((item) => ({
-          ...item,
-          total_amount_each_category: formatNumberWithCommas(
-            item.total_amount_each_category
-          ),
-        }));
+        // const formattedResult = await result.map((item) => ({
+        //   ...item,
+        //   total_amount_each_category: formatNumberWithCommas(
+        //     item.total_amount_each_category
+        //   ),
+        // }));
 
-        await setListData(formattedResult);
+        await setListData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -223,10 +233,10 @@ const BalanceCategory: React.FC = () => {
       });
       result.forEach((item) => {
         const per: number = Math.floor(
-          ((Number(item.total_amount_each_category) || 0) * 100) / sumAmount
+          ((Number(item.total_amount_each_category) || 0) * 100) / sumAmount,
         );
         const targetItem = newChartData.find(
-          (targetItem) => targetItem.name === item.category
+          (targetItem) => targetItem.name === item.category,
         );
         if (targetItem) {
           targetItem.population = per;

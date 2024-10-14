@@ -38,7 +38,7 @@ const Category: React.FC = ({ navigation }: any) => {
   console.log(route);
   console.log();
   const [registeredProps, setRegisteredProps] = useState<RegisteredProps>({
-    transaction_date: new Date(),
+    transaction_date: new Date(new Date().toDateString()),
     payment_location: route.params.registerItems.payment_location ?? "",
     category: "",
     payment_method: route.params.registerItems.payment_method ?? "",
