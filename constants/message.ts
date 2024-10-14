@@ -29,3 +29,31 @@ export const HISTORY_MESSAGE = {
     CLOSE: "閉じる",
   },
 } as const;
+
+export const HISTORYDETAIL_MESSAGE = {
+  TITLE: "項目詳細",
+  label_1: "日付",
+  label_2: "金額",
+  label_3: "カテゴリ",
+  label_4: "メモ",
+  PLAICEHOLDER_MEMO: "メモを入力",
+  BUTTON_UPDATE: {
+    DISPLAY: "保存",
+    CLICK_START: {
+      HEADER: "入力内容の保存",
+      MESSAGE: "入力内容を保存しますか？",
+    },
+    CLICK_END: {
+      MESSAGE: "保存が完了しました",
+    },
+  },
+  BUTTON_DELETE: {
+    CLICK_START: {
+      HEADER: "項目削除",
+      MESSAGE: "この項目を削除しますか？",
+    },
+    CLICK_END: {
+      MESSAGE: "削除が完了しました",
+    },
+  },
+} as const;

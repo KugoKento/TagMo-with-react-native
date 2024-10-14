@@ -13,6 +13,7 @@ import { PieChart } from "react-native-chart-kit";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import { HOME_VALUE } from "@/constants/appConstants";
+import utility from "@/utils/utility";
 
 //支払い手法は一元管理し、そこから利用する形にする
 
@@ -125,17 +126,13 @@ const BalanceMethod: React.FC = () => {
     ({ item }: { item: ListItemProps }) => (
       <ListItem
         payment_method={item.payment_method}
-        total_amount_each_method={formatNumberWithCommas(
+        total_amount_each_method={utility.formatNumberWithCommas(
           item.total_amount_each_method,
         )}
       />
     ),
     [],
   );
-
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
 
   useEffect(() => {
     const fetchData = async (createChart: {
@@ -154,14 +151,6 @@ const BalanceMethod: React.FC = () => {
         );
 
         await createChart(result);
-
-        // amount をカンマ区切りにフォーマット
-        // const formattedResult = await result.map((item) => ({
-        //   ...item,
-        //   total_amount_each_method: formatNumberWithCommas(
-        //     item.total_amount_each_method,
-        //   ),
-        // }));
 
         await setListData(result);
       } catch (error) {

@@ -15,6 +15,7 @@ import DBApi from "@/services/database/DBApi";
 import { DateSelecter } from "@/components/DateSelecter";
 import { useNavigation } from "expo-router";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
+import utility from "@/utils/utility";
 
 type ListItemProps = {
   id: string;
@@ -60,15 +61,11 @@ const ListItem: React.FC<ListItemProps> = ({ ...ListItemProps }) => (
         {ListItemProps.memo}
       </Text>
       <Text style={styles.amount} numberOfLines={1} ellipsizeMode="tail">
-        ¥{formatNumberWithCommas(ListItemProps.amount)}
+        ¥{utility.formatNumberWithCommas(ListItemProps.amount)}
       </Text>
     </View>
   </View>
 );
-
-const formatNumberWithCommas = (value: string): string => {
-  return Number(value).toLocaleString();
-};
 
 const History: React.FC = () => {
   // const [searchText, setSearchText] = useState("");
@@ -130,7 +127,7 @@ const History: React.FC = () => {
           numberOfLines={1}
           ellipsizeMode="tail"
         >
-          ¥ {formatNumberWithCommas(totalAmount)}
+          ¥ {utility.formatNumberWithCommas(totalAmount)}
         </Text>
       </View>
       <FlatList

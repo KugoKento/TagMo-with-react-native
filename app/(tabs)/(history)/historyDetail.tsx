@@ -17,13 +17,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CommonHeader } from "@/components/header/CommonHeader";
 import RNPickerSelect from "react-native-picker-select";
 import { HOME_VALUE } from "@/constants/appConstants";
-import { COMMON_MESSAGE } from "@/constants/message";
+import { COMMON_MESSAGE, HISTORYDETAIL_MESSAGE } from "@/constants/message";
 import DBApi from "@/services/database/DBApi";
 import { NativeStackNavigationProp } from "react-native-screens/lib/typescript/native-stack/types";
 import { LoadListContext } from "@/app/_layout";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+import utility from "@/utils/utility";
 
 type RootParamList = {
   History: undefined;
@@ -38,10 +39,6 @@ type RegisteredProps = {
   payment_method: string;
   amount: string;
   memo: string;
-};
-
-const formatNumberWithCommas = (value: string): string => {
-  return Number(value).toLocaleString();
 };
 
 const HistoryDetail: React.FC = () => {
@@ -98,8 +95,8 @@ const HistoryDetail: React.FC = () => {
 
   const onUpdateHistory = async () => {
     Alert.alert(
-      "入力内容の保存",
-      "入力内容を保存しますか？",
+      HISTORYDETAIL_MESSAGE.BUTTON_UPDATE.CLICK_START.HEADER,
+      HISTORYDETAIL_MESSAGE.BUTTON_UPDATE.CLICK_START.MESSAGE,
       [
         {
           text: COMMON_MESSAGE.BUTTON.PATTERN_NO,
@@ -111,7 +108,9 @@ const HistoryDetail: React.FC = () => {
             await DBApi.updateAmountList(formData);
             await setLoadList(!loadList);
             await navigation.navigate("History");
-            await Alert.alert("保存が完了しました");
+            await Alert.alert(
+              HISTORYDETAIL_MESSAGE.BUTTON_UPDATE.CLICK_END.MESSAGE.toString(),
+            );
           },
         },
       ],
@@ -121,8 +120,8 @@ const HistoryDetail: React.FC = () => {
 
   const onDeleteHistory = async () => {
     Alert.alert(
-      "項目削除",
-      "この項目を削除しますか？",
+      HISTORYDETAIL_MESSAGE.BUTTON_DELETE.CLICK_START.HEADER,
+      HISTORYDETAIL_MESSAGE.BUTTON_DELETE.CLICK_START.MESSAGE,
       [
         {
           text: COMMON_MESSAGE.BUTTON.PATTERN_NO,
@@ -134,7 +133,9 @@ const HistoryDetail: React.FC = () => {
             await DBApi.deleteAmountList(route.params.item.id);
             await setLoadList(!loadList);
             await navigation.navigate("History");
-            await Alert.alert("削除が完了しました");
+            await Alert.alert(
+              HISTORYDETAIL_MESSAGE.BUTTON_DELETE.CLICK_END.MESSAGE,
+            );
           },
         },
       ],
@@ -146,7 +147,7 @@ const HistoryDetail: React.FC = () => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.container}>
         <CommonHeader
-          title={"項目詳細"}
+          title={HISTORYDETAIL_MESSAGE.TITLE}
           hasLeftButton={true}
           hasRightButton={true}
           leftFontAwesomeName={"chevron-left"}
@@ -157,7 +158,7 @@ const HistoryDetail: React.FC = () => {
           onRightPress={onDeleteHistory}
         />
         <View style={styles.inputRow}>
-          <Text style={styles.label}>日付:</Text>
+          <Text style={styles.label}>{HISTORYDETAIL_MESSAGE.label_1}:</Text>
           <DateTimePicker
             style={styles.inputDate}
             value={formData.transaction_date}
@@ -167,18 +168,20 @@ const HistoryDetail: React.FC = () => {
           />
         </View>
         <View style={styles.inputRow}>
-          <Text style={styles.label}>金額:</Text>
+          <Text style={styles.label}>{HISTORYDETAIL_MESSAGE.label_2}:</Text>
           <TextInput
             style={styles.input}
             value={formData.amount}
-            placeholder={formatNumberWithCommas(route.params.item.amount)}
+            placeholder={utility.formatNumberWithCommas(
+              route.params.item.amount,
+            )}
             keyboardType="numeric"
             // placeholderTextColor="#888"
             onChangeText={(value) => handleFieldChange("amount", value)}
           />
         </View>
         <View style={styles.inputRow}>
-          <Text style={styles.label}>カテゴリ:</Text>
+          <Text style={styles.label}>{HISTORYDETAIL_MESSAGE.label_3}:</Text>
           <RNPickerSelect
             items={[
               {
@@ -255,11 +258,11 @@ const HistoryDetail: React.FC = () => {
           />
         </View>
         <View style={styles.memoContainer}>
-          <Text style={styles.label}>メモ:</Text>
+          <Text style={styles.label}>{HISTORYDETAIL_MESSAGE.label_4}:</Text>
           <TextInput
             style={styles.memoInput}
             value={formData.memo}
-            placeholder="メモを入力"
+            placeholder={HISTORYDETAIL_MESSAGE.PLAICEHOLDER_MEMO}
             multiline
             placeholderTextColor="#888"
             onChangeText={(value) => handleFieldChange("memo", value)}
@@ -270,10 +273,9 @@ const HistoryDetail: React.FC = () => {
             style={[styles.button, styles.saveButton]}
             onPress={onUpdateHistory}
           >
-            <Text style={styles.buttonText}>保存</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.deleteButton]}>
-            <Text style={styles.buttonText}>削除</Text>
+            <Text style={styles.buttonText}>
+              {HISTORYDETAIL_MESSAGE.BUTTON_UPDATE.DISPLAY}
+            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

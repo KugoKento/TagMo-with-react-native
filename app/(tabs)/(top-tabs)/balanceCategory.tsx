@@ -13,6 +13,7 @@ import { PieChart } from "react-native-chart-kit";
 import { useSQLiteContext } from "expo-sqlite";
 import { LoadListContext } from "@/app/_layout";
 import { HOME_VALUE } from "@/constants/appConstants";
+import utility from "@/utils/utility";
 
 type ListItemProps = {
   category: string;
@@ -179,17 +180,13 @@ const BalanceCategory: React.FC = () => {
     ({ item }: { item: ListItemProps }) => (
       <ListItem
         category={item.category}
-        total_amount_each_category={formatNumberWithCommas(
+        total_amount_each_category={utility.formatNumberWithCommas(
           item.total_amount_each_category,
         )}
       />
     ),
     [],
   );
-
-  const formatNumberWithCommas = (value: string): string => {
-    return Number(value).toLocaleString();
-  };
 
   useEffect(() => {
     const fetchData = async (createChart: {
@@ -209,13 +206,6 @@ const BalanceCategory: React.FC = () => {
 
         await createChart(result);
 
-        // amount をカンマ区切りにフォーマット
-        // const formattedResult = await result.map((item) => ({
-        //   ...item,
-        //   total_amount_each_category: formatNumberWithCommas(
-        //     item.total_amount_each_category
-        //   ),
-        // }));
 
         await setListData(result);
       } catch (error) {
