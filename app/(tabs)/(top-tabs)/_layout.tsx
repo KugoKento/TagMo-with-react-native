@@ -36,7 +36,7 @@ export default function BalanceLayout() {
           options={{ title: "支払方法" }}
         />
         <MaterialTopTabs.Screen
-          name="amountTransition"
+          name="balanceTransition"
           options={{ title: "支出推移" }}
         />
       </MaterialTopTabs>

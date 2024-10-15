@@ -23,6 +23,11 @@ type ListItemProps = {
   memo: string;
 };
 
+type getTotalAmountByYearProps = {
+  month: string;
+  total_amount_by_month: number;
+};
+
 const getAmountList = async (
   startDate: Date | null,
   endDate: Date | null,
@@ -51,6 +56,29 @@ const getAmountList = async (
     query += " ORDER BY transaction_date DESC";
 
     const result = await db.getAllAsync<ListItemProps>(query, params);
+
+    return result;
+  } catch (error) {
+    console.error("Error in database operation:", error);
+    return [];
+  }
+};
+
+const getTotalAmountByYear = async (
+  targetYear: string,
+): Promise<getTotalAmountByYearProps[]> => {
+  const db = await SQLite.openDatabaseAsync("tagmo.db");
+  try {
+    const query = `SELECT strftime('%m', transaction_date) as month, SUM(amount) as total_amount_by_month 
+    FROM amount_list 
+    WHERE strftime('%Y', transaction_date) = ? 
+    GROUP BY month
+    ORDER BY month`;
+
+    const result = await db.getAllAsync<getTotalAmountByYearProps>(
+      query,
+      targetYear,
+    );
 
     return result;
   } catch (error) {
@@ -110,4 +138,5 @@ export default {
   registerAmountList,
   deleteAmountList,
   updateAmountList,
+  getTotalAmountByYear,
 };

@@ -44,7 +44,7 @@ export async function migrateDbIfNeeded(db: SQLiteDatabase) {
 // 日付を1日ずつずらして10000個のデータを挿入する関数
 async function insertSampleData(db: SQLiteDatabase) {
   const startDate = new Date(); // 現在の日付から始める
-  const numberOfRecords = 3;
+  const numberOfRecords = 20;
   const paymentMethods = [
     "現金",
     "クレジット",
@@ -57,9 +57,9 @@ async function insertSampleData(db: SQLiteDatabase) {
     "その他",
   ];
   const categories = [
-    "食品",
-    "交通",
-    "光熱費",
+    "食費",
+    "日用品",
+    "被服費",
     "娯楽",
     "医療",
     "教育",
@@ -68,19 +68,39 @@ async function insertSampleData(db: SQLiteDatabase) {
 
   const inserts = [];
 
+  // for (let i = 0; i < numberOfRecords; i++) {
+  //   const transactionDate = new Date(startDate);
+  //   transactionDate.setDate(startDate.getDate() + i);
+
+  //   const paymentMethod = paymentMethods[i % paymentMethods.length];
+  //   const category = categories[i % categories.length];
+  //   const amount = Math.floor(Math.random() * 10000) + 1; // 1 から 10000 のランダムな金額
+
+  //   inserts.push(`
+  //     (${i + 1}, '${transactionDate.toISOString()}', 'Location ${
+  //       i + 1
+  //     }', '${paymentMethod}', '${category}', ${amount})
+  //   `);
+  // }
+
   for (let i = 0; i < numberOfRecords; i++) {
+    // ランダムに年と月を生成 (例: 2020年から2024年の年、1月から12月の月)
+    const randomYear = Math.floor(Math.random() * 5) + 2020; // 2020年から2024年の間
+    const randomMonth = Math.floor(Math.random() * 12); // 0から11までのランダムな月 (1月は0, 12月は11)
+
+    // 開始日をベースにして、ランダムな年と月を設定
     const transactionDate = new Date(startDate);
-    transactionDate.setDate(startDate.getDate() + i);
+    transactionDate.setFullYear(randomYear); // ランダムな年を設定
+    transactionDate.setMonth(randomMonth); // ランダムな月を設定
+    transactionDate.setDate(startDate.getDate() + i); // 日付を設定
 
     const paymentMethod = paymentMethods[i % paymentMethods.length];
     const category = categories[i % categories.length];
     const amount = Math.floor(Math.random() * 10000) + 1; // 1 から 10000 のランダムな金額
 
-    inserts.push(`
-      (${i + 1}, '${transactionDate.toISOString()}', 'Location ${
-        i + 1
-      }', '${paymentMethod}', '${category}', ${amount})
-    `);
+    inserts.push(`(
+      ${i + 1}, '${transactionDate.toISOString()}', 'Location ${i + 1}', '${paymentMethod}', '${category}', ${amount}
+    )`);
   }
 
   const insertQuery = `
